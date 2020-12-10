@@ -1,0 +1,6 @@
+{
+    "id": {
+        "query": "service id",
+        "default": "com.domain.app.service"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "id": {
+        "query": "app id",
+        "default": "com.domain.app"
+    },
+    "title": {
+        "query": "title",
+        "default": "new app"
+    },
+    "version": {
+        "query": "version",
+        "default": "1.0.0"
+    },
+    "url": {
+        "query":"url",
+        "default":"http://developer.lge.com/"
+    }
+}

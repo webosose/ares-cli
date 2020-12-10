@@ -1,0 +1,9 @@
+{
+  "id": "com.ose.target.native",
+  "version": "1.0.0",
+  "vendor": "LG Electronics",
+  "type": "native",
+  "main": "Hello",
+  "title": "ose native app",
+  "icon": "icon.png"
+}

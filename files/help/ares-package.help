@@ -1,0 +1,87 @@
+{
+    "display" : ["name", "synopsis", "options", "extraoption", "description", "examples", "extraexample"],
+    "notab":["examples", "extraexample"],
+    "notitle" : ["extraoption", "extraexample"],
+    "name" : "ares-package - Create a package containing a webOS app or service",
+    "synopsis" : {
+        "default" : [
+            "ares-package [OPTION...] APP_DIR [SERVICE_DIR [...]]"
+        ]
+    },
+    "description" : [
+        {
+          "default" : [
+            "This command makes a package.",
+            "",
+            "APP_DIR is an app directory containing a valid appinfo.json file.",
+            "",
+            "SERVICE_DIR is a directory containing a valid services.json file.",
+            "",
+            "APP_DIR or OUTPUT_DIR can be a relative or absolute path."
+          ]
+        }
+    ],
+    "examples" : [
+        {
+            "default" : [
+                "",
+                "# Create a package without including all text files and the test directory.",
+                "ares-package -e \"*.txt\" -e \"test\"",
+                "",
+                "# Create a package for the webOS app with multiple webOS services",
+                "ares-package APP_DIR SVC1_DIR SVC2_DIR",
+                ""
+            ]
+        }
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["check", "outdir", "app-exclude", "level", "help", "version", "verbose", "rom"],
+        "check" : "-c, --check @TAB@ Check whether the app and service are valid, but don't package it",
+        "outdir" : "-o, --outdir <OUTPUT_DIR> @TAB@ Use OUTPUT_DIR as the output directory",
+        "no-minify" : "-n, --no-minify @TAB@ Skip the minification phase",
+        "app-exclude" : "-e, --app-exclude PATTERN @TAB@ Exclude files, given as a PATTERN",
+        "rom" : [
+            "-r, --rom @TAB@ Do not create ipk, instead output a folder structure"
+        ],
+        "encrypt" : "-enc, --encrypt @TAB@ Make an encrypted package, it cannot install by ares-install",
+        "sign" : "-s, --sign <PRIVATEKEY> @TAB@ Make app sign to package. Must use with certificate option",
+        "certificate" : "-crt, --certificate <CERTIFICATE> @TAB@ Add certificate.crt to pacakge",
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log"
+    },
+    "extraoption" : {
+        "cmdOpt":"hidden",
+        "default" : {
+            "cmdOpt":"option",
+            "default" : ["force", "level"],
+            "none" : ["pkgid", "pkgversion", "pkginfofile"],
+            "force" : [
+            "-f, --force @TAB@ Make .ipk package forcibly with same file structure in APP_DIR",
+            "  (ex) APP_DIR/",
+            "              +-- usr/",
+            "              +-- usr/bin",
+            "              +-- usr/bin/foo",
+            "              +-- etc/",
+            "              +-- etc/boo.conf",
+            "                            '-f, --force' option will keep this structure in .ipk"
+            ],
+            "pkgid" : "-pi, --pkgid <ID> @TAB@ Set package id for packaging about only services\n@TAB@@TAB@ Can not use with pkginfofile option",
+            "pkgversion" : "-pv, --pkgversion <VERSION> @TAB@ Set package version for packaging about only services",
+            "pkginfofile" : "-pf, --pkginfofile <PKGINFOFILE> @TAB@ Set package meta by pkginfofile for packaging about only services\n@TAB@@TAB@ Can not use with pkgid option",
+            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
+        }
+    },
+    "extraexample" : {
+        "cmdOpt" : "hidden",
+        "none" : [
+          "# Create a package for the multiple webOS services without webOS app",
+          "ares-package -pi com.domain SVC1_DIR SVC2_DIR",
+          "",
+          "# Create a package for the multiple webOS services by existing packgeinfo.json",
+          "ares-package -pf packageinfo.json SVC1_DIR SVC2_DIR",
+          ""
+        ]
+    }
+}

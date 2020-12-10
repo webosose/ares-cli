@@ -1,0 +1,9 @@
+{
+  "id": "com.sample.gles2",
+  "version": "1.0.0",
+  "vendor": "LG Electronics",
+  "type": "native",
+  "main": "GLES2",
+  "title": "gles2 sample",
+  "icon": "icon.png"
+}

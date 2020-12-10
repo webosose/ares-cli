@@ -1,0 +1,8 @@
+{
+    "SDKPATH_ENV_NAME": "",
+    "BROWSER_PATH_IN_SDK": {
+        "win32" : "",
+        "darwin" : "",
+        "linux" : ""
+    }
+}

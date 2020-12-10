@@ -1,0 +1,10 @@
+{
+    "id": "com.example.app.qml",
+    "version": "1.0.0",
+    "vendor": "My Company",
+    "type": "qml",
+    "main": "main.qml",
+    "title": "QML App",
+    "icon": "icon.png",
+    "requiredPermissions" : ["time", "applications"]
+}

@@ -1,0 +1,40 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-shell - Open a device terminal or run a command",
+    "synopsis" : {
+        "default" : [
+            "ares-shell",
+            "ares-shell -r <CMD>"
+        ]
+    },
+    "description" : [
+        "This command opens a device terminal.",
+        "",
+        "DISPLAY_ID is working on multi-user profile.",
+        "If not specified, target's host terminal will be opened.",
+        ""
+    ],
+    "examples" : [
+        "# Open a device terminial",
+        "ares-shell -d DEVICE",
+        "",
+        "# Run a device command on the device",
+        "ares-shell -d DEVICE -r \"ls\"",
+        ""
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["device", "run", "device-list", "display", "level", "help", "version", "verbose"],
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
+            "@TAB@ If not specified, set to default device"
+        ],
+        "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
+        "run" : "-r, --run <CMD> @TAB@ Run CMD",
+        "display": "-dp,--display <DISPLAY_ID> @TAB@ Open shell of the specified display",
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log"
+    }
+}

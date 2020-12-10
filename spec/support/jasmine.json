@@ -1,0 +1,21 @@
+{
+  "spec_dir": "spec",
+  "spec_files": [
+    "jsSpecs/ares-config.spec.js",
+    "jsSpecs/ares-generate.spec.js",
+    "jsSpecs/ares-inspect.spec.js",
+    "jsSpecs/ares-install.spec.js",
+    "jsSpecs/ares-launch.spec.js",
+    "jsSpecs/ares-package.spec.js",
+    "jsSpecs/ares-pull.spec.js",
+    "jsSpecs/ares-push.spec.js",
+    "jsSpecs/ares-server.spec.js",
+    "jsSpecs/ares-setup-device.spec.js",
+    "jsSpecs/ares-shell.spec.js",
+    "jsSpecs/ares.spec.js",
+    "jsSpecs/ares-device.spec.js"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ]
+}

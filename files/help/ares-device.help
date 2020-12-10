@@ -1,0 +1,49 @@
+{
+    "display" : ["name", "synopsis", "options", "extraoption", "description", "examples"],
+    "notab":["examples"],
+    "notitle" : ["extraoption"],
+    "name" : "ares-device - Display the device information",
+    "synopsis" : {
+        "default" : [
+            "ares-device",
+            "ares-device [OPTION...]"
+        ]
+    },
+    "description" : {
+        "default": [
+            "This command displays the device information."
+        ]
+    },
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["system", "session", "device", "device-list", "help", "version", "verbose"],
+        "system" : "-i, --system-info @TAB@ Display the device system information",
+        "session" : "-s, --session-info @TAB@ Display the device session information",
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
+            "@TAB@ If not specified, set to default device"
+        ],
+        "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log"
+    },
+    "extraoption" : {
+        "cmdOpt":"hidden",
+        "default" : {
+            "cmdOpt":"option",
+            "default" : ["level"],
+            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
+        }
+    },
+    "examples" : {
+        "default" : [
+            "# Display system information",
+            "ares-device -i -d DEVICE",
+            "",
+            "# Display session information",
+            "ares-device -s -d DEVICE",
+            ""
+        ]
+    }
+}

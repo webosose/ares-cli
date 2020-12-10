@@ -1,0 +1,18 @@
+[
+    {
+        "order":"0",
+        "default": true,
+        "profile": "ose",
+        "name": "emulator",
+        "description": "LG webOS Emulator",
+        "host": "127.0.0.1",
+        "port": 6622,
+        "username": "developer",
+        "privateKey": {
+            "openSsh": "webos_emul"
+        },
+        "files":"sftp",
+        "noPortForwarding":false,
+        "indelible": true
+    }
+]

@@ -1,0 +1,63 @@
+{
+    "ares-config" : {
+        "profile" : ["none"],
+        "description" : "Configure webOS CLI",
+        "knownOpts" : "config",
+        "shortHands" : {"c":  ["--config"]}
+    },
+    "ares-device" : {
+        "description" : "Display the device information",
+        "knownOpts" : "info",
+        "shortHands" : {"d":  ["--device"]}
+    },
+    "ares-generate" : {
+        "description" : "Generate files for a webOS app or service",
+        "knownOpts" : "generate",
+        "shortHands" : {"G":  ["--generate"]}
+    },
+    "ares-inspect" : {
+        "description" : "Enable Web Inspector or Node's Inspector",
+        "knownOpts" : "inspect",
+        "shortHands" : {"I":  ["--inspect"]}
+    },
+    "ares-install" : {
+        "description" : "Install or Remove app from a device",
+        "knownOpts" : "install",
+        "shortHands" : {"i":  ["--install"]}
+    },
+    "ares-launch" : {
+        "description" : "Launch or close apps",
+        "knownOpts" : "launch",
+        "shortHands" : {"L":  ["--launch"]}
+    },
+    "ares-package" : {
+        "description" : "Create a package containing a webOS app or service",
+        "knownOpts" : "package",
+        "shortHands" : {"p":  ["--package"]}
+    },
+    "ares-pull" : {
+        "description" : "Pull file from a device",
+        "knownOpts" : "pull",
+        "shortHands" : {"pf":  ["--pull"]}
+    },
+    "ares-push" : {
+        "description" : "Push the file to target device",
+        "knownOpts" : "push",
+        "shortHands" : {"pt":  ["--push"]}
+    },
+    "ares-server" : {
+        "description" : "Run a local web server based on path",
+        "knownOpts" : "server",
+        "shortHands" : {"s":  ["--server"]}
+    },
+    "ares-setup-device" : {
+        "description" : "Add or modify the information of the devices to use",
+        "knownOpts" : "setup-device",
+        "shortHands" : {"se":  ["--setup-device"]}
+    },
+    "ares-shell" : {
+        "description" : "Open a device terminal or run a command",
+        "knownOpts" : "shell",
+        "shortHands" : {"sh":  ["--shell"]}
+    }
+}

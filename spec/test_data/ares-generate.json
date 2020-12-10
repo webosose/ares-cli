@@ -1,0 +1,21 @@
+{   
+    "ose" : {
+        "list" : [
+            "webapp         Web App          -  (default) web app for webOS",
+            "hosted_webapp  Web App          -  hosted web app for webOS",
+            "webappinfo     Web App Info     -  appinfo.json for web app",
+            "js_service     JS Service       -  js service for webOS",
+            "jsserviceinfo  JS Service Info  -  services.json, package.json for JS service",
+            "icon           Icon             -  app icon files [80x80]",
+            "qmlapp         QML App          -  QML app for webOS",
+            "qmlappinfo     QML App Info     -  appinfo.json for QML app"
+        ],
+        "template" : {
+            "webapp" : "webapp",
+            "jsservice" : "js_service",
+            "webappinfo" : ["appinfo.json"],
+            "qmlapp" : "qmlapp",
+            "qmlappinfo" : "qmlappinfo"
+        }
+    }
+}

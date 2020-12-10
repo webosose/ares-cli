@@ -1,0 +1,319 @@
+{
+    "id": "ApplicationDescription",
+    "type": "object",
+    "properties": {
+
+        "id": {
+            "type": "string",
+            "description": "Application ID, e.g., \"com.newco.app.myApp\" . Every application has a unique ID, created from reverse DNS naming conventions."
+        },
+        "main": {
+            "type": "string",
+            "description": "The launch point for the app. This is a file path relative to the appinfo.json file and needs to point to an HTML file."
+        },
+        "title": {
+            "type": "string",
+            "description": "The title of the application as it shows in the Launcher and the app window. The application title is unique, set once."
+        },
+        "keywords": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "Keyword meta-data. Just Type list apps that contain the user-entered text in their keywords values."
+        },
+        "mimeTypes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "mime": {
+                        "type": "string",
+                        "description": "Mime type refers to the Internet standard for defining the content type."
+                    },
+                    "stream": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If true, this type should not be downloaded first (pass url directly to app), else download first."
+                    },
+                    "extension": {
+                        "type": "string",
+                        "description": "The field is extension according to the mime type."
+                    },
+                    "urlPattern": {
+                        "type": "string",
+                        "description": "A pure redirect form. (e.g. ^[^:]+://www.youtube.com/watch\\?v=)"
+                    },
+                    "scheme": {
+                        "type": "string",
+                        "description": "A scheme or command form. (e.g. tel://)"
+                    }
+                }
+            },
+            "description": "Mime type refers to the Internet standard for defining the content type. This field is used mime system."
+        },
+        "icon": {
+            "type": "string",
+            "description": "Image displayed for your app. This is a file path relative to the appinfo.json file. The default is \"icon.png\"."
+        },
+        "largeIcon": {
+            "type": "string",
+            "description": "Large app icon,This is a file path relative to the appinfo.json file. e.g, largeIcon-130x130.png."
+        },
+        "mediumIcon": {
+            "type": "string",
+            "description": "Medium app icon,This is a file path relative to the appinfo.json file. e.g, mediumIcon-96x96.png."
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "web",
+                "stub",
+                "native",
+                "native_builtin",
+                "native_appshell",
+                "qml"
+            ],
+            "description": "Identifies the application type"
+        },
+        "splashBackground": {
+            "type": "string",
+            "description": "splashBackground is shown in loading screen, e.g, splash-background.png"
+        },
+        "miniicon": {
+            "type": "string",
+            "description": "Used for notifications. This is a file path relative to the appinfo.json file."
+        },
+        "vendor": {
+            "type": "string",
+            "description": "App owner. This is used in the launcher and deviceinfo dialogs, e.g., LGE"
+        },
+        "vendorurl": {
+            "type": "string",
+            "description": "URL that turns the vendor portion in deviceinfo dialogs to hyperlinks."
+        },
+        "visible": {
+            "type": "boolean",
+            "default": true,
+            "description": "By default, the launch icons are visible...set to false in the json and they won't show in the launcher screen."
+        },
+        "transparent": {
+            "type": "boolean",
+            "default": false,
+            "description": "whether app is transparent or not."
+        },
+        "class": {
+            "type": "object",
+            "properties": {
+                "hidden": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "whether app is hidden in Recents or not"
+                }
+            },
+            "description": "indicates window behavior of app in the compositor"
+        },
+        "version": {
+            "type": "string",
+            "default": "1.0.0",
+            "description": "The application version number, in the dot-notation format, e.g., 3.0.2500"
+        },
+        "removable": {
+            "type": "boolean",
+            "default": true,
+            "description": "whether app is removale or not"
+        },
+        "bootLaunchParams": {
+            "type": "object",
+            "description": "if specified, params is used on boot application-launching"
+        },
+        "handlesRelaunch": {
+            "type": "boolean",
+            "default": false,
+            "description": "For native app. If true, SAM relaunch app when user execute native app that already running, If false, just maximize existing window."
+        },
+        "inspectable" : {
+            "type": "boolean",
+            "default" : false,
+            "description": "This field is used to tell WAM if an application should be inspectable in DevMode, based on the app's install location (/media/developer) or the presence of an \"inspectable\" field (if true) in the app's appinfo.json file."
+        },
+        "bgImage": {
+            "type": "string",
+            "description": "This field is the location of a bitmap. The bitmap is displayed to the user when the user hovers over the launch point with the system pointer."
+        },
+        "bgColor": {
+            "type": "string",
+            "description": "This field is the color to be displayed to the user when the user hovers over the launch point with the system pointer. This is used in the absence of the backgroundImage."
+        },
+        "deeplinkingParams": {
+            "type": "string",
+            "default": "",
+            "description": "This field describes parameter pattern for deep linking. Pattern must have \"$CONTENTID\" keyword which will be replaced with real content ID given by cloud."
+        },
+        "defaultWindowType": {
+            "type": "string",
+            "enum": [
+                "system_ui",
+                "card",
+                "favoriteshows",
+                "floating",
+                "minimal",
+                "overlay",
+                "popup",
+                "screenSaver"
+            ],
+            "default": "card",
+            "description": "Used by WebAppMgr to launch a window with a special window type setting."
+        },
+        "imageForRecents": {
+            "type": "string",
+            "description": "This field is the location of a bitmap. The bitmap is displayed in the recent apps list."
+        },
+        "requiredMemory": {
+            "type": "number",
+            "description": "Memory consumption is increasing quickly while launching. OOM can be occured before system(Memory Manager) try to acquire adequate memory for the application. requiredMemory is describe the maximum usage of memory while app is publishing. It is not about maximum usage of memory while app is running."
+        },
+        "iconColor": {
+            "type": "string",
+            "description": "indicates color of the icon of the launch point."
+        },
+        "appDescription": {
+            "type": "string",
+            "description": "A short tagline for the application"
+        },
+        "appDescriptionLong": {
+            "type": "string",
+            "description": "A long description for MVPD application. It can exceed 60 characters."
+        },
+        "inAppSetting":{
+            "type": "boolean",
+            "default": false,
+            "description": "This tells whether an applicaiton supports deeplinking for inAppSetting"
+        },
+        "disableBackHistoryAPI": {
+            "type": "boolean",
+            "default": false,
+            "description": "Disable WebAppMgr usage of the HTML5 History API with the Back keypress"
+        },
+        "lockable": {
+            "type": "boolean",
+            "default": true,
+            "description": "When set to true, the app can be locked"
+        },
+        "checkUpdateOnLaunch": {
+            "type": "boolean",
+            "default": true,
+            "description": "If this value is true and SAM receives checkUpdateOnLaunch:true with launch request, SAM will check update for the app."
+        },
+        "hasPromotion": {
+            "type": "boolean",
+            "default": false,
+            "description": "This indicates that this app has promotional contents."
+        },
+        "noSplashOnLaunch": {
+            "type": "boolean",
+            "default": false,
+            "description": "If this value is true, this application is launched without splash screen."
+        },
+        "spinnerOnLaunch": {
+            "type": "boolean",
+            "default": true,
+            "description": "If this value is true, this application is launched with spinner."
+        },
+        "unmovable": {
+            "type": "boolean",
+            "default": false,
+            "description": "Hint that an item should never be moved from it's given position"
+        },
+        "windowGroup": {
+            "type": "object",
+            "properties": {
+                "owner": {
+                    "type": "boolean",
+                    "description": "it's true if owner of window group"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Specify group owner's app id if child window"
+                }
+            },
+            "description": "Set relationship between owner window and child windows",
+            "required": ["owner"]
+        },
+        "accessibility": {
+            "type": "object",
+            "properties": {
+                "supportsAudioGuidance": {
+                    "type": "boolean",
+                    "description": "Specify this app supports audio guidance",
+                    "default": false
+                }
+            },
+            "description": "Specify which accessibility feature this app supports",
+            "default": {
+                "supportsAudioGuidance": false
+            }
+        },
+        "tileSize": {
+            "type": "string",
+            "enum": [ "normal", "large" ],
+            "default": "normal",
+            "description": "Hint for sizing of UI tiles: normal or large, large may be used for a promotional item"
+        },
+        "redirection": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [ "id" ],
+                    "description": "what type of content is redirected"
+                },
+                "target": {
+                    "type": "string",
+                    "description": "AppId, mime, or keywords"
+                },
+                "params": {
+                    "type": "object",
+                    "description": "Parameters to be sent to redirected app"
+                }
+            },
+            "description": "Redirection Information",
+            "required": ["type", "target"]
+        },
+        "containerJS": {
+            "type": "string",
+            "description": "container-app.js file"
+        },
+        "enyoVersion": {
+            "type": "string",
+            "description": "Enyo version for web app"
+        },
+        "icons": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "icon": {
+                        "type": "string",
+                        "description": "one of icons"
+                    },
+                    "iconColor": {
+                        "type": "string",
+                        "description": "one of iconColors"
+                    }
+                },
+                "description": "Pair of icon and iconColor",
+                "required": ["icon", "iconColor"]
+            },
+            "default" : [],
+            "description": "Icon and Color set for dynamic icon"
+        }
+    },
+    "required": [
+        "id",
+        "main",
+        "icon",
+        "type",
+        "title"
+    ]
+}

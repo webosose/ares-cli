@@ -1,0 +1,61 @@
+{
+    "webapp": {
+        "type": "webapp",
+        "path": "$cli-root/files/templates/ose-sdk-templates/bootplate-web",
+        "description": "web app for webOS",
+        "metadata": {
+            "id": "webappinfo"
+        },
+        "deps": ["icon"],
+        "default": true
+    },
+    "hosted_webapp": {
+        "type": "webapp",
+        "path": "$cli-root/files/templates/ose-sdk-templates/hosted-webapp",
+        "description": "hosted web app for webOS",
+        "metadata": {
+            "id": "webappinfo"
+        },
+        "deps": ["icon"]
+    },
+    "webappinfo": {
+        "type": "webappinfo",
+        "path": "$cli-root/files/templates/ose-sdk-templates/appinfo/appinfo.json",
+        "description": "appinfo.json for web app"
+    },
+    "js_service": {
+        "type": "jsservice",
+        "path": "$cli-root/files/templates/ose-sdk-templates/js-service",
+        "description": "js service for webOS",
+        "metadata": {
+            "id": "jsserviceinfo"
+        }
+    },
+    "jsserviceinfo": {
+        "type": "jsserviceinfo",
+        "path": [
+            "$cli-root/files/templates/ose-sdk-templates/serviceinfo/services.json",
+            "$cli-root/files/templates/ose-sdk-templates/serviceinfo/package.json"
+        ],
+        "description": "services.json, package.json for JS service"
+    },
+    "icon": {
+        "type": "icon",
+        "path": "$cli-root/files/templates/ose-sdk-templates/icon",
+        "description": "app icon files [80x80]"
+    },
+    "qmlapp": {
+        "type": "qmlapp",
+        "path": "$cli-root/files/templates/ose-sdk-templates/qml-app",
+        "description": "QML app for webOS",
+        "metadata": {
+            "id": "qmlappinfo"
+        },
+        "deps": ["icon"]
+    },
+    "qmlappinfo": {
+        "type": "qmlappinfo",
+        "path": "$cli-root/files/templates/ose-sdk-templates/qmlappinfo/appinfo.json",
+        "description": "appinfo.json for QML app"
+    }
+}

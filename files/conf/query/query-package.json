@@ -1,0 +1,10 @@
+{
+    "id": {
+        "query": "package id",
+        "default": "com.domain"
+    },
+    "version": {
+        "query": "version",
+        "default": "1.0.0"
+    }
+}
