@@ -9,7 +9,7 @@
 To install ares-cli, use `npm`. It is recommended to install ares-cli globally. For Linux, you might need the `sudo` command.
 
 ``` shell
-$ npm install -g ares-cli
+$ npm install -g @webosose/ares-cli
 ```
 
 > Note: Node 8.12.0 is recommended.
