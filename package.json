@@ -43,7 +43,7 @@
     "easy-table": "1.1.1",
     "elfy": "1.0.0",
     "encoding": "0.1.13",
-    "express": "3.3.8",
+    "express": "4.17.1",
     "extract-zip": "1.7.0",
     "fs-extra": "8.1.0",
     "fstream": "1.0.12",
