@@ -6,13 +6,24 @@
 
 ## Installation
 
-To install ares-cli, use `npm`. It is recommended to install ares-cli globally. For Linux, you might need the `sudo` command.
+To install ares-cli, use `npm`. It is recommended to install ares-cli globally. For Linux and macOS, you might need the `sudo` command.
 
 ``` shell
 $ npm install -g @webosose/ares-cli
 ```
 
-> Note: Node 8.12.0 is recommended.
+> Note: Node 8.12.0 to 14.15.1 are recommended.
+
+## Compatibility
+
+Our release cycle is independent of webOS OSE and Auto. We follow semver and here is the compatibility table:
+
+| webOS CLI | webOS OSE | webOS Auto |
+|--------|--------|------|
+| v2.0.2 | v2.8.0 | v2.0 |
+
+
+For information about the CLI previous version, see the [CLI Release Notes](https://www.webosose.org/docs/tools/sdk/cli/cli-release-notes/).
 
 ## Command List
 
