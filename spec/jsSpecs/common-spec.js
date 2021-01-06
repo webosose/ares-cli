@@ -110,3 +110,9 @@ commonSpec.removeOutDir = function(filePath) {
     if(fs.existsSync(filePath))
         shelljs.rm('-rf', filePath);
 };
+
+commonSpec.test = function(stderr) {
+    return fail(stderr);
+
+    //stderr를 특정 string(ex. warning, error)로 filtering해서 return을 핸들링 할 수 있음
+}

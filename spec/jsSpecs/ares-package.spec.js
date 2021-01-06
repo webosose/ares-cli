@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+const commonSpec = require('./common-spec');
+
 const path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec,
@@ -102,7 +104,17 @@ describe(aresCmd, function() {
     });
 
     it('Package web app with -o(--outdir)', function(done) {
-        exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout) {
+        exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
+            // console.log("error" + error)
+            // console.log("stdout" + stdout)
+            // console.log("stderr" + stderr)
+            // console.log("stderr"+ typeof(stderr) + stderr.length)
+
+            if(stderr.length>0){
+                // fail(stderr);
+                commonSpec.test(stderr);
+            }
+
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
             expect(fs.existsSync(appPkgPath)).toBe(true);
@@ -110,7 +122,7 @@ describe(aresCmd, function() {
         });
     });
 });
-
+/*
 describe(aresCmd, function() {
     beforeEach(function(done) {
         common.removeOutDir(outputPath);
@@ -528,3 +540,4 @@ describe(aresCmd + ' negative TC for services packaging', function() {
         });
     });
 });
+*/
