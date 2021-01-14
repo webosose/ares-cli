@@ -60,7 +60,6 @@ const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-
 
 log.heading = processName;
 log.level = argv.level || 'warn';
-//deviceLib.log.level = log.level;
 log.verbose("argv", argv);
 
 /**
@@ -83,10 +82,8 @@ if (argv.level) {
 const options = {
     device: argv.device,
     display : argv.display || 0,
-    capturePath : argv.argv.remain[0] || null,
+    inputPath : argv.argv.remain[0] || null,
 };
-
-console.log("input capturePath : " + options.capturePath);
 
 let op;
 if (argv['device-list']) {
