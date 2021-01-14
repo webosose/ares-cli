@@ -5,9 +5,13 @@
  */
 
 const exec = require('child_process').exec,
+    path = require('path'),
+    fs = require('fs'),
     common = require('./common-spec');
 
 const aresCmd = 'ares-device';
+
+const tempDirPath = path.join(__dirname, "..", "tempFiles");
 
 let cmd,
     options;
@@ -82,6 +86,90 @@ describe(aresCmd, function() {
                     expect(stdout).toContain(key);
                 });
             }
+            done();
+        });
+    });
+});
+
+//Remove created file in AfterAll
+describe(aresCmd + ' --capture(-c)', function() {
+    it('Capture screen', function(done) {
+        exec(cmd + ` --capture`, function (error, stdout) {
+            const curDate = new Date();
+            expect(stdout).toContain(options.device);
+            expect(stdout).toContain(curDate.getFullYear());
+            expect(stdout).toContain("display0");
+            expect(stdout).toContain(".png");
+            expect(stdout).toContain(path.resolve('.'));
+
+            console.log(stdout);
+            console.log("asdf : " + stdout.replace(/^[a-zA-Z0-9]*_$/g));
+
+            //        const parseBase = path.parse(options.inputPath).base;
+            //        let parseExt = path.parse(options.inputPath).ext;
+            //        parseExt = parseExt.split('.').pop();
+            //existsSync? 
+
+            done();
+        });
+    });
+
+    it('Capture screen with filename', function(done) {
+        exec(cmd + ` --capture test.png`, function (error, stdout) {
+            expect(stdout).not.toContain(options.device);
+            expect(stdout).not.toContain("display0");
+            expect(stdout).toContain("test.png");
+            expect(stdout).toContain(path.resolve('.'));
+
+            expect(fs.existsSync(path.join(path.resolve('.', "test.png")))).toBe(true);
+
+            done();
+        });
+    });
+
+    it('Capture screen with directory Path', function(done) {
+        const capDirPath = path.join(tempDirPath, "webOSCap");
+        console.log(capDirPath);
+        exec(cmd + ` --capture ${capDirPath}`, function (error, stdout) {
+            const curDate = new Date();
+            expect(stdout).toContain(options.device);
+            expect(stdout).toContain(curDate.getFullYear());
+            expect(stdout).toContain("display0");
+            expect(stdout).toContain(".png");
+            expect(stdout).toContain(capDirPath);
+            expect(fs.existsSync(capDirPath)).toBe(true);
+
+            done();
+        });
+    });
+
+    it('Capture screen with directory & fileName', function(done) {
+        const capDirPath = path.join(tempDirPath, "webOSCap");
+        const capFilePath = path.join(capDirPath, "test.bmp");
+        console.log(capFilePath);
+        exec(cmd + ` --capture ${capFilePath}`, function (error, stdout) {
+            expect(stdout).not.toContain(options.device);
+            expect(stdout).not.toContain("display0");
+            expect(stdout).toContain("test.bmp");
+            expect(stdout).toContain(capDirPath);
+            expect(fs.existsSync(capFilePath)).toBe(true);
+
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC', function() {
+    it('Capture screen with invalid format', function(done) {
+        exec(cmd + ` --capture "test.abc"`, function (error, stdout, stderr) {
+            expect(stderr).toContain("Please specify file extension, either 'png' 'bmp' or 'jpg'");
+            done();
+        });
+    });
+
+    it('Capture screen with invalid destiation Path', function(done) {
+        exec(cmd + ` --capture /webOSCap`, function (error, stdout, stderr) {
+            expect(stderr).toContain("permission denied, mkdir '/webOSCap'");
             done();
         });
     });
