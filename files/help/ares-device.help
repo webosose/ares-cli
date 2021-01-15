@@ -16,9 +16,15 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
+        "capture" : [
+            "-c, --capture <OUTPUT_PATH> @TAB@ Capture screen and save the file to local",
+            "@TAB@ Use OUTPUT_PATH as the output directory or file path",
+            "@TAB@ File format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default"
+        ],
+        "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture option",
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -43,6 +49,12 @@
             "",
             "# Display session information",
             "ares-device -s -d DEVICE",
+            "",
+            "# Display session information",
+            "ares-device -s -d DEVICE",
+            "",
+            "# Capture screen as screen.png of display 1",
+            "ares-device -c screen.png -dp 1 -d DEVICE",
             ""
         ]
     }
