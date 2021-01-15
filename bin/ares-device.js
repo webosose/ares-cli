@@ -99,8 +99,7 @@ if (argv['device-list']) {
     op = getSessionInfo;
 } else if (argv['capture']) {
     op = captureScreen;
-}  
-else {
+} else {
     showUsage();
     cliControl.end();
 }

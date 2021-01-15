@@ -113,7 +113,7 @@ describe(aresCmd + ' --capture(-c)', function() {
 
             const reg = new RegExp("[A-Za-z0-9]*_[dispaly0-9]*_[0-9]*.png");
             const arr = stdout.match(reg);
-            const filePath = path.join(path.resolve('.', arr[0]));
+            const filePath = path.join(path.resolve('.'), arr[0]);
             console.log("capture file name : " + arr[0]);
             expect(fs.existsSync(filePath)).toBe(true);
 
@@ -131,7 +131,7 @@ describe(aresCmd + ' --capture(-c)', function() {
             expect(stdout).toContain("capFile.png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const filePath = path.join(path.resolve('.', "capFile.png"));
+            const filePath = path.join(path.resolve('.'), "capFile.png");
             expect(fs.existsSync(filePath)).toBe(true);
 
             // remove created capture file
