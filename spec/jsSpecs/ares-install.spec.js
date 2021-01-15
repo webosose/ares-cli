@@ -68,7 +68,7 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain("Success", stderr);/////stderr 출력? 앞에 조건을 만족하지 않는 경우에만 stderr
+            expect(stdout).toContain("Success", stderr);
             done();
         });
     });

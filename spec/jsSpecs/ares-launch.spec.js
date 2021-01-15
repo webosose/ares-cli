@@ -231,28 +231,11 @@ describe(aresCmd +' --hosted(-H)', function() {
         });
     });
 
-    // it('Launch -H SampleApp', function(done) {/////////////
-    //     let result;
-    //     const child = exec(cmd + ` -H ${sampleAppPath}`, function (error, stdout, stderr) {
-    //         console.log("aaaaaaaaaaaaa")
-    //         console.log("stdout: "+ stdout)
-    //         expect(stdout).toContain('Ares Hosted App is now running');
-    //         done();
-    //     });
-
-    //     setTimeout(() => {
-    //         console.log(result)
-    //         child.kill();
-    //         expect(result).not.toBeNull();
-    //         done();
-    //     }, 3000);
-    // });
-
     it('Launch -H SampleApp', function(done) {
         let result = "";
         const child = exec(cmd + ` -H ${sampleAppPath}`);
         
-        child.stdout.on('data', function (data) {//////////////////
+        child.stdout.on('data', function (data) {
             process.stdout.write(data);
             result += data;
         });
@@ -267,7 +250,6 @@ describe(aresCmd +' --hosted(-H)', function() {
 
         setTimeout(() => {
             child.kill();
-            // console.log("result:\n"+result)
             expect(result).toContain('Ares Hosted App is now running');
             expect(result).not.toBeNull();
             done();
