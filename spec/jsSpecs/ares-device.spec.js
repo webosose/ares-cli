@@ -24,7 +24,10 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -49,7 +52,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --device-list(-D)', function() {
     it('Show available device list', function(done) {
-        exec(cmd + ' -D', function (error, stdout) {
+        exec(cmd + ' -D', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             done();
         });
@@ -61,7 +67,10 @@ describe(aresCmd, function() {
         const keys = ["webos_build_id","webos_imagename","webos_name","webos_release",
                     "webos_manufacturing_version", "core_os_kernel_version", "device_name",
                     "device_id", "chromium_version", "qt_version"];
-        exec(cmd + ` -i ${options.device}`, function (error, stdout) {
+        exec(cmd + ` -i ${options.device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             keys.forEach(function(key) {
                 expect(stdout).toContain(key);
             });
@@ -74,7 +83,8 @@ describe(aresCmd, function() {
     it('Retrieve session information', function(done) {
         const keys = ["sessionId", "displayId"];
         exec(cmd + ` -s ${options.device}`, function (error, stdout, stderr) {
-            if (stderr.length > 0) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
                 expect(stderr).toContain("This device does not support the session.");
             }
             else {

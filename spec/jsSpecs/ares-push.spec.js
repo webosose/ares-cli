@@ -26,7 +26,7 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            expect(stderr).toContain("verb argv");
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -51,7 +51,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --device-list(-D)', function() {
     it('Show available device list', function(done) {
-        exec(cmd + ' -D', function (error, stdout) {
+        exec(cmd + ' -D', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             done();
         });
@@ -67,7 +70,10 @@ describe(aresCmd, function() {
     });
 
     it('Copy directory', function(done) {
-        exec(cmd + ` ${srcPath} /tmp`, function (error, stdout) {
+        exec(cmd + ` ${srcPath} /tmp`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain("/tmp/copyFiles/testFile.txt");
             expect(stdout).toContain("/tmp/copyFiles/helloFile.txt");
             expect(stdout).toContain("2 file(s) pushed");
@@ -86,7 +92,10 @@ describe(aresCmd + " --ignore(-i) ", function() {
     });
 
     it('Copy directory with -i', function(done) {
-        exec(cmd + ` -i ${srcPath} /tmp`, function (error, stdout) {
+        exec(cmd + ` -i ${srcPath} /tmp`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain("/tmp/copyFiles/testFile.txt");
             expect(stdout).not.toContain("/tmp/copyFiles/helloFile.txt");
             expect(stdout).toContain("2 file(s) pushed");
