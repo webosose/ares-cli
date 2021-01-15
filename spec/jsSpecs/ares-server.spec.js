@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const commonSpec = require('./common-spec');
-
 const path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec,
@@ -76,7 +74,7 @@ describe(aresCmd, function() {
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
             result = data;
-            expect(result).toContain('Local server running on http://localhost');
+            expect(data).toContain('Local server running on http://localhost');
         });
 
         child.stderr.on('data', function (data) {

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const commonSpec = require('./common-spec');
-
 const path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec,
