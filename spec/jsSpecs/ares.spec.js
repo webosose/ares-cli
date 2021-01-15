@@ -26,7 +26,10 @@ beforeAll(function (done) {
 // ares command test
 describe(aresCmd + ' --list(-l)', function() {
     it('Should show all the ares commands', function(done) {
-        exec(cmd + ' --list', function (error, stdout) {
+        exec(cmd + ' --list', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             // get expected list
             expectedList = expectedList.join('\n'); // multi string in array. need to join
             stdout = stdout.trim().replace(/\s+['\n']/g, '\n');
@@ -38,7 +41,10 @@ describe(aresCmd + ' --list(-l)', function() {
 
 describe(aresCmd + ' --version(-v)', function() {
     it('Check version info with package.json', function(done) {
-        exec(cmd + ' --version', function (error, stdout) {
+        exec(cmd + ' --version', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             // get CLI version
             const text = fs.readFileSync(path.join(__dirname, "../../", "package.json"), 'utf8');
             const pkgInfoObj = JSON.parse(text);
@@ -51,7 +57,10 @@ describe(aresCmd + ' --version(-v)', function() {
 
 describe(aresCmd + ' --<COMMAND>', function() {
     it('Display the help information of the generate', function(done) {
-        exec(cmd + ' -generate', function (error) {
+        exec(cmd + ' -generate', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(error).toBeNull();
             done();
         });

@@ -30,7 +30,10 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -55,7 +58,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --device-list(-D)', function() {
     it('Show available device list', function(done) {
-        exec(cmd + ' -D', function (error, stdout) {
+        exec(cmd + ' -D', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             done();
         });
@@ -66,6 +72,9 @@ describe(aresCmd, function() {
     it('Install sample ipk to device with ares-install', function(done) {
         const installCmd = common.makeCmd('ares-install');
         exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain("Success", stderr);
             setTimeout(function(){
                 done();
@@ -76,7 +85,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd, function() {
     it('Launch sample App', function(done) {
-        exec(cmd + ` ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             setTimeout(function(){
                 done();
@@ -87,7 +99,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --running(-r)', function() {
     it('Check sample app in running list', function(done) {
-        exec(cmd + ' -r', function (error, stdout) {
+        exec(cmd + ' -r', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`${options.pkgId}`);
             done();
         });
@@ -96,7 +111,10 @@ describe(aresCmd + ' --running(-r)', function() {
 
 describe(aresCmd + ' --close(-c)', function() {
     it('Close sample app', function(done) {
-        exec(cmd + ` -c ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` -c ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`${options.pkgId}`);
             setTimeout(function(){
                 done();
@@ -107,7 +125,10 @@ describe(aresCmd + ' --close(-c)', function() {
 
 describe(aresCmd + ' with --display(-dp) option', function() {
     it('Launch sample App', function(done) {
-        exec(cmd + ` -dp 1 ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` -dp 1 ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             expect(stdout).toContain("on display 1");
             setTimeout(function(){
@@ -119,7 +140,10 @@ describe(aresCmd + ' with --display(-dp) option', function() {
 
 describe(aresCmd + ' --running(-r) with --display(-dp) option', function() {
     it('Check sample app in running list', function(done) {
-        exec(cmd + ' -r -dp 1', function (error, stdout) {
+        exec(cmd + ' -r -dp 1', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`${options.pkgId}`);
             expect(stdout).toContain("- display 1");
             done();
@@ -129,7 +153,10 @@ describe(aresCmd + ' --running(-r) with --display(-dp) option', function() {
 
 describe(aresCmd + ' --close(-c) with --display(-dp) option', function() {
     it('Close sample app', function(done) {
-        exec(cmd + ` -c -dp 1 ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` -c -dp 1 ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`${options.pkgId}`);
             expect(stdout).toContain("on display 1");
             setTimeout(function(){
@@ -141,7 +168,10 @@ describe(aresCmd + ' --close(-c) with --display(-dp) option', function() {
 
 describe(aresCmd + ' with -p "{\'displayAffinity\':1}" option', function() {
     it('Launch sample App', function(done) {
-        exec(cmd + ` -p "{'displayAffinity':0}" ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` -p "{'displayAffinity':0}" ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             expect(stdout).toContain("on display 0");
             setTimeout(function(){
@@ -153,7 +183,10 @@ describe(aresCmd + ' with -p "{\'displayAffinity\':1}" option', function() {
 
 describe(aresCmd + ' --close(-c) p "{\'displayAffinity\':1}" option', function() {
     it('Close sample app', function(done) {
-        exec(cmd + ` -c -p "{'displayAffinity':0}" ${options.pkgId}`, function (error, stdout) {
+        exec(cmd + ` -c -p "{'displayAffinity':0}" ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`${options.pkgId}`);
             expect(stdout).toContain("on display 0");
             setTimeout(function(){
@@ -167,6 +200,9 @@ describe(aresCmd, function() {
     it('Remove installed sample app with ares-install', function(done) {
         const installCmd = common.makeCmd('ares-install');
         exec(installCmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Removed package ${options.pkgId}`, stderr);
             done();
         });
@@ -185,30 +221,66 @@ describe(aresCmd +' --hosted(-H)', function() {
 
     it('Generate SampleApp', function(done) {
         const generateCmd = common.makeCmd('ares-generate');
-        exec(generateCmd + ` -t ${expectedTemplate.webapp} -p "id=com.sample.app" ${sampleAppPath}`, function (error, stdout) {
+        exec(generateCmd + ` -t ${expectedTemplate.webapp} -p "id=com.sample.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Generating ${expectedTemplate.webapp}`);
             expect(error).toBeNull();
             done();
         });
     });
 
+    // it('Launch -H SampleApp', function(done) {/////////////
+    //     let result;
+    //     const child = exec(cmd + ` -H ${sampleAppPath}`, function (error, stdout, stderr) {
+    //         console.log("aaaaaaaaaaaaa")
+    //         console.log("stdout: "+ stdout)
+    //         expect(stdout).toContain('Ares Hosted App is now running');
+    //         done();
+    //     });
+
+    //     setTimeout(() => {
+    //         console.log(result)
+    //         child.kill();
+    //         expect(result).not.toBeNull();
+    //         done();
+    //     }, 3000);
+    // });
+
     it('Launch -H SampleApp', function(done) {
-        let result;
-        const child = exec(cmd + ` -H ${sampleAppPath}`, function (error, stdout) {
-            expect(stdout).toContain('Ares Hosted App is now running');
-            done();
+        let result = "";
+        const child = exec(cmd + ` -H ${sampleAppPath}`);
+        
+        child.stdout.on('data', function (data) {//////////////////
+            process.stdout.write(data);
+            result += data;
+        });
+
+        child.stderr.on('data', function (data) {
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            result += data;
+            expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
+            // console.log("result:\n"+result)
+            expect(result).toContain('Ares Hosted App is now running');
             expect(result).not.toBeNull();
             done();
         }, 3000);
     });
 
+
     it('Remove installed ares-hosted app with ares-install', function(done) {
         const installCmd = common.makeCmd('ares-install');
         exec(installCmd + ' -r com.sdk.ares.hostedapp', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Removed package com.sdk.ares.hostedapp`, stderr);
             done();
         });
