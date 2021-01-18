@@ -17,7 +17,7 @@ $ npm install -g @webosose/ares-cli
 ## Compatibility
 
 Our release cycle is independent of webOS OSE and Auto. 
-We recommend using the latest CLI. The latest CLI is compatible with the latest webOS OSE and webOS Auto"
+We recommend using the latest CLI. The latest CLI is compatible with the latest webOS OSE and Auto"
 
 For information about the CLI previous version and compatible with platform, see the [CLI Release Notes](https://www.webosose.org/docs/tools/sdk/cli/cli-release-notes/).
 
