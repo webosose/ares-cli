@@ -48,7 +48,7 @@ describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 expect(stderr).toContain("verb argv");
             }
             expect(stdout).toContain("SYNOPSIS");
@@ -68,7 +68,7 @@ describe(aresCmd, function() {
         const generateCmd = common.makeCmd('ares-generate');
         exec(generateCmd + ` -t ${expectedTemplate.webapp} -p "id=com.webos.sample.app" -p "version=1.0.0" ${sampleAppPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Generating");
             expect(error).toBeNull();
@@ -91,7 +91,7 @@ describe(aresCmd, function() {
             const generateCmd = common.makeCmd('ares-generate');
             exec(generateCmd + ` -t ${expectedTemplate.jsservice} -s ${svcId} ${svcPath}`, function (error, stdout, stderr) {
                 if (stderr && stderr.length > 0) {
-                    commonSpec.detectNodeMessage(stderr);
+                    common.detectNodeMessage(stderr);
                 }
                 expect(stdout).toContain("Generating");
                 done();
@@ -132,7 +132,7 @@ describe(aresCmd, function() {
     it('Package web app & service with -o(--outdir)', function(done) {
         exec(cmd + ` ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(outputPath);
             expect(stdout).toContain("Success", error);
@@ -160,7 +160,7 @@ describe(aresCmd, function() {
     it('App version does not exist', function(done) {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
@@ -183,7 +183,7 @@ describe(aresCmd, function() {
 
         exec(cmd + ` ${nativeAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
@@ -201,7 +201,7 @@ describe(aresCmd, function() {
 
         exec(cmd + ` ${nativeAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
@@ -219,7 +219,7 @@ describe(aresCmd, function() {
 
         exec(cmd + ` ${nativeAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
@@ -237,7 +237,7 @@ describe(aresCmd, function() {
 
         exec(cmd + ` ${nativeAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Create", error);
             expect(stdout).toContain("Success", error);
@@ -257,7 +257,7 @@ describe(aresCmd, function() {
     it('Package Only Service with -o(--outdir)', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pi com.webos.sample -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(outputPath);
             expect(stdout).toContain("Success", error);
@@ -280,7 +280,7 @@ describe(aresCmd, function() {
     it('Package Only Service by packageinfo.json with -o(--outdir)', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pf ${pkginfoPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(outputPath);
             expect(stdout).toContain("Success", error);
@@ -294,7 +294,7 @@ describe(aresCmd + ' --check(-c)', function() {
     it('Check the application but do not pacakge', function(done) {
         exec(cmd + ` -c ${sampleAppPath} ${sampleServicePaths[0]}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("no problems detected");
             done();
@@ -303,7 +303,7 @@ describe(aresCmd + ' --check(-c)', function() {
     it('Check the services but do not pacakge', function(done) {
         exec(cmd + ` -c ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pi com.webos.sample`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("no problems detected");
             done();
@@ -325,7 +325,7 @@ describe(aresCmd + ' --rom(-r)', function() {
     it('Create output a directory structure with app', function(done) {
         exec(cmd + ` -r ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
 
             const createdSvcPath = path.join(outputPath, 'usr/palm/services');
@@ -339,7 +339,7 @@ describe(aresCmd + ' --rom(-r)', function() {
     it('Create output a directory structure without app', function(done) {
         exec(cmd + ` -r ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pi com.webos.sample -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
 
             const createdSvcPath = path.join(outputPath, 'usr/palm/services');
@@ -364,7 +364,7 @@ describe(aresCmd + ' --encrypt(-enc)', function() {
     it('Encrypted ipk', function(done) {
         exec(cmd + ` -enc ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 expect(stderr).toContain('no such file or directory, open');
             }
             expect(fs.existsSync(appPkgPath)).toBe(false);
@@ -387,7 +387,7 @@ describe(aresCmd + ' --sign(-s) & --certificate(-crt)', function() {
     it('Sign ipk', function(done) {
         exec(cmd +` -s ${signKeyPath} -crt ${crtPath} ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain('Create signed', error);
             expect(fs.existsSync(appPkgPath)).toBe(true);
@@ -413,7 +413,7 @@ describe(aresCmd + ' --app-exclude(-e)', function() {
     it('Check the application but do not pacakge', function(done) {
         exec(cmd + ` -e tmpFile ${sampleAppPath} -r -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("Success");
             expect(fs.existsSync(path.join(appPathByRom, "com.webos.sample.app/tmpFile"))).toBe(false);
@@ -439,7 +439,7 @@ describe(aresCmd + ' negative TC', function() {
     it('Check to exist app id', function(done) {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Please input required field <id>", error);
             }
@@ -462,7 +462,7 @@ describe(aresCmd + ' negative TC', function() {
     it('Check to exist required fields in app meta file', function(done) {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Invalid file <appinfo.json> :\nmain is required\ntitle is required\nicon is required" +
                                         "\ntype is required", error);
@@ -490,7 +490,7 @@ describe(aresCmd + ' negative TC', function() {
     it('Check to invalid app type', function(done) {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Invalid file <appinfo.json> :" +
                                         "\ntype is not one of enum values: web,stub,native,native_builtin,native_appshell,qml", error);
@@ -509,7 +509,7 @@ describe(aresCmd + ' negative TC', function() {
     it('Check pi/pn option for app packaging', function(done) {
         exec(cmd + ` ${sampleAppPath} -pi com.webos.sample -pv 1.1.1 -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Do not use together with options <pkgid, pkgversion, pkginfofile>", error);
             }
@@ -527,7 +527,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
     it('Check to exist pi option', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: packageId must be provided by using either the '--pkgid' or the '--pkginfofile' option", error);
             }
@@ -545,7 +545,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
     it('Check to do not support -pi and -pf options together', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pf ${pkginfoPath} -pi com.webos.sample -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Do not use together with options <pkginfofile, pkgid>", error);
             }
@@ -574,7 +574,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
     it('Check to file name of package meta file', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pf ${tmpPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! CLI: Invalid file <packageinfo.json> ", error);
             }
@@ -603,7 +603,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
     it('Check to exist id fields in pkg meta file', function(done) {
         exec(cmd + ` ${sampleServicePaths[1]} ${sampleServicePaths[2]} -pf ${pkginfoPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
-                commonSpec.detectNodeMessage(stderr);
+                common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
                 console.log("stderr:"+stderr)
                 expect(stderr).toContain("ares-package ERR! CLI: Please input required field <id>", error);
