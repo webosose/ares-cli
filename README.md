@@ -16,14 +16,10 @@ $ npm install -g @webosose/ares-cli
 
 ## Compatibility
 
-Our release cycle is independent of webOS OSE and Auto. We follow semver and here is the compatibility table:
+Our release cycle is independent of webOS OSE and Auto. 
+We recommend using the latest CLI. The latest CLI is compatible with the latest webOS OSE and Auto"
 
-| webOS CLI | webOS OSE | webOS Auto |
-|--------|--------|------|
-| v2.0.2 | v2.8.0 | v2.0 |
-
-
-For information about the CLI previous version, see the [CLI Release Notes](https://www.webosose.org/docs/tools/sdk/cli/cli-release-notes/).
+For information about the CLI previous version and compatible with platform, see the [CLI Release Notes](https://www.webosose.org/docs/tools/sdk/cli/cli-release-notes/).
 
 ## Command List
 
@@ -100,7 +96,7 @@ The following key-value pairs are the default configurations for the test.
 - Test ares-generate command.
 
     ``` shell
-    $ jasmine --device=webOS --ip=192.168.0.12 --port=24 spec/jsSpec/arse-generate.js
+    $ jasmine --device=webOS --ip=192.168.0.12 --port=24 spec/jsSpec/ares-generate.js
     ```
 
 - Test using npm command `npm test` instead of `jasmine`.
@@ -113,7 +109,7 @@ The following key-value pairs are the default configurations for the test.
 
 The step-by-step guide to contribute is as follows:
 
-1. Fork: Fork source from are-cli repository.
+1. Fork: Fork source from ares-cli repository.
 2. Create a new branch: Create a branch from develop branch.
 3. Implement: Implement the source codes and `git push` the changes to the new branch.
 4. Create a pull request: Create a pull request. When you write a commit message, make sure you follow [Commit Message Guidelines](#commit-message-guidelines).
