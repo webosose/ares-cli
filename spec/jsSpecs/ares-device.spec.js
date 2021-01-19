@@ -9,7 +9,8 @@ const exec = require('child_process').exec,
     fs = require('fs'),
     common = require('./common-spec');
 
-const captureDirPath = path.join(__dirname, "..", "tempFiles", "webOSCap");
+const captureDirPath = path.join(__dirname, "..", "tempFiles", "deviceCapture"),
+    reg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
 
 const aresCmd = 'ares-device';
 
@@ -110,15 +111,14 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain(".png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const reg = new RegExp("[A-Za-z0-9]*_[dispaly0-9]*_[0-9]*.png");
-            const arr = stdout.match(reg);
-            const filePath = path.join(path.resolve('.'), arr[0]);
+            const arr = stdout.match(reg),
+                filePath = path.join(path.resolve('.'), arr[0]);
+
             console.log("capture file name : " + arr[0]);
             expect(fs.existsSync(filePath)).toBe(true);
 
             // remove created capture file
             common.removeOutDir(filePath);
-
             done();
         });
     });
@@ -135,27 +135,23 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 
             // remove created capture file
             common.removeOutDir(filePath);
-
             done();
         });
     });
 
     it('Capture with directory Path & display option', function(done) {
         exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout) {
-            const curDate = new Date();
             expect(stdout).toContain(options.device);
-            expect(stdout).toContain(curDate.getFullYear());
+            expect(stdout).toContain(new Date().getFullYear());
             expect(stdout).toContain("display1");
             expect(stdout).toContain(".png");
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
 
-            // eslint-disable-next-line no-useless-escape
-            const reg = new RegExp("[A-Za-z0-9]*_[A-Za-z0-9]*_[0-9]*.png");
+            
             const arr = stdout.match(reg);
             console.log("capture file name : " + arr[0]);
             expect(fs.existsSync(path.join(captureDirPath, arr[0]))).toBe(true);
-
             done();
         });
     });
@@ -168,20 +164,18 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain("screen.bmp");
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
-
             done();
         });
     });
 
     it('Capture with directory & file path(jpg)', function(done) {
-        const capFilePath = path.join(captureDirPath, "screen.jpg");
-        exec(cmd + ` -c ${capFilePath}`, function (error, stdout) {
+        const captureFilePath = path.join(captureDirPath, "screen.jpg");
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
-
             done();
         });
     });
