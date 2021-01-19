@@ -82,7 +82,7 @@ if (argv.level) {
 const options = {
     device: argv.device,
     display : argv.display || 0,
-    inputPath : argv.argv.remain[0] || null,
+    outputPath : argv.argv.remain[0] || null,
 };
 
 let op;

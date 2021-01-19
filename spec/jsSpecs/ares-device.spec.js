@@ -9,8 +9,7 @@ const exec = require('child_process').exec,
     fs = require('fs'),
     common = require('./common-spec');
 
-const tempDirPath = path.join(__dirname, "..", "tempFiles"),
-    capDirPath = path.join(tempDirPath, "webOSCap");
+const captureDirPath = path.join(__dirname, "..", "tempFiles", "webOSCap");
 
 const aresCmd = 'ares-device';
 
@@ -94,11 +93,11 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --capture(-c)', function() {
     beforeEach(function(done) {
-        common.removeOutDir(capDirPath);
+        common.removeOutDir(captureDirPath);
         done();
     });
     afterEach(function(done) {
-        common.removeOutDir(capDirPath);
+        common.removeOutDir(captureDirPath);
         done();
     });
 
@@ -125,13 +124,13 @@ describe(aresCmd + ' --capture(-c)', function() {
     });
 
     it('Capture with filename', function(done) {
-        exec(cmd + ` --capture capFile.png`, function (error, stdout) {
+        exec(cmd + ` --capture screen.png`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("capFile.png");
+            expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const filePath = path.join(path.resolve('.'), "capFile.png");
+            const filePath = path.join(path.resolve('.'), "screen.png");
             expect(fs.existsSync(filePath)).toBe(true);
 
             // remove created capture file
@@ -142,46 +141,46 @@ describe(aresCmd + ' --capture(-c)', function() {
     });
 
     it('Capture with directory Path & display option', function(done) {
-        exec(cmd + ` --capture ${capDirPath} --display 1`, function (error, stdout) {
+        exec(cmd + ` --capture ${captureDirPath} --display 1`, function (error, stdout) {
             const curDate = new Date();
             expect(stdout).toContain(options.device);
             expect(stdout).toContain(curDate.getFullYear());
             expect(stdout).toContain("display1");
             expect(stdout).toContain(".png");
-            expect(stdout).toContain(capDirPath);
-            expect(fs.existsSync(capDirPath)).toBe(true);
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
 
             // eslint-disable-next-line no-useless-escape
             const reg = new RegExp("[A-Za-z0-9]*_[A-Za-z0-9]*_[0-9]*.png");
             const arr = stdout.match(reg);
             console.log("capture file name : " + arr[0]);
-            expect(fs.existsSync(path.join(capDirPath, arr[0]))).toBe(true);
+            expect(fs.existsSync(path.join(captureDirPath, arr[0]))).toBe(true);
 
             done();
         });
     });
 
     it('Capture with directory & file path(bmp)', function(done) {
-        const capFilePath = path.join(capDirPath, "capFile.bmp");
-        exec(cmd + ` --capture ${capFilePath}`, function (error, stdout) {
+        const captureFilePath = path.join(captureDirPath, "screen.bmp");
+        exec(cmd + ` --capture ${captureFilePath}`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("capFile.bmp");
-            expect(stdout).toContain(capDirPath);
-            expect(fs.existsSync(capFilePath)).toBe(true);
+            expect(stdout).toContain("screen.bmp");
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
 
             done();
         });
     });
 
     it('Capture with directory & file path(jpg)', function(done) {
-        const capFilePath = path.join(capDirPath, "capFile.jpg");
+        const capFilePath = path.join(captureDirPath, "screen.jpg");
         exec(cmd + ` --capture ${capFilePath}`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("capFile.jpg");
-            expect(stdout).toContain(capDirPath);
-            expect(fs.existsSync(capFilePath)).toBe(true);
+            expect(stdout).toContain("screen.jpg");
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
 
             done();
         });

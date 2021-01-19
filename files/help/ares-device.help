@@ -11,7 +11,11 @@
     },
     "description" : {
         "default": [
-            "This command displays the device information."
+            "This command displays the device information.",
+            "",
+            "OUTPUT_PATH is the output directory or file path of capture file.",
+            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
+            ""
         ]
     },
     "options" : {
@@ -19,11 +23,7 @@
         "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
-        "capture" : [
-            "-c, --capture <OUTPUT_PATH> @TAB@ Capture screen and save the file to local",
-            "@TAB@ Use OUTPUT_PATH as the output directory or file path",
-            "@TAB@ File format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default"
-        ],
+        "capture" : "-c, --capture <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
         "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture option",
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
@@ -50,10 +50,7 @@
             "# Display session information",
             "ares-device -s -d DEVICE",
             "",
-            "# Display session information",
-            "ares-device -s -d DEVICE",
-            "",
-            "# Capture screen as screen.png of display 1",
+            "# Capture the screen of display 1 as screen.png",
             "ares-device -c screen.png -dp 1 -d DEVICE",
             ""
         ]
