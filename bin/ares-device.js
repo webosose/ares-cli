@@ -35,7 +35,7 @@ if (process.argv.length === 2) {
 const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
-    "capture" : Boolean,
+    "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
     "device-list":  Boolean,
@@ -47,7 +47,7 @@ const knownOpts = {
 const shortHands = {
     "i": ["--system-info"],
     "s": ["--session-info"],
-    "c": ["--capture"],
+    "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
     "D": ["--device-list"],
@@ -97,7 +97,7 @@ if (argv['device-list']) {
     op = getDeviceInfo;
 } else if (argv['session-info']) {
     op = getSessionInfo;
-} else if (argv['capture']) {
+} else if (argv['capture-screen']) {
     op = captureScreen;
 } else {
     showUsage();

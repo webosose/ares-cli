@@ -91,7 +91,7 @@ describe(aresCmd, function() {
     });
 });
 
-describe(aresCmd + ' --capture(-c)', function() {
+describe(aresCmd + ' --capture-screen(-c)', function() {
     beforeEach(function(done) {
         common.removeOutDir(captureDirPath);
         done();
@@ -102,7 +102,7 @@ describe(aresCmd + ' --capture(-c)', function() {
     });
 
     it('Capture', function(done) {
-        exec(cmd + ` --capture`, function (error, stdout) {
+        exec(cmd + ` -c`, function (error, stdout) {
             const curDate = new Date();
             expect(stdout).toContain(options.device);
             expect(stdout).toContain(curDate.getFullYear());
@@ -124,7 +124,7 @@ describe(aresCmd + ' --capture(-c)', function() {
     });
 
     it('Capture with filename', function(done) {
-        exec(cmd + ` --capture screen.png`, function (error, stdout) {
+        exec(cmd + ` -c screen.png`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
@@ -141,7 +141,7 @@ describe(aresCmd + ' --capture(-c)', function() {
     });
 
     it('Capture with directory Path & display option', function(done) {
-        exec(cmd + ` --capture ${captureDirPath} --display 1`, function (error, stdout) {
+        exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout) {
             const curDate = new Date();
             expect(stdout).toContain(options.device);
             expect(stdout).toContain(curDate.getFullYear());
@@ -162,7 +162,7 @@ describe(aresCmd + ' --capture(-c)', function() {
 
     it('Capture with directory & file path(bmp)', function(done) {
         const captureFilePath = path.join(captureDirPath, "screen.bmp");
-        exec(cmd + ` --capture ${captureFilePath}`, function (error, stdout) {
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.bmp");
@@ -175,7 +175,7 @@ describe(aresCmd + ' --capture(-c)', function() {
 
     it('Capture with directory & file path(jpg)', function(done) {
         const capFilePath = path.join(captureDirPath, "screen.jpg");
-        exec(cmd + ` --capture ${capFilePath}`, function (error, stdout) {
+        exec(cmd + ` -c ${capFilePath}`, function (error, stdout) {
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
@@ -189,21 +189,21 @@ describe(aresCmd + ' --capture(-c)', function() {
 
 describe(aresCmd + ' negative TC', function() {
     it('Capture with invalid file format', function(done) {
-        exec(cmd + ` --capture "test.abc"`, function (error, stdout, stderr) {
+        exec(cmd + ` -c "test.abc"`, function (error, stdout, stderr) {
             expect(stderr).toContain("Please specify file extension, either 'png' 'bmp' or 'jpg'");
             done();
         });
     });
 
     it('Capture with invalid destiation Path', function(done) {
-        exec(cmd + ` --capture /rootDir`, function (error, stdout, stderr) {
+        exec(cmd + ` -c /rootDir`, function (error, stdout, stderr) {
             expect(stderr).toContain("permission denied, mkdir '/rootDir'");
             done();
         });
     });
 
     it('Capture with invalid display ID', function(done) {
-        exec(cmd + ` --capture --display 10`, function (error, stdout, stderr) {
+        exec(cmd + ` -c --display 10`, function (error, stdout, stderr) {
             expect(stderr).toContain("luna-send command failed <ERR_INVALID_DISPLAY>");
             done();
         });
