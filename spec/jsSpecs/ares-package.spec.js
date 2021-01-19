@@ -605,7 +605,6 @@ describe(aresCmd + ' negative TC for services packaging', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
-                console.log("stderr:"+stderr)
                 expect(stderr).toContain("ares-package ERR! CLI: Please input required field <id>", error);
             }
             done();

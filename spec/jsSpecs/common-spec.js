@@ -115,4 +115,4 @@ commonSpec.detectNodeMessage = function(stderr) {
     if (stderr.includes("node:")) {
         return fail(stderr);
     }
-}
+};
