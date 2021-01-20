@@ -117,7 +117,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
     });
 
     it('Capture', function(done) {
-        exec(cmd + ` -c`, function (error, stdout) {
+        exec(cmd + ` -c`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             expect(stdout).toContain(new Date().getFullYear());
             expect(stdout).toContain("display0");
@@ -134,7 +137,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
     });
 
     it('Capture with filename', function(done) {
-        exec(cmd + ` -c screen.png`, function (error, stdout) {
+        exec(cmd + ` -c screen.png`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
@@ -147,7 +153,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
     });
 
     it('Capture with directory Path & display option', function(done) {
-        exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout) {
+        exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             expect(stdout).toContain(new Date().getFullYear());
             expect(stdout).toContain("display1");
@@ -165,7 +174,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 
     it('Capture with directory & file path(bmp)', function(done) {
         const captureFilePath = path.join(captureDirPath, "screen.bmp");
-        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout) {
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.bmp");
@@ -177,7 +189,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 
     it('Capture with directory & file path(jpg)', function(done) {
         const captureFilePath = path.join(captureDirPath, "screen.jpg");
-        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout) {
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
@@ -191,21 +206,30 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 describe(aresCmd + ' negative TC', function() {
     it('Capture with invalid file format', function(done) {
         exec(cmd + ` -c "test.abc"`, function (error, stdout, stderr) {
-            expect(stderr).toContain("Please specify file extension, either 'png' 'bmp' or 'jpg'");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("Please specify file extension, either 'png' 'bmp' or 'jpg'");
+            }
             done();
         });
     });
 
     it('Capture with invalid destiation Path', function(done) {
         exec(cmd + ` -c /rootDir`, function (error, stdout, stderr) {
-            expect(stderr).toContain("permission denied, mkdir '/rootDir'");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("permission denied, mkdir '/rootDir'");
+            }
             done();
         });
     });
 
     it('Capture with invalid display ID', function(done) {
         exec(cmd + ` -c --display 10`, function (error, stdout, stderr) {
-            expect(stderr).toContain("luna-send command failed <ERR_INVALID_DISPLAY>");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("luna-send command failed <ERR_INVALID_DISPLAY>");
+            }
             done();
         });
     });
