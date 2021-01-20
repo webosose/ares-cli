@@ -23,8 +23,8 @@
         "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
-        "capture" : "-c, --capture <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
-        "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture option",
+        "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
+        "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture screen option",
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"

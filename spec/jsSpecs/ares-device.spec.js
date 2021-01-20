@@ -93,12 +93,16 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd + ' --capture-screen(-c)', function() {
+    let generatedFile = "";
+
     beforeEach(function(done) {
         common.removeOutDir(captureDirPath);
         done();
     });
     afterEach(function(done) {
+        common.removeOutDir(generatedFile);
         common.removeOutDir(captureDirPath);
+        generatedFile = "";
         done();
     });
 
@@ -111,14 +115,11 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain(".png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const arr = stdout.match(reg),
-                filePath = path.join(path.resolve('.'), arr[0]);
+            const arr = stdout.match(reg);
 
+            generatedFile = path.join(path.resolve('.'), arr[0]);
             console.log("capture file name : " + arr[0]);
-            expect(fs.existsSync(filePath)).toBe(true);
-
-            // remove created capture file
-            common.removeOutDir(filePath);
+            expect(fs.existsSync(generatedFile)).toBe(true);
             done();
         });
     });
@@ -130,11 +131,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const filePath = path.join(path.resolve('.'), "screen.png");
-            expect(fs.existsSync(filePath)).toBe(true);
-
-            // remove created capture file
-            common.removeOutDir(filePath);
+            generatedFile = path.join(path.resolve('.'), "screen.png");
+            expect(fs.existsSync(generatedFile)).toBe(true);
             done();
         });
     });
@@ -148,8 +146,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
 
-            
             const arr = stdout.match(reg);
+
             console.log("capture file name : " + arr[0]);
             expect(fs.existsSync(path.join(captureDirPath, arr[0]))).toBe(true);
             done();
