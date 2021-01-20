@@ -35,7 +35,10 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -45,7 +48,11 @@ describe(aresCmd + ' -v', function() {
 
 describe(aresCmd + ' --list', function() {
     it('List the available templates', function(done) {
-        exec(cmd + ' --list', function (error, stdout) {
+        exec(cmd + ' --list', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             expectedList = expectedList.join('\n'); // multi string in array. need to join
             stdout = stdout.trim().replace(/\s+['\n']/g, '\n');
             expect(stdout).toContain(expectedList);
@@ -70,7 +77,11 @@ describe(aresCmd +' --property', function() {
         const version = "2.0.0";
         const title = "First App";
 
-        exec(cmd + ` -t ${expectedTemplate.webapp} -p "id=${id}" -p "version=${version}" -p "title=${title}" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t ${expectedTemplate.webapp} -p "id=${id}" -p "version=${version}" -p "title=${title}" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text, outputObj;
             expect(fs.existsSync(path.join(sampleAppPath, "appinfo.json"))).toBe(true);
             try {
@@ -97,7 +108,11 @@ describe(aresCmd +' --property', function() {
         const version = "1.1.1";
         const test = "testData";
 
-        exec(cmd + ` -t packageinfo -p "id=${id}" -p "version=${version}" -p "test=${test}" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t packageinfo -p "id=${id}" -p "version=${version}" -p "test=${test}" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text, outputObj;
             expect(fs.existsSync(path.join(sampleAppPath, "packageinfo.json"))).toBe(true);
             try {
@@ -119,7 +134,11 @@ describe(aresCmd +' --property', function() {
         const id = "com.sample.app.service";
         const version = "1.1.1";
 
-        exec(cmd + ` -t jsserviceinfo -p "id=${id}" -p "version=${version}" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t jsserviceinfo -p "id=${id}" -p "version=${version}" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text, outputObj;
             expect(fs.existsSync(path.join(sampleAppPath, "services.json"))).toBe(true);
             try {
@@ -142,7 +161,11 @@ describe(aresCmd +' --property', function() {
         const version = "2.0.0";
         const title = "First App";
 
-        exec(cmd + ` -t ${expectedTemplate.qmlappinfo} -p "id=${id}" -p "version=${version}" -p "title=${title}" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t ${expectedTemplate.qmlappinfo} -p "id=${id}" -p "version=${version}" -p "title=${title}" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text, outputObj;
             expect(fs.existsSync(path.join(sampleAppPath, "appinfo.json"))).toBe(true);
             try {
@@ -172,7 +195,11 @@ describe(aresCmd + ' --template', function() {
     });
 
     it('webappinfo : appinfo.json for web app', function(done) {
-        exec(cmd + ` -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             const fileList = [];
 
             expect(fs.existsSync(path.join(sampleAppPath))).toBe(true);
@@ -195,7 +222,11 @@ describe(aresCmd + ' --template', function() {
             pending("Skip packageinfo.json check");
         }
 
-        exec(cmd + ` -t packageinfo -p "id=com.domain" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t packageinfo -p "id=com.domain" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             const  fileList= [];
 
             expect(fs.existsSync(path.join(sampleAppPath))).toBe(true);
@@ -215,7 +246,11 @@ describe(aresCmd + ' --template', function() {
 
     it('hosted_webapp : generate qml template app', function(done) {
         const url = "http://www.google.com";
-        exec(cmd + ` -t hosted_webapp -p "url=${url}" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t hosted_webapp -p "url=${url}" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text;
             expect(fs.existsSync(path.join(sampleAppPath, "index.html"))).toBe(true);
             try {
@@ -231,7 +266,11 @@ describe(aresCmd + ' --template', function() {
     });
 
     it('qmlapp : generate qml template app', function(done) {
-        exec(cmd + ` -t qmlapp -p "id=com.qml.app" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t qmlapp -p "id=com.qml.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text;
             expect(fs.existsSync(path.join(sampleAppPath, "main.qml"))).toBe(true);
             try {
@@ -259,7 +298,11 @@ describe(aresCmd + ' --overwrite(-f)', function() {
     });
 
     it('generate sample app', function(done) {
-        exec(cmd + ` -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             const fileList = [];
 
             expect(fs.existsSync(path.join(sampleAppPath))).toBe(true);
@@ -278,7 +321,11 @@ describe(aresCmd + ' --overwrite(-f)', function() {
     });
 
     it('Overwirte existing files', function(done) {
-        exec(cmd + ` -f -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error) {
+        exec(cmd + ` -f -t webappinfo -p "id=com.domain.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             const fileList = [];
 
             expect(fs.existsSync(path.join(sampleAppPath))).toBe(true);
@@ -309,7 +356,11 @@ describe(aresCmd + ' --servicename', function() {
 
     it('Set the servicename for webOS service.', function(done) {
         const serviceid = "com.domain.app.service";
-        exec(cmd + ` -t ${expectedTemplate.jsservice} -s ${serviceid} ${sampleServicePath}`, function (error) {
+        exec(cmd + ` -t ${expectedTemplate.jsservice} -s ${serviceid} ${sampleServicePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let text, outputObj;
             expect(fs.existsSync(path.join(sampleServicePath, "services.json"))).toBe(true);
             try {

@@ -110,3 +110,9 @@ commonSpec.removeOutDir = function(filePath) {
     if(fs.existsSync(filePath))
         shelljs.rm('-rf', filePath);
 };
+
+commonSpec.detectNodeMessage = function(stderr) {
+    if (stderr.includes("node:")) {
+        return fail(stderr);
+    }
+};
