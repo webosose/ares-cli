@@ -14,8 +14,7 @@
             "This command displays the device information and supports screen capture.",
             "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
-            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
-            ""
+            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default."
         ]
     },
     "options" : {
