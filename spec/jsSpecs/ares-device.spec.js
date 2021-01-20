@@ -10,7 +10,7 @@ const exec = require('child_process').exec,
     common = require('./common-spec');
 
 const captureDirPath = path.join(__dirname, "..", "tempFiles", "deviceCapture"),
-    reg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
+    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
 
 const aresCmd = 'ares-device';
 
@@ -96,13 +96,13 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
     let generatedFile = "";
 
     beforeEach(function(done) {
+        generatedFile = "";
         common.removeOutDir(captureDirPath);
         done();
     });
     afterEach(function(done) {
         common.removeOutDir(generatedFile);
         common.removeOutDir(captureDirPath);
-        generatedFile = "";
         done();
     });
 
@@ -114,10 +114,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain(".png");
             expect(stdout).toContain(path.resolve('.'));
 
-            const arr = stdout.match(reg);
+            const matchedFiles = stdout.match(dateFileReg);
 
-            generatedFile = path.join(path.resolve('.'), arr[0]);
-            console.log("capture file name : " + arr[0]);
+            generatedFile = path.join(path.resolve('.'), matchedFiles[0]);
+            console.log("capture file name : " + matchedFiles[0]);
             expect(fs.existsSync(generatedFile)).toBe(true);
             done();
         });
@@ -145,10 +145,10 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
 
-            const arr = stdout.match(reg);
+            const matchedFiles = stdout.match(dateFileReg);
 
-            console.log("capture file name : " + arr[0]);
-            expect(fs.existsSync(path.join(captureDirPath, arr[0]))).toBe(true);
+            console.log("capture file name : " + matchedFiles[0]);
+            expect(fs.existsSync(path.join(captureDirPath, matchedFiles[0]))).toBe(true);
             done();
         });
     });
