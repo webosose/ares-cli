@@ -108,9 +108,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 
     it('Capture', function(done) {
         exec(cmd + ` -c`, function (error, stdout) {
-            const curDate = new Date();
             expect(stdout).toContain(options.device);
-            expect(stdout).toContain(curDate.getFullYear());
+            expect(stdout).toContain(new Date().getFullYear());
             expect(stdout).toContain("display0");
             expect(stdout).toContain(".png");
             expect(stdout).toContain(path.resolve('.'));
