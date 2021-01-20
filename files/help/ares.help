@@ -9,7 +9,9 @@
         ]
     },
     "description" : [
-        "This command lists all ares commands or provides help information of the given command."
+        "This command lists all ares commands or provides help information of the given command.",
+        "",
+        "COMMAND is a postfix of the ares commands."
     ],
     "examples" : [
         "# List all the ares commands",
@@ -21,7 +23,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["list", "<COMMAND>", "level", "help", "version"],
+        "default" : ["list", "<COMMAND>","help", "version"],
         "list" : [
             "-l, --list @TAB@ List all the ares commands"
         ],

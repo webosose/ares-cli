@@ -27,7 +27,10 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -43,7 +46,11 @@ describe(aresCmd, function() {
 
     it('Generate sample app', function(done) {
         const generateCmd = common.makeCmd('ares-generate');
-        exec(generateCmd + ` -t ${expectedTemplate.webapp} -p "id=com.domain.app" ${sampleAppPath}`, function (error) {
+        exec(generateCmd + ` -t ${expectedTemplate.webapp} -p "id=com.domain.app" ${sampleAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             let outputObj;
             try {
                 const text = fs.readFileSync(path.join(sampleAppPath, "appinfo.json"));
@@ -65,14 +72,17 @@ describe(aresCmd, function() {
         let result;
 
         child.stdout.on('data', function (data) {
-            process.stdout.write(data.toString());
-            result = data.toString();
-            expect(data.toString()).toContain('Local server running on http://localhost');
+            process.stdout.write(data);
+            result = data;
+            expect(data).toContain('Local server running on http://localhost');
         });
 
         child.stderr.on('data', function (data) {
-            result = data.toString();
-            expect(data.toString()).toBeNull();
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            result = data;
+            expect(data).toBeNull();
         });
 
         setTimeout(() => {
@@ -89,14 +99,17 @@ describe(aresCmd + ' --open(o)', function() {
         let result;
 
         child.stdout.on('data', function (data) {
-            process.stdout.write(data.toString());
-            result = data.toString();
-            expect(data.toString()).toContain('Local server running on http://localhost');
+            process.stdout.write(data);
+            result = data;
+            expect(data).toContain('Local server running on http://localhost');
         });
 
         child.stderr.on('data', function (data) {
-            result = data.toString();
-            expect(data.toString()).toBeNull();
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            result = data;
+            expect(data).toBeNull();
         });
 
         setTimeout(() => {
@@ -119,14 +132,17 @@ describe(aresCmd +' --port', function() {
         let result;
 
         child.stdout.on('data', function (data) {
-            process.stdout.write(data.toString());
-            result = data.toString();
-            expect(data.toString()).toContain(`Local server running on http://localhost:${port}`);
+            process.stdout.write(data);
+            result = data;
+            expect(data).toContain(`Local server running on http://localhost:${port}`);
         });
 
         child.stderr.on('data', function (data) {
-            result = data.toString();
-            expect(data.toString()).toBeNull();
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            result = data;
+            expect(data).toBeNull();
         });
 
         setTimeout(() => {
