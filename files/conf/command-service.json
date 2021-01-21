@@ -52,6 +52,11 @@
             "service" : "com.webos.service.sessionmanager",
             "method" : "getSessionList",
             "returnValue" : "return.returnValue"
+        },
+        "captureCompositorOutput" : {
+            "service" : "com.webos.surfacemanager",
+            "method" : "captureCompositorOutput",
+            "returnValue" : "return.returnValue"
         }
     }
 }
