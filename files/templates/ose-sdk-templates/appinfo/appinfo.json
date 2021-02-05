@@ -6,5 +6,5 @@
     "main": "index.html",
     "title": "new app",
     "icon": "icon.png",
-    "requiredPermissions": ["time", "settings.read", "activities.manage"]
+    "requiredPermissions": ["time.query", "activity.operation"]
 }
