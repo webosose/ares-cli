@@ -53,7 +53,10 @@ const killUsedPort = function() {
 describe(aresCmd + ' -h -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -h -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -66,7 +69,10 @@ describe(aresCmd + ' --add(-a)', function() {
         const host = '192.168.0.5';
         const port = '1234';
         const username = 'developer';
-        exec(cmd + ` -a ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout) {
+        exec(cmd + ` -a ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(device);
             expect(stdout).toContain(host);
             expect(stdout).toContain(port);
@@ -84,7 +90,10 @@ describe(aresCmd + ' --add(-a)', function() {
         const port = '1234';
         const username = 'developer';
         const newDevice = 'test1';
-        exec(cmd + ` -a ${newDevice} -i username=${username} -i host=${host} -i port=${port} -i default=true`, function (error, stdout) {
+        exec(cmd + ` -a ${newDevice} -i username=${username} -i host=${host} -i port=${port} -i default=true`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(newDevice);
             expect(stdout).toContain(host);
             expect(stdout).toContain(port);
@@ -97,7 +106,10 @@ describe(aresCmd + ' --add(-a)', function() {
 
 describe(aresCmd + ' --list(-l)', function() {
     it('Should List all device information', function(done) {
-        exec(cmd + ' --list', function (error, stdout) {
+        exec(cmd + ' --list', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(device);
             done();
         });
@@ -106,7 +118,10 @@ describe(aresCmd + ' --list(-l)', function() {
 
 describe(aresCmd + ' --listfull(-F)', function() {
     it('Should List all device detail information', function(done) {
-        exec(cmd + ' -F', function (error, stdout) {
+        exec(cmd + ' -F', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(device);
             expect(stdout).toContain("description");
             done();
@@ -119,7 +134,10 @@ describe(aresCmd + ' --modify(-m)', function() {
         const username = 'developer';
         const host = '192.168.0.1';
         const port = '4321';
-        exec(cmd + ` -m ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout) {
+        exec(cmd + ` -m ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(username);
             expect(stdout).toContain(host);
             expect(stdout).toContain(port);
@@ -130,7 +148,10 @@ describe(aresCmd + ' --modify(-m)', function() {
 
 describe(aresCmd + ' --default(-f)', function() {
     it('Set default device', function(done) {
-        exec(cmd + ` -f ${device}`, function (error, stdout) {
+        exec(cmd + ` -f ${device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(device + " (default)");
             done();
         });
@@ -139,7 +160,10 @@ describe(aresCmd + ' --default(-f)', function() {
 
 describe(aresCmd + ' --remove(-r)', function() {
     it('Should remove added device information', function(done) {
-        exec(cmd + ` -r ${device}`, function (error, stdout) {
+        exec(cmd + ` -r ${device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain(device);
             expect(error).toBeNull();
             expect(stdout).not.toContain(device);
@@ -165,17 +189,20 @@ describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
         let result;
 
         child.stdout.on('data', function (data) {
-            process.stdout.write(data.toString());
-            result = data.toString();
+            process.stdout.write(data);
+            result = data;
             if(!checkDone) {
-                expect(data.toString()).toContain("Searching...");
+                expect(data).toContain("Searching...");
                 checkDone = true;
             }
         });
 
         child.stderr.on('data', function (data) {
-            result = data.toString();
-            expect(data.toString()).toBeNull();
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            result = data;
+            expect(data).toBeNull();
         });
 
         setTimeout(() => {
@@ -190,7 +217,10 @@ describe(aresCmd + ' --reset(-R)', function() {
         const host = '192.168.0.5';
         const port = '1234';
         const username = 'developer';
-        exec(cmd + ` -a ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout) {
+        exec(cmd + ` -a ${device} -i username=${username} -i host=${host} -i port=${port}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(device);
             expect(stdout).toContain(host);
             expect(stdout).toContain(port);
@@ -208,7 +238,10 @@ describe(aresCmd + ' --reset(-R)', function() {
             }
         });
 
-        exec(cmd + ' -R', function (error, stdout) {
+        exec(cmd + ' -R', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(initDevice.name +" (default)");
             expect(stdout).toContain(initDevice.username);
             expect(stdout).toContain(initDevice.host);

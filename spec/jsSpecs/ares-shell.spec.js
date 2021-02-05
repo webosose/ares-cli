@@ -39,7 +39,10 @@ describe(aresCmd, function() {
 describe(aresCmd + ' -h -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -h -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -49,7 +52,10 @@ describe(aresCmd + ' -h -v', function() {
 
 describe(aresCmd + ' --device-list(-D)', function() {
     it('Show available device list', function(done) {
-        exec(cmd + ' -D', function (error, stdout) {
+        exec(cmd + ' -D', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             done();
         });
@@ -58,7 +64,10 @@ describe(aresCmd + ' --device-list(-D)', function() {
 
 describe(aresCmd, function() {
     it('Open shell on default device', function(done) {
-        exec(cmd, function (error, stdout) {
+        exec(cmd, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Start ${options.device} shell`, error);
             done();
         });
@@ -68,6 +77,10 @@ describe(aresCmd, function() {
 describe(aresCmd + ' --display(-dp)', function() {
     it('Set display', function(done) {
         exec(cmd + ' -dp 1', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             if (options.device === "emulator") { // emulator's default setting user is "developer"
                 expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
             }
@@ -83,6 +96,10 @@ describe(aresCmd + ' --run', function() {
     it('Run CMD', function(done) {
         // eslint-disable-next-line no-useless-escape
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
             if (options.device === "emulator") { // emulator's default setting user is "developer"
                 expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
             } else {

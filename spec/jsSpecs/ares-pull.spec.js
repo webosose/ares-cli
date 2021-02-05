@@ -26,7 +26,10 @@ beforeAll(function (done) {
 describe(aresCmd + ' -v', function() {
     it('Print help message with verbose log', function(done) {
         exec(cmd + ' -v', function (error, stdout, stderr) {
-            expect(stderr.toString()).toContain("verb argv");
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("verb argv");
+            }
             expect(stdout).toContain("SYNOPSIS");
             expect(error).toBeNull();
             done();
@@ -51,7 +54,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --device-list(-D)', function() {
     it('Show available device list', function(done) {
-        exec(cmd + ' -D', function (error, stdout) {
+        exec(cmd + ' -D', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(options.device);
             done();
         });
@@ -67,7 +73,10 @@ describe(aresCmd, function() {
     });
 
     it('Copy directory from a device to host machine', function(done) {
-        exec(cmd + ` /tmp/aresfile ${dstPath}`, function (error, stdout) {
+        exec(cmd + ` /tmp/aresfile ${dstPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(dstPath);
             expect(stdout).toContain("1 file(s) pulled");
             done();
@@ -77,7 +86,10 @@ describe(aresCmd, function() {
 
 describe(aresCmd + ' --ignore(-i)', function() {
     it('Copy directory from a device to host machine', function(done) {
-        exec(cmd + ` -i /tmp/aresfile ${dstPath}`, function (error, stdout) {
+        exec(cmd + ` -i /tmp/aresfile ${dstPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).not.toContain(dstPath);
             expect(stdout).toContain("1 file(s) pulled");
             done();

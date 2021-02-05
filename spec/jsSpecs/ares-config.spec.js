@@ -23,14 +23,20 @@ beforeAll(function (done) {
 
 describe(aresCmd + ' --profile(-p)', function() {
     it("Set a device profile to ose", function(done) {
-        exec(cmd + ' -p ose', function (error, stdout) {
+        exec(cmd + ' -p ose', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain("profile and config data is changed to ose");
             done();
         });
     });
 
     it("Set a device profile input", function(done) {
-        exec(cmd + ` -p ${options.profile}`, function (error, stdout) {
+        exec(cmd + ` -p ${options.profile}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`profile and config data is changed to ${options.profile}`);
             done();
         });
@@ -39,7 +45,10 @@ describe(aresCmd + ' --profile(-p)', function() {
 
 describe(aresCmd + ' --prefile-details(-c)', function() {
     it("Set a device profile to configure", function(done) {
-        exec(cmd + ' -c', function (error, stdout) {
+        exec(cmd + ' -c', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
             expect(stdout).toContain(`Current profile set to ${options.profile}`, error);
             done();
         });

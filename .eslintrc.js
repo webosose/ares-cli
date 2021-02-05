@@ -43,6 +43,7 @@ module.exports = {
         'expect' : false,
         'it' : false,
         'pending' :false,
-        'jasmine' : false
+        'jasmine' : false,
+        'fail' : false
     }
 };

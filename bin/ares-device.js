@@ -35,6 +35,8 @@ if (process.argv.length === 2) {
 const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
+    "capture-screen" : Boolean,
+    "display" : Number,
     "device":   [String, null],
     "device-list":  Boolean,
     "version":  Boolean,
@@ -45,6 +47,8 @@ const knownOpts = {
 const shortHands = {
     "i": ["--system-info"],
     "s": ["--session-info"],
+    "c": ["--capture-screen"],
+    "dp" : ["--display"],
     "d": ["--device"],
     "D": ["--device-list"],
     "V": ["--version"],
@@ -56,7 +60,6 @@ const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-
 
 log.heading = processName;
 log.level = argv.level || 'warn';
-deviceLib.log.level = log.level;
 log.verbose("argv", argv);
 
 /**
@@ -78,6 +81,8 @@ if (argv.level) {
 
 const options = {
     device: argv.device,
+    display : argv.display || 0,
+    outputPath : argv.argv.remain[0] || null,
 };
 
 let op;
@@ -92,6 +97,8 @@ if (argv['device-list']) {
     op = getDeviceInfo;
 } else if (argv['session-info']) {
     op = getSessionInfo;
+} else if (argv['capture-screen']) {
+    op = captureScreen;
 } else {
     showUsage();
     cliControl.end();
@@ -111,16 +118,20 @@ if (op) {
     });
 }
 
-function getSessionInfo() {
-    deviceLib.sessionInfo(options, finish);
-}
-
 function showUsage() {
     help.display(processName, appdata.getConfig(true).profile);
 }
 
 function getDeviceInfo() {
     deviceLib.systemInfo(options, finish);
+}
+
+function getSessionInfo() {
+    deviceLib.sessionInfo(options, finish);
+}
+
+function captureScreen() {
+    deviceLib.captureScreen(options, finish);
 }
 
 function finish(err, value) {
