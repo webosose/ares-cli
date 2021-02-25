@@ -158,7 +158,7 @@ function list(){
             strPkgs = strPkgs.concat(pkg.id);
         });
         console.log(strPkgs);
-        finish(err);
+        return finish(err);
     });
 }
 
@@ -188,9 +188,9 @@ function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
     log.info("remove():", "pkgId:", pkgId);
     if (!pkgId) {
-        return finish(errHndl.changeErrMsg("EMPTY_VALUE", "APP_ID"));
+        return errHndl.finish(errHndl.changeErrMsg("EMPTY_VALUE", "APP_ID"));
     }
-    installLib.remove(options, pkgId,finish);
+    installLib.remove(options, pkgId, finish);
 }
 
 function finish(err, value) {
@@ -199,7 +199,7 @@ function finish(err, value) {
         log.verbose(err.stack);
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.info('finish!!!!():', value);
         if (value && value.msg) {
             console.log(value.msg);
         }
