@@ -123,3 +123,17 @@ describe(aresCmd + ' --run echo $PATH', function() {
         });
     });
 });
+
+describe(aresCmd + ' --run echo $PATH', function() {
+    it('Check environment variable with --run option', function(done) {
+        // eslint-disable-next-line no-useless-escape
+        exec(cmd + ' -dp 1 -r \'echo $PATH\'', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
+            expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+            done();
+        });
+    });
+});
