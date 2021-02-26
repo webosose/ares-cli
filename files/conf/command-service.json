@@ -3,7 +3,7 @@
     "lunaAddr" : {
         "install" : {
             "service" : "com.webos.appInstallService",
-            "folder" : "dev1",
+            "folder" : "dev",
             "method" : "install",
             "returnValue" : "return.details.state"
         },

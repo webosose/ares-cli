@@ -195,10 +195,10 @@ function remove() {
 
 function finish(err, value) {
     if (err) {
-        if (err.length === undefined) { //single error
+        if (err.length === undefined) { // single error
             log.error(err.heading, err.message);
             log.verbose(err.stack);
-        } else if (err.length > 0){ //[service]/[system] + tips error
+        } else if (err.length > 0){ // [service/system] + [tips] error
             for(const index in err){
                 log.error(err[index].heading, err[index].message);
             }
@@ -207,8 +207,8 @@ function finish(err, value) {
         cliControl.end(-1);
     } else {
         log.info('finish!!!!():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
+        if (value) {
+            console.log(value);
         }
         cliControl.end();
     }
