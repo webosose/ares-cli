@@ -168,7 +168,7 @@ PalmPackage.prototype = {
         if (Object.hasOwnProperty.call(this.argv, 'app-exclude')) {
             for(const excl_file in this.argv) {
                 if ((this.argv[excl_file]).toString() === "appinfo.json") {
-                    this.exitOnError(errHndl.changeErrMsg("NOT_EXCLUDE_APPINFO"));
+                    this.finish(errHndl.changeErrMsg("NOT_EXCLUDE_APPINFO"));
                 }
             }
             this.options.excludefiles = this.argv['app-exclude'];
@@ -188,14 +188,14 @@ PalmPackage.prototype = {
 
         if (Object.hasOwnProperty.call(this.argv, 'sign')) {
             if (!fs.existsSync(path.resolve(this.argv.sign))) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.sign));
+                this.finish(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.sign));
             }
             this.options.sign = this.argv.sign;
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'certificate')) {
             if (!fs.existsSync(path.resolve(this.argv.certificate))) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.certificate));
+                this.finish(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.certificate));
             }
             this.options.certificate = this.argv.certificate;
         }
@@ -203,7 +203,7 @@ PalmPackage.prototype = {
         // check sign option must be used with certificate option
         if ((this.options.sign && !this.options.certificate) ||
                 (this.options.certificate && !this.options.sign)) {
-            this.exitOnError(errHndl.changeErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
+            this.finish(errHndl.changeErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'pkgid')) {
@@ -217,12 +217,6 @@ PalmPackage.prototype = {
         if (Object.hasOwnProperty.call(this.argv, 'pkginfofile')) {
             this.options.pkginfofile = this.argv.pkginfofile;
         }
-    },
-
-    exitOnError: function(err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
-        cliControl.end(-1);
     },
 
     packageReady: function(err, results) {
@@ -239,14 +233,24 @@ PalmPackage.prototype = {
         }
     },
 
-    appOk: function(err) {
-        log.info("appOk");
+    finish(err, value) {
+        log.info("package-finish appOk");
         if (err) {
-            log.error(err.toString());
-            log.verbose(err.stack);
+            if (err.length === undefined) { // single error
+                log.error(err.heading, err.message);
+                log.verbose(err.stack);
+            } else if (err.length > 0){ // [service/system] + [tips] error
+                for(const index in err){
+                    log.error(err[index].heading, err[index].message);
+                }
+                log.verbose(err[0].stack);
+            }
             cliControl.end(-1);
         } else {
-            console.log("no problems detected");
+            log.info('finish():', value);
+            if (value && value.msg) {
+                console.log(value.msg);
+            }
             cliControl.end();
         }
     },
@@ -287,7 +291,7 @@ PalmPackage.prototype = {
         const packager = new packageLib.Packager(this.options);
         if(this.appCnt === 0) { // only service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
+                this.finish(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
                 cliControl.end(-1);
             }
             else if (Object.hasOwnProperty.call(this.options, 'pkgid')) {
@@ -297,12 +301,12 @@ PalmPackage.prototype = {
                 packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
             }
             else {
-                this.exitOnError(errHndl.changeErrMsg("USE_PKGID_PKGINFO"));
+                this.finish(errHndl.changeErrMsg("USE_PKGID_PKGINFO"));
                 cliControl.end(-1);
             }
         } else { // app+service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkgid') || Object.hasOwnProperty.call(this.options, 'pkgversion') || Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
+                this.finish(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
             }
             packager.generatePackage(this.argv.argv.remain, this.destination, this.options, next);
         }
@@ -315,7 +319,8 @@ PalmPackage.prototype = {
                 this.checkInputDir.bind(this),
                 this.packageApp.bind(this)
             ],
-            this.packageReady.bind(this));
+            //this.packageReady.bind(this));
+            this.finish.bind(this));
     },
 
     checkApplication: function() {
@@ -323,7 +328,7 @@ PalmPackage.prototype = {
                 version.checkNodeVersion,
                 this.checkInputDir.bind(this)
             ],
-            this.appOk.bind(this));
+            this.finish.bind(this));
     },
 
     exec: function() {
