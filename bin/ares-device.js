@@ -147,9 +147,9 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish!!!!():', value);
-        if (value) {
-            console.log(value);
+        log.info('finish():', value);
+        if (value && value.msg) {
+            console.log(value.msg);
         }
         cliControl.end();
     }
