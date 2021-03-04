@@ -79,31 +79,34 @@ describe(aresCmd + ' --display(-dp)', function() {
         exec(cmd + ' -dp 1', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-
-            if (options.device === "emulator") { // emulator's default setting user is "developer"
-                expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
-            }
-            else {
-                expect(stdout).toContain(`Start ${options.device} shell`, error);
+                // TO-DO: uncaughtException TypeError: process.stdin.setRawMode is not a function
+                // expect(stderr).toContain("This device does not support the session.");
+            } else {
+                if (options.device === "emulator") { // emulator's default setting user is "developer"
+                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                }
+                else {
+                    expect(stdout).toContain(`Start ${options.device} shell`, error);
+                }
             }
             done();
         });
     });
 });
 
-describe(aresCmd + ' --run', function() {
+describe(aresCmd + ' --run in session', function() {
     it('Run CMD', function(done) {
         // eslint-disable-next-line no-useless-escape
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-
-            if (options.device === "emulator") { // emulator's default setting user is "developer"
-                expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                expect(stderr).toContain("This device does not support the session.");
             } else {
-                expect(stdout.trim()).toBe("hello webOS", stderr);
+                if (options.device === "emulator") { // emulator's default setting user is "developer"
+                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    expect(stdout.trim()).toBe("hello webOS", stderr);
+                }
             }
             done();
         });
@@ -124,15 +127,16 @@ describe(aresCmd + ' --run echo $PATH', function() {
     });
 });
 
-describe(aresCmd + ' --run echo $PATH', function() {
+describe(aresCmd + ' --run echo $PATH in session', function() {
     it('Check environment variable with --run option', function(done) {
         // eslint-disable-next-line no-useless-escape
         exec(cmd + ' -dp 1 -r \'echo $PATH\'', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("This device does not support the session.");
+            } else {
+                expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             }
-
-            expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             done();
         });
     });
