@@ -63,8 +63,8 @@ describe(aresCmd + ' --device-list(-D)', function() {
     });
 });
 
-describe('Check whether there is a session in the device', function() {
-    it('Session check', function(done) {
+describe('Check if there are sessions on the device', function() {
+    it('Check session', function(done) {
         const deviceCmd = common.makeCmd('ares-device');
         exec(deviceCmd + ` -s ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
