@@ -10,7 +10,8 @@ const exec = require('child_process').exec,
 const aresCmd = 'ares-shell';
 
 let cmd,
-    options;
+    options,
+    hasSession = false;
 
 beforeAll(function (done) {
     cmd = common.makeCmd(aresCmd);
@@ -62,6 +63,21 @@ describe(aresCmd + ' --device-list(-D)', function() {
     });
 });
 
+describe('Check whether there is a session in the device', function() {
+    it('Session check', function(done) {
+        const deviceCmd = common.makeCmd('ares-device');
+        exec(deviceCmd + ` -s ${options.device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
+            if (stdout.includes("sessionId")) {
+                hasSession = true;
+            }
+            done();
+        });
+    });
+});
 describe(aresCmd, function() {
     it('Open shell on default device', function(done) {
         exec(cmd, function (error, stdout, stderr) {
@@ -79,15 +95,16 @@ describe(aresCmd + ' --display(-dp)', function() {
         exec(cmd + ' -dp 1', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                // TO-DO: uncaughtException TypeError: process.stdin.setRawMode is not a function
-                // expect(stderr).toContain("This device does not support the session.");
-            } else {
-                if (options.device === "emulator") { // emulator's default setting user is "developer"
+
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
                     expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    // TO-DO: uncaughtException TypeError: process.stdin.setRawMode is not a function
+                    // expect(stderr).toContain("This device does not support the session.");
                 }
-                else {
-                    expect(stdout).toContain(`Start ${options.device} shell`, error);
-                }
+            } else {
+                expect(stdout).toContain(`Start ${options.device} shell`, error);
             }
             done();
         });
@@ -100,13 +117,15 @@ describe(aresCmd + ' --run in session', function() {
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("This device does not support the session.");
-            } else {
-                if (options.device === "emulator") { // emulator's default setting user is "developer"
+
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
                     expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
                 } else {
-                    expect(stdout.trim()).toBe("hello webOS", stderr);
+                    expect(stderr).toContain("This device does not support the session.");
                 }
+            } else {
+                    expect(stdout.trim()).toBe("hello webOS", stderr);
             }
             done();
         });
@@ -133,7 +152,13 @@ describe(aresCmd + ' --run echo $PATH in session', function() {
         exec(cmd + ' -dp 1 -r \'echo $PATH\'', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("This device does not support the session.");
+
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
+                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    expect(stderr).toContain("This device does not support the session.");
+                }
             } else {
                 expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             }
