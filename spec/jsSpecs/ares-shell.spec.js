@@ -125,7 +125,7 @@ describe(aresCmd + ' --run in session', function() {
                     expect(stderr).toContain("This device does not support the session.");
                 }
             } else {
-                    expect(stdout.trim()).toBe("hello webOS", stderr);
+                expect(stdout.trim()).toBe("hello webOS", stderr);
             }
             done();
         });
