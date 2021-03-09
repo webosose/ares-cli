@@ -234,21 +234,33 @@ PalmPackage.prototype = {
     },
 
     finish(err, value) {
-        log.info("package-finish appOk");
+        log.info("package-finish appOk1");
         if (err) {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0){ // [service/system] + [tips] error
-                for(const index in err){
-                    log.error(err[index].heading, err[index].message);
+            // new Tips format
+            if (err.heading) {
+                if (err.length === undefined) { // single error
+                    log.error(err.heading, err.message);
+                    log.verbose(err.stack);
+                } else if (err.length > 0){ // [service/system] + [tips] error
+                    for(const index in err){
+                        log.error(err[index].heading, err[index].message);
+                    }
+                    log.verbose(err[0].stack);
                 }
-                log.verbose(err[0].stack);
+            } else {
+                log.error(err);
+                log.verbose(err.stack);
             }
             cliControl.end(-1);
         } else {
             log.info('finish():', value);
-            if (value && value.msg) {
+            // if (value && value[value.length-1] && value[value.length-1].msg) {
+            //     console.log(value[value.length-1].msg);
+            // }
+            // console.log(value.msg);
+            if (value && value[value.length-1] && value[value.length-1].msg) {
+                console.log(value[value.length-1].msg);
+            } else if (value && value.msg) {
                 console.log(value.msg);
             }
             cliControl.end();
@@ -319,8 +331,18 @@ PalmPackage.prototype = {
                 this.checkInputDir.bind(this),
                 this.packageApp.bind(this)
             ],
-            //this.packageReady.bind(this));
             this.finish.bind(this));
+    },
+
+    appOk: function(err) {
+        log.info("appOk");
+        if (err) {
+            log.error(err.toString());
+            cliControl.end(-1);
+        } else {
+            console.log("no problems detected");
+            cliControl.end();
+        }
     },
 
     checkApplication: function() {
@@ -328,7 +350,7 @@ PalmPackage.prototype = {
                 version.checkNodeVersion,
                 this.checkInputDir.bind(this)
             ],
-            this.finish.bind(this));
+            this.appOk.bind(this));
     },
 
     exec: function() {
@@ -336,6 +358,7 @@ PalmPackage.prototype = {
         this.checkAndShowHelp();
 
         if (this.argv.check) {
+            this.options.check = true;
             this.checkApplication();
         } else if (this.argv.version) {
             version.showVersionAndExit();
