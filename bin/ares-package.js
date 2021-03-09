@@ -233,11 +233,13 @@ PalmPackage.prototype = {
         }
     },
 
+
     finish(err, value) {
-        log.info("package-finish appOk1");
-        if (err) {
-            // new Tips format
-            if (err.heading) {
+        if(err) {
+            if (typeof(err) === "string"){
+                log.error(err.toString());
+                log.verbose(err.stack);
+            } else if(typeof(err) == "object"){
                 if (err.length === undefined) { // single error
                     log.error(err.heading, err.message);
                     log.verbose(err.stack);
@@ -247,17 +249,10 @@ PalmPackage.prototype = {
                     }
                     log.verbose(err[0].stack);
                 }
-            } else {
-                log.error(err);
-                log.verbose(err.stack);
             }
             cliControl.end(-1);
         } else {
             log.info('finish():', value);
-            // if (value && value[value.length-1] && value[value.length-1].msg) {
-            //     console.log(value[value.length-1].msg);
-            // }
-            // console.log(value.msg);
             if (value && value[value.length-1] && value[value.length-1].msg) {
                 console.log(value[value.length-1].msg);
             } else if (value && value.msg) {

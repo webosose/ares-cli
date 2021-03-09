@@ -291,15 +291,20 @@ function generate(next) {
 }
 
 function finish(err, value) {
-    if (err) {
-        if (err.length === undefined) { // single error
-            log.error(err.heading, err.message);
+    if(err) {
+        if (typeof(err) === "string"){
+            log.error(err.toString());
             log.verbose(err.stack);
-        } else if (err.length > 0){ // [service/system] + [tips] error
-            for(const index in err){
-                log.error(err[index].heading, err[index].message);
+        } else if(typeof(err) == "object"){
+            if (err.length === undefined) { // single error
+                log.error(err.heading, err.message);
+                log.verbose(err.stack);
+            } else if (err.length > 0){ // [service/system] + [tips] error
+                for(const index in err){
+                    log.error(err[index].heading, err[index].message);
+                }
+                log.verbose(err[0].stack);
             }
-            log.verbose(err[0].stack);
         }
         cliControl.end(-1);
     } else {
