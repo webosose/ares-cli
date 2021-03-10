@@ -666,15 +666,15 @@ function removeDeviceInfo(next) {
 
 function finish(err, value) {
     if(err) {
-        if (typeof(err) === "string"){
+        if (typeof(err) === "string") {
             log.error(err.toString());
             log.verbose(err.stack);
-        } else if(typeof(err) == "object"){
+        } else if (typeof(err) == "object") {
             if (err.length === undefined) { // single error
                 log.error(err.heading, err.message);
                 log.verbose(err.stack);
-            } else if (err.length > 0){ // [service/system] + [tips] error
-                for(const index in err){
+            } else if (err.length > 0) { // [service/system] + [tips] error
+                for(const index in err) {
                     log.error(err[index].heading, err[index].message);
                 }
                 log.verbose(err[0].stack);

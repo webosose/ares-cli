@@ -365,7 +365,9 @@ describe(aresCmd + ' --encrypt(-enc)', function() {
         exec(cmd + ` -enc ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain('no such file or directory, open');
+                console.log(stderr);
+                expect(stderr).toContain("ares-package ERR! ENOENT: no such file or directory, open");
+                //expect(stderr).toContain("ares-package ERR! [syscall failuire]: no such file or directory, open");
             }
             expect(fs.existsSync(appPkgPath)).toBe(false);
             done();
@@ -466,8 +468,6 @@ describe(aresCmd + ' negative TC', function() {
                 common.detectNodeMessage(stderr);
                 console.log(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-
-
                 expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
                                         "\nares-package ERR! [Tips]: main is required" +
                                         "\nares-package ERR! [Tips]: title is required" +
@@ -500,7 +500,6 @@ describe(aresCmd + ' negative TC', function() {
                 common.detectNodeMessage(stderr);
                 console.log(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                
                 expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
                                          "\nares-package ERR! [Tips]: type is not one of enum values: web,stub,native,native_builtin,native_appshell,qml");
             }
