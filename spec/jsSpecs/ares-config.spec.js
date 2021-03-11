@@ -56,7 +56,7 @@ describe(aresCmd + ' --prefile-details(-c)', function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
-    it("Set a invalid device profile", function(done) {
+    it("Set invalid device profile", function(done) {
         exec(cmd + ' -p test', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -66,5 +66,3 @@ describe(aresCmd + ' negative TC', function() {
         });
     });
 });
-
-

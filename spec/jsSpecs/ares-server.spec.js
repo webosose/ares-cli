@@ -152,3 +152,16 @@ describe(aresCmd +' --port', function() {
         }, 3000);
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    it('Set invaild path', function(done) {
+        exec(cmd + ` invalidDir`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            console.log(stderr);
+            expect(stderr).toContain("ares-server ERR! [Tips]: Please specify a value <APP_DIR>");
+            done();
+        });
+    });
+});

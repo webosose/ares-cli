@@ -122,3 +122,15 @@ describe(aresCmd + ' --run echo $PATH', function() {
         });
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    it('Set invalid display', function(done) {
+        exec(cmd + ` -dp 10`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
+            done();
+        });
+    });
+});

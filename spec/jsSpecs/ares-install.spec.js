@@ -124,7 +124,7 @@ describe(aresCmd + ' --list(-l)', function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
-    it("Set a invalid app ipk which is not exist", function(done) {
+    it("Set invalid app ipk which is not exist", function(done) {
         exec(cmd + ' com.invalid.app.ipk', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -134,7 +134,7 @@ describe(aresCmd + ' negative TC', function() {
         });
     });
 
-    it("Remove a invalid app which is not installed", function(done) {
+    it("Remove invalid app which is not installed", function(done) {
         exec(cmd + ' -r com.invalid.app', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);

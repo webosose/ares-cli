@@ -104,3 +104,17 @@ describe(aresCmd + " --ignore(-i) ", function() {
         });
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    it('Set invaild source path', function(done) {
+        exec(cmd + ` invalidDir /tmp`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            console.log(stderr);
+            expect(stderr).toContain("ares-push ERR! [syscall failure]: ENOENT: no such file or directory, lstat 'invalidDir'");
+            expect(stderr).toContain("ares-push ERR! [Tips]: Please check the given path is valid <invalidDir>");
+            done();
+        });
+    });
+});

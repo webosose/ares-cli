@@ -231,7 +231,7 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
-    it("Set a invalid app which is not installed", function(done) {
+    it("Set invalid app which is not installed", function(done) {
         exec(cmd + ' com.invalid.app', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -243,7 +243,7 @@ describe(aresCmd + ' negative TC', function() {
         });
     });
 
-    it("Set a invalid service which is not installed", function(done) {
+    it("Set invalid service which is not installed", function(done) {
         exec(cmd + ' -s com.invalid.service', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);

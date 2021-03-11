@@ -97,14 +97,22 @@ function commandList (next) {
 
 function display (next) {
     let commandsList;
+    let found = false;
     try{
         commandsList = JSON.parse(fs.readFileSync(path.join(__dirname, '../', 'files', 'conf', 'ares.json')));
         for(const arg in argv){
             if(Object.hasOwnProperty.call(commandsList, 'ares-'+ arg) && fs.existsSync(path.join(__dirname, 'ares-'+ arg + '.js'))){
                 help.display('ares-'+arg, appdata.getConfig(true).profile);
+                found = true;
             }
         }
-        next();
+
+        if(found === false) {
+            next(errHndl.getErrMsg("INVALID_COMMAND"));
+        } else {
+            next();
+        }
+        
     } catch(e){
         next(errHndl.getErrMsg("INVALID_JSON_FORMAT"));
     }

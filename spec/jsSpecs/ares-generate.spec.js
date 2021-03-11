@@ -377,7 +377,7 @@ describe(aresCmd + ' --servicename', function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
-    it("Set a invalid template type", function(done) {
+    it("Set invalid template type", function(done) {
         exec(cmd + ' -t invalidType sampleApp', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
