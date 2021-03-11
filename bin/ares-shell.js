@@ -87,14 +87,14 @@ function showUsage() {
 
 function run() {
     if(argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish("Please use nonnegative integer values for a \"display\" option");
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
     shellLib.remoteRun(options, argv.run, finish);
 }
 
 function shell() {
     if(argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish("Please use nonnegative integer values for a \"display\" option");
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
     shellLib.shell(options, finish);
 }

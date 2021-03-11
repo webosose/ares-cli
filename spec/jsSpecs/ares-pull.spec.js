@@ -101,3 +101,34 @@ describe(aresCmd + ' --ignore(-i)', function() {
         done();
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    beforeEach(function(done) {
+        const shellCmd = common.makeCmd('ares-shell');
+        exec(shellCmd + ' -r "touch /tmp/aresfile"', function () {
+            done();
+        });
+    });
+
+    it('Copy file to not exist local directory', function(done) {
+        exec(cmd + ` /tmp/aresfile invalidDir`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            console.log(stderr);
+            expect(stderr).toContain("ares-pull ERR! [syscall failure]: ENOENT: no such file or directory, lstat 'invalidDir'");
+            expect(stderr).toContain("ares-pull ERR! [Tips]: Please check the given path is valid <invalidDir>");
+            done();
+        });
+    });
+
+    it('Copy invalid file from target', function(done) {
+        exec(cmd + ` /tmp/invalidFile tempDir`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stderr).toContain("ares-pull ERR! [Tips]: The specified path does not exist <SOURCE> : /tmp/invalidFile");
+            done();
+        });
+    });
+});
