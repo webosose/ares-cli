@@ -236,7 +236,7 @@ PalmPackage.prototype = {
         if (fs.existsSync(this.destination)) {
             const stats = fs.statSync(this.destination);
             if (!stats.isDirectory()) {
-                this.exitOnError(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
+                this.finish(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
             }
         } else {
             log.verbose("creating directory '" + this.destination + "' ...");
@@ -340,7 +340,6 @@ PalmPackage.prototype = {
         this.checkAndShowHelp();
 
         if (this.argv.check) {
-            this.options.check = true;
             this.checkApplication();
         } else if (this.argv.version) {
             version.showVersionAndExit();

@@ -159,7 +159,7 @@ function list(){
             strPkgs = strPkgs.concat(pkg.id);
         });
         console.log(strPkgs);
-        return finish(err);
+        finish(err);
     });
 }
 
@@ -189,7 +189,7 @@ function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
     log.info("remove():", "pkgId:", pkgId);
     if (!pkgId) {
-        return errHndl.finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
     installLib.remove(options, pkgId, finish);
 }

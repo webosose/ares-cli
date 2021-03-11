@@ -100,7 +100,7 @@ describe(aresCmd + ' --run', function() {
             }
 
             if (options.device === "emulator") { // emulator's default setting user is "developer"
-            expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
             } else {
                 expect(stdout.trim()).toBe("hello webOS", stderr);
             }

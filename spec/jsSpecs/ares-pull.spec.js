@@ -114,8 +114,7 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` /tmp/aresfile invalidDir`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-            console.log(stderr);
+            }    
             expect(stderr).toContain("ares-pull ERR! [syscall failure]: ENOENT: no such file or directory, lstat 'invalidDir'");
             expect(stderr).toContain("ares-pull ERR! [Tips]: Please check the given path is valid <invalidDir>");
             done();

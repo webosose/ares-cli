@@ -100,7 +100,7 @@ function config() {
     log.verbose("profile()", "options:", options);
 
     if (!Object.prototype.hasOwnProperty.call(configFiles, options.profile)) {
-      return finish(errHndl.getErrMsg("INVALID_VALUE", "profile", options.profile));
+        return finish(errHndl.getErrMsg("INVALID_VALUE", "profile", options.profile));
     }
 
     const queryPath = queryPaths.common;
