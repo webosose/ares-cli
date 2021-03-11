@@ -220,9 +220,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c /rootDir`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
-                expect(stderr).toContain("ares-device ERR! EACCES: permission denied, mkdir '/rootDir'");
-                //expect(stderr).toContain("ares-device ERR! [syscall failure]: permission denied, mkdir '/rootDir'");
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, mkdir '/rootDir'");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please check that can execute the command to the path </rootDir>");
             }
             done();
         });
@@ -232,7 +231,6 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c --display 10`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.surfacemanager failure]: luna-send command failed <ERR_INVALID_DISPLAY>");
                 expect(stderr).toContain("ares-device ERR! [Tips]: Please use nonnegative integer and valid value for the \"display\" option");
             }
