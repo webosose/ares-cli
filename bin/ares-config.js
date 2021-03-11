@@ -16,7 +16,8 @@ const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg;
+    errHndl = commonTools.errMsg,
+    finish = errHndl.finish;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -99,20 +100,20 @@ function config() {
     log.verbose("profile()", "options:", options);
 
     if (!Object.prototype.hasOwnProperty.call(configFiles, options.profile)) {
-      return finish(errHndl.changeErrMsg("INVALID_VALUE", "profile", options.profile));
+      return finish(errHndl.getErrMsg("INVALID_VALUE", "profile", options.profile));
     }
 
     const queryPath = queryPaths.common;
 
     appdata.setQuery(path.join(__dirname, '..', queryPath), function(err, status){
         if(typeof status === 'undefined')
-            return finish(errHndl.changeErrMsg("INVALID_VALUE", "query configuration"));
+            return finish(errHndl.getErrMsg("INVALID_VALUE", "query configuration"));
     });
 
     const templateData = require(path.join(__dirname, '..', templateFiles[options.profile]));
     appdata.setTemplate(templateData, function(err, status){
         if(typeof status === 'undefined')
-            return finish(errHndl.changeErrMsg("INVALID_VALUE", "template configuration"));
+            return finish(errHndl.getErrMsg("INVALID_VALUE", "template configuration"));
     });
 
     let keyFile = "";
@@ -121,13 +122,13 @@ function config() {
     }
     appdata.setKey(keyFile, function(err){
         if(err)
-            return finish(errHndl.changeErrMsg("INVALID_VALUE", "key configuration"));
+            return finish(errHndl.getErrMsg("INVALID_VALUE", "key configuration"));
     });
 
     const configData = require(path.join(__dirname, '..', configFiles[options.profile]));
     appdata.setConfig(configData, function(err, status){
         if(typeof status === 'undefined'){
-            return finish(errHndl.changeErrMsg("INVALID_VALUE", "configuration"));
+            return finish(errHndl.getErrMsg("INVALID_VALUE", "configuration"));
         } else {
             console.log("profile and config data is changed to " + status.profile);
         }
@@ -138,37 +139,11 @@ function config() {
 function curConfig(next) {
     const curConfigData = appdata.getConfig(true);
     if (typeof curConfigData.profile === 'undefined') {
-        return finish(errHndl.changeErrMsg("INVALID_VALUE", "profile details"));
+        return finish(errHndl.getErrMsg("INVALID_VALUE", "profile details"));
     } else if (curConfigData.profile.trim() === "") {
-        return finish(errHndl.changeErrMsg("EMPTY_PROFILE"));
+        return finish(errHndl.getErrMsg("EMPTY_PROFILE"));
     } else {
         console.log("Current profile set to " + curConfigData.profile);
         next();
-    }
-}
-
-function finish(err, value) {
-    if(err) {
-        if (typeof(err) === "string") {
-            log.error(err.toString());
-            log.verbose(err.stack);
-        } else if (typeof(err) == "object") {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0) { // [service/system] + [tips] error
-                for(const index in err) {
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            }
-        }
-        cliControl.end(-1);
-    } else {
-        log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
-        }
-        cliControl.end();
     }
 }

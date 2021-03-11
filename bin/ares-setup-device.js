@@ -20,8 +20,9 @@ const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg,
     setupDevice = commonTools.setupDevice,
+    errHndl = commonTools.errMsg,
+    finish = errHndl.finish,
     isValidDeviceName = setupDevice.isValidDeviceName,
     isValidIpv4 = setupDevice.isValidIpv4,
     isValidPort = setupDevice.isValidPort;
@@ -420,7 +421,7 @@ function _queryDeviceInfo(selDevice, next) {
                 inDevice.passphrase = answers.ssh_passphrase || "@DELETE@";
                 inDevice.privateKeyName = "@DELETE@";
             } else {
-                return next(errHndl.changeErrMsg("NOT_SUPPORT_AUTHTYPE", answers.auth_type));
+                return next(errHndl.getErrMsg("NOT_SUPPORT_AUTHTYPE", answers.auth_type));
             }
         }
 
@@ -551,16 +552,16 @@ function modifyDeviceInfo(next) {
     try {
         const mode = (argv.add)? "add" : (argv.modify)? "modify" : null;
         if (!mode) {
-            return next(errHndl.changeErrMsg("INVALID_MODE"));
+            return next(errHndl.getErrMsg("INVALID_MODE"));
         }
         if (argv[mode].match(/^-/)) {
-            return next(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+            return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
         }
         const argName = (argv.info)? "info" : mode;
         const inDevice = _getParams(argName);
         if (!inDevice.name) {
             if (argv[mode] === "true") {
-                return next(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+                return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
             }
             inDevice.name = argv[mode];
         }
@@ -592,13 +593,13 @@ function modifyDeviceInfo(next) {
         }
         // check validation
         if (!isValidDeviceName(inDevice.name)) {
-            return next(errHndl.changeErrMsg("INVALID_DEVICENAME"));
+            return next(errHndl.getErrMsg("INVALID_DEVICENAME"));
         }
         if (inDevice.host && !isValidIpv4(inDevice.host)) {
-            return next(errHndl.changeErrMsg("INVALID_VALUE", "host", inDevice.host));
+            return next(errHndl.getErrMsg("INVALID_VALUE", "host", inDevice.host));
         }
         if (inDevice.port && !isValidPort(inDevice.port)) {
-            return next(errHndl.changeErrMsg("INVALID_VALUE", "port", inDevice.port));
+            return next(errHndl.getErrMsg("INVALID_VALUE", "port", inDevice.port));
         }
         if (inDevice.port) {
             inDevice.port = Number(inDevice.port);
@@ -644,7 +645,7 @@ function setDefaultDeviceInfo(next) {
 function removeDeviceInfo(next) {
     try {
         if (argv.remove === 'true') {
-            return finish(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
         }
 
         const resolver = this.resolver || (this.resolver = new novacom.Resolver()),
@@ -661,31 +662,5 @@ function removeDeviceInfo(next) {
         });
     } catch (err) {
         next(err);
-    }
-}
-
-function finish(err, value) {
-    if(err) {
-        if (typeof(err) === "string") {
-            log.error(err.toString());
-            log.verbose(err.stack);
-        } else if (typeof(err) == "object") {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0) { // [service/system] + [tips] error
-                for(const index in err) {
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            }
-        }
-        cliControl.end(-1);
-    } else {
-        log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
-        }
-        cliControl.end();
     }
 }

@@ -92,7 +92,7 @@ describe(aresCmd, function() {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
                                         "luna-send command failed <Service does not exist: com.webos.service.sessionmanager.>");
-                expect(stderr).toContain("ares-device ERR! [Tips]: This device does not support the session.");
+                expect(stderr).toContain("ares-device ERR! [Tips]: This device does not support multiple sessions");
             }
             else {
                 keys.forEach(function(key) {
@@ -210,7 +210,7 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c "test.abc"`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [Tips]: Please specify file extension, either 'png' 'bmp' or 'jpg'");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please specify the file extension(.png, .bmp or .jpg)");
             }
             done();
         });
@@ -221,7 +221,7 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, mkdir '/rootDir'");
-                expect(stderr).toContain("ares-device ERR! [Tips]: Please check that can execute the command to the path </rootDir>");
+                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission </rootDir>");
             }
             done();
         });
@@ -231,8 +231,9 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c --display 10`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                console.log(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.surfacemanager failure]: luna-send command failed <ERR_INVALID_DISPLAY>");
-                expect(stderr).toContain("ares-device ERR! [Tips]: Please use nonnegative integer and valid value for the \"display\" option");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please use a valid value for display id");
             }
             done();
         });

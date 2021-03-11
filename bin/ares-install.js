@@ -21,7 +21,8 @@ const version = commonTools.version,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg;
+    errHndl = commonTools.errMsg,
+    finish = errHndl.finish;
 
 process.on('uncaughtException', function (err) {
     log.error('uncaughtException', err.toString());
@@ -135,10 +136,10 @@ function install() {
     const pkgPath = argv.install || argv.argv.remain[0];
     log.info("install():", "pkgPath:", pkgPath);
     if (!pkgPath) {
-        return finish(errHndl.changeErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
     } else {
         if (!fs.existsSync(path.normalize(pkgPath))) {
-            return finish(errHndl.changeErrMsg("NOT_EXIST_PATH", pkgPath));
+            return finish(errHndl.getErrMsg("NOT_EXIST_PATH", pkgPath));
         }
         installLib.install(options, pkgPath, finish);
     }
@@ -188,33 +189,7 @@ function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
     log.info("remove():", "pkgId:", pkgId);
     if (!pkgId) {
-        return errHndl.finish(errHndl.changeErrMsg("EMPTY_VALUE", "APP_ID"));
+        return errHndl.finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
     installLib.remove(options, pkgId, finish);
-}
-
-function finish(err, value) {
-    if(err) {
-        if (typeof(err) === 'string') {
-            log.error(err.toString());
-            log.verbose(err.stack);
-        } else if (typeof(err) == "object") {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0) { // [service/system] + [tips] error
-                for(const index in err) {
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            }
-        }
-        cliControl.end(-1);
-    } else {
-        log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
-        }
-        cliControl.end();
-    }
 }

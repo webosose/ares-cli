@@ -365,9 +365,10 @@ describe(aresCmd + ' --encrypt(-enc)', function() {
         exec(cmd + ` -enc ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
-                expect(stderr).toContain("ares-package ERR! ENOENT: no such file or directory, open");
-                //expect(stderr).toContain("ares-package ERR! [syscall failuire]: no such file or directory, open");
+                expect(stderr).toContain("ares-package ERR! [syscall failure]: ENOENT: no such file or directory," + 
+                                        " open '/home/ye0607kim/project/github/ares-cli/files/conf/pubkey.pem'");
+                expect(stderr).toContain("ares-package ERR! [Tips]: Please check the given path is valid " + 
+                                        "</home/ye0607kim/project/github/ares-cli/files/conf/pubkey.pem>");
             }
             expect(fs.existsSync(appPkgPath)).toBe(false);
             done();

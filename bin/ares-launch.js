@@ -19,7 +19,8 @@ const version = commonTools.version,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg;
+    errHndl = commonTools.errMsg,
+    finish = errHndl.finish;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -186,7 +187,7 @@ function getParams() {
     });
 
     if (argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish(errHndl.changeErrMsg("INVALID_DISPLAY"));
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
 
     log.info("getParams():", "params:", JSON.stringify(params));
@@ -220,30 +221,4 @@ function running() {
         console.log(strRunApps);
         finish(err);
     });
-}
-
-function finish(err, value) {
-    if(err) {
-        if (typeof(err) === "string") {
-            log.error(err.toString());
-            log.verbose(err.stack);
-        } else if(typeof(err) == "object") {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0) { // [service/system] + [tips] error
-                for(const index in err) {
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            }
-        }
-        cliControl.end(-1);
-    } else {
-        log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
-        }
-        cliControl.end();
-    }
 }

@@ -168,7 +168,7 @@ PalmPackage.prototype = {
         if (Object.hasOwnProperty.call(this.argv, 'app-exclude')) {
             for(const excl_file in this.argv) {
                 if ((this.argv[excl_file]).toString() === "appinfo.json") {
-                    this.finish(errHndl.changeErrMsg("NOT_EXCLUDE_APPINFO"));
+                    this.finish(errHndl.getErrMsg("NOT_EXCLUDE_APPINFO"));
                 }
             }
             this.options.excludefiles = this.argv['app-exclude'];
@@ -188,14 +188,14 @@ PalmPackage.prototype = {
 
         if (Object.hasOwnProperty.call(this.argv, 'sign')) {
             if (!fs.existsSync(path.resolve(this.argv.sign))) {
-                this.finish(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.sign));
+                this.finish(errHndl.getErrMsg("NOT_EXIST_PATH", this.argv.sign));
             }
             this.options.sign = this.argv.sign;
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'certificate')) {
             if (!fs.existsSync(path.resolve(this.argv.certificate))) {
-                this.finish(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.certificate));
+                this.finish(errHndl.getErrMsg("NOT_EXIST_PATH", this.argv.certificate));
             }
             this.options.certificate = this.argv.certificate;
         }
@@ -203,7 +203,7 @@ PalmPackage.prototype = {
         // check sign option must be used with certificate option
         if ((this.options.sign && !this.options.certificate) ||
                 (this.options.certificate && !this.options.sign)) {
-            this.finish(errHndl.changeErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
+            this.finish(errHndl.getErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'pkgid')) {
@@ -219,20 +219,93 @@ PalmPackage.prototype = {
         }
     },
 
-    packageReady: function(err, results) {
-        log.info("projectReady");
-        if (err) {
-            log.error(err.toString());
-            log.verbose(err.stack);
-            cliControl.end(-1);
-        } else {
-            if (results && results[results.length-1] && results[results.length-1].msg) {
-                console.log(results[results.length-1].msg);
+    
+
+    setOutputDir: function(next) {
+        log.info("setOutputDir");
+
+        if (this.argv.outdir) {
+            this.destination = this.argv.outdir;
+        }
+
+        if (this.destination === '.') {
+            this.destination = process.cwd();
+        }
+
+        // Check that the directorie exist
+        if (fs.existsSync(this.destination)) {
+            const stats = fs.statSync(this.destination);
+            if (!stats.isDirectory()) {
+                this.exitOnError(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
             }
-            cliControl.end();
+        } else {
+            log.verbose("creating directory '" + this.destination + "' ...");
+            mkdirp.sync(this.destination);
+        }
+        this.destination = fs.realpathSync(this.destination);
+        next();
+    },
+
+    checkInputDir: function(next) {
+        log.info("checkInputDir");
+        const packager = new packageLib.Packager(this.options);
+        this.appCnt = packager.checkInputDirectories(this.argv.argv.remain, this.options, next);
+    },
+
+    packageApp: function(next) {
+        log.info("packageApp");
+        const packager = new packageLib.Packager(this.options);
+        if(this.appCnt === 0) { // only service packaging
+            if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
+                this.finish(errHndl.getErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
+                cliControl.end(-1);
+            }
+            else if (Object.hasOwnProperty.call(this.options, 'pkgid')) {
+                packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
+            }
+            else if (Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
+                packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
+            }
+            else {
+                this.finish(errHndl.getErrMsg("USE_PKGID_PKGINFO"));
+                cliControl.end(-1);
+            }
+        } else { // app+service packaging
+            if (Object.hasOwnProperty.call(this.options, 'pkgid') || Object.hasOwnProperty.call(this.options, 'pkgversion') || Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
+                this.finish(errHndl.getErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
+            }
+            packager.generatePackage(this.argv.argv.remain, this.destination, this.options, next);
         }
     },
 
+    packageProject: function() {
+        async.series([
+                version.checkNodeVersion,
+                this.setOutputDir.bind(this),
+                this.checkInputDir.bind(this),
+                this.packageApp.bind(this)
+            ],
+            this.finish.bind(this));
+    },
+    
+    checkApplication: function() {
+        async.series([
+                version.checkNodeVersion,
+                this.checkInputDir.bind(this)
+            ],
+            this.appOk.bind(this));
+    },
+
+    appOk: function(err) {
+        log.info("appOk");
+        if (err) {
+            log.error(err.toString());
+            cliControl.end(-1);
+        } else {
+            console.log("no problems detected");
+            cliControl.end();
+        }
+    },
 
     finish(err, value) {
         if(err) {
@@ -260,92 +333,6 @@ PalmPackage.prototype = {
             }
             cliControl.end();
         }
-    },
-
-    setOutputDir: function(next) {
-        log.info("setOutputDir");
-
-        if (this.argv.outdir) {
-            this.destination = this.argv.outdir;
-        }
-
-        if (this.destination === '.') {
-            this.destination = process.cwd();
-        }
-
-        // Check that the directorie exist
-        if (fs.existsSync(this.destination)) {
-            const stats = fs.statSync(this.destination);
-            if (!stats.isDirectory()) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_DIRTYPE_PATH", this.destination));
-            }
-        } else {
-            log.verbose("creating directory '" + this.destination + "' ...");
-            mkdirp.sync(this.destination);
-        }
-        this.destination = fs.realpathSync(this.destination);
-        next();
-    },
-
-    checkInputDir: function(next) {
-        log.info("checkInputDir");
-        const packager = new packageLib.Packager(this.options);
-        this.appCnt = packager.checkInputDirectories(this.argv.argv.remain, this.options, next);
-    },
-
-    packageApp: function(next) {
-        log.info("packageApp");
-        const packager = new packageLib.Packager(this.options);
-        if(this.appCnt === 0) { // only service packaging
-            if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
-                this.finish(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
-                cliControl.end(-1);
-            }
-            else if (Object.hasOwnProperty.call(this.options, 'pkgid')) {
-                packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
-            }
-            else if (Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
-                packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
-            }
-            else {
-                this.finish(errHndl.changeErrMsg("USE_PKGID_PKGINFO"));
-                cliControl.end(-1);
-            }
-        } else { // app+service packaging
-            if (Object.hasOwnProperty.call(this.options, 'pkgid') || Object.hasOwnProperty.call(this.options, 'pkgversion') || Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
-                this.finish(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
-            }
-            packager.generatePackage(this.argv.argv.remain, this.destination, this.options, next);
-        }
-    },
-
-    packageProject: function() {
-        async.series([
-                version.checkNodeVersion,
-                this.setOutputDir.bind(this),
-                this.checkInputDir.bind(this),
-                this.packageApp.bind(this)
-            ],
-            this.finish.bind(this));
-    },
-
-    appOk: function(err) {
-        log.info("appOk");
-        if (err) {
-            log.error(err.toString());
-            cliControl.end(-1);
-        } else {
-            console.log("no problems detected");
-            cliControl.end();
-        }
-    },
-
-    checkApplication: function() {
-        async.series([
-                version.checkNodeVersion,
-                this.checkInputDir.bind(this)
-            ],
-            this.appOk.bind(this));
     },
 
     exec: function() {

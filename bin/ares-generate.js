@@ -19,8 +19,9 @@ const readJsonSync = require('./../lib/util/json').readJsonSync,
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
     help = commonTools.help,
+    appdata = commonTools.appdata,
     errHndl = commonTools.errMsg,
-    appdata = commonTools.appdata;
+    finish = errHndl.finish;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -205,10 +206,10 @@ function generate(next) {
         }
     }
     if (!options.tmplName) {
-        return next(errHndl.changeErrMsg("EMPTY_VALUE", "TEMPLATE"));
+        return next(errHndl.getErrMsg("EMPTY_VALUE", "TEMPLATE"));
     }
     if (!options.out) {
-        return next(errHndl.changeErrMsg("EMPTY_VALUE", "APP_DIR"));
+        return next(errHndl.getErrMsg("EMPTY_VALUE", "APP_DIR"));
     }
     Promise.resolve()
         .then(function() {
@@ -229,13 +230,13 @@ function generate(next) {
             return inquirer.prompt(questions).then(function(answers) {
                 options.overwrite = answers.overwrite || options.overwrite;
                 if (existDir && !options.overwrite) {
-                    throw errHndl.changeErrMsg("NOT_OVERWRITE_DIR", dest);
+                    throw errHndl.getErrMsg("NOT_OVERWRITE_DIR", dest);
                 }
             });
         })
         .then(function() {
             const template = templates[options.tmplName];
-            if (!template) throw errHndl.changeErrMsg("INVALID_VALUE", "TEMPLATE", options.tmplName);
+            if (!template) throw errHndl.getErrMsg("INVALID_VALUE", "TEMPLATE", options.tmplName);
             if (!template.type) {
                 return;
             }
@@ -288,30 +289,4 @@ function generate(next) {
         .catch(function(err) {
             finish(err);
         });
-}
-
-function finish(err, value) {
-    if(err) {
-        if (typeof(err) === "string") {
-            log.error(err.toString());
-            log.verbose(err.stack);
-        } else if (typeof(err) == "object") {
-            if (err.length === undefined) { // single error
-                log.error(err.heading, err.message);
-                log.verbose(err.stack);
-            } else if (err.length > 0) { // [service/system] + [tips] error
-                for(const index in err){
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            }
-        }
-        cliControl.end(-1);
-    } else {
-        log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
-        }
-        cliControl.end();
-    }
 }
