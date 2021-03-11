@@ -231,7 +231,6 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c --display 10`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.surfacemanager failure]: luna-send command failed <ERR_INVALID_DISPLAY>");
                 expect(stderr).toContain("ares-device ERR! [Tips]: Please use a valid value for display id");
             }

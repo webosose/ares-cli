@@ -467,7 +467,6 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
                                         "\nares-package ERR! [Tips]: main is required" +
@@ -499,7 +498,6 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` ${sampleAppPath} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
                                          "\nares-package ERR! [Tips]: type is not one of enum values: web,stub,native,native_builtin,native_appshell,qml");
