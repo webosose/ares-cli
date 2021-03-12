@@ -257,8 +257,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -r invalidTarget`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Invalid value <DEVICE_NAME> : invalidTarget");
             }
-            expect(stderr).toContain("ares-setup-device ERR! [Tips]: Invalid value <DEVICE_NAME> : invalidTarget");
             done();
         });
     });
@@ -267,8 +267,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -r emulator`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Cannot remove the device <emulator>");
             }
-            expect(stderr).toContain("ares-setup-device ERR! [Tips]: Cannot remove the device <emulator>");
             done();
         });
     });

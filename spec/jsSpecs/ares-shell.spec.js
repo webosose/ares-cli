@@ -108,8 +108,6 @@ describe(aresCmd + ' --display(-dp)', function() {
             done();
         });
     });
-
-
 });
 
 describe(aresCmd + ' --run in session', function() {
@@ -145,7 +143,6 @@ describe(aresCmd + ' --run echo $PATH', function() {
     });
 });
 
-
 describe(aresCmd + ' --run echo $PATH in session', function() {
     it('Check environment variable with --run option', function(done) {
         // eslint-disable-next-line no-useless-escape
@@ -171,11 +168,11 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -dp 10`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-            if(hasSession) {
-                expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
-            } else {
-                expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                if(hasSession) {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
+                } else {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                }
             }
             done();
         });

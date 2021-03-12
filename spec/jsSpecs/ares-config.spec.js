@@ -60,8 +60,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ' -p test', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain(`ares-config ERR! [Tips]: Invalid value <profile> : test`, error);
             }
-            expect(stderr).toContain(`ares-config ERR! [Tips]: Invalid value <profile> : test`, error);
             done();
         });
     });

@@ -381,8 +381,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ' -t invalidType sampleApp', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-generate ERR! [Tips]: Invalid value <TEMPLATE> : invalidType", error);
             }
-            expect(stderr).toContain("ares-generate ERR! [Tips]: Invalid value <TEMPLATE> : invalidType", error);
             done();
         });
     });

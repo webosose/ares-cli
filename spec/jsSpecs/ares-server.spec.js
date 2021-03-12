@@ -158,8 +158,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` invalidDir`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-server ERR! [Tips]: Please specify a value <APP_DIR>");
             }
-            expect(stderr).toContain("ares-server ERR! [Tips]: Please specify a value <APP_DIR>");
             done();
         });
     });

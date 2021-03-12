@@ -128,8 +128,8 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ' com.invalid.app.ipk', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-install ERR! [Tips]: The specified path does not exist <com.invalid.app.ipk>");
             }
-            expect(stderr).toContain("ares-install ERR! [Tips]: The specified path does not exist <com.invalid.app.ipk>");
             done();
         });
     });
@@ -138,9 +138,9 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ' -r com.invalid.app', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-install ERR! [com.webos.appInstallService failure]: luna-send command failed <FAILED_REMOVE>");
+                expect(stderr).toContain("ares-install ERR! [Tips]: Please check app is installed to device by ares-install -l");
             }
-            expect(stderr).toContain("ares-install ERR! [com.webos.appInstallService failure]: luna-send command failed <FAILED_REMOVE>");
-            expect(stderr).toContain("ares-install ERR! [Tips]: Please check app is installed to device by ares-install -l");
             done();
         });
     });

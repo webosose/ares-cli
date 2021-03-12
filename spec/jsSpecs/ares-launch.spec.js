@@ -274,9 +274,9 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ' -c com.invalid.app', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-launch ERR! [com.webos.applicationManager failure]: luna-send command failed <com.invalid.app is not running>");
+                expect(stderr).toContain("ares-launch ERR! [Tips]: Please check the list of running apps using ares-launch -r");
             }
-            expect(stderr).toContain("ares-launch ERR! [com.webos.applicationManager failure]: luna-send command failed <com.invalid.app is not running>");
-            expect(stderr).toContain("ares-launch ERR! [Tips]: Please check the list of running apps using ares-launch -r");
             done();
         });
     });
