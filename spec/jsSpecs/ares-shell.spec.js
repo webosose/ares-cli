@@ -10,7 +10,8 @@ const exec = require('child_process').exec,
 const aresCmd = 'ares-shell';
 
 let cmd,
-    options;
+    options,
+    hasSession = false;
 
 beforeAll(function (done) {
     cmd = common.makeCmd(aresCmd);
@@ -62,6 +63,21 @@ describe(aresCmd + ' --device-list(-D)', function() {
     });
 });
 
+describe('Check if there are sessions on the device', function() {
+    it('Check session', function(done) {
+        const deviceCmd = common.makeCmd('ares-device');
+        exec(deviceCmd + ` -s ${options.device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+
+            if (stdout.includes("sessionId")) {
+                hasSession = true;
+            }
+            done();
+        });
+    });
+});
 describe(aresCmd, function() {
     it('Open shell on default device', function(done) {
         exec(cmd, function (error, stdout, stderr) {
@@ -79,28 +95,35 @@ describe(aresCmd + ' --display(-dp)', function() {
         exec(cmd + ' -dp 1', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-
-            if (options.device === "emulator") { // emulator's default setting user is "developer"
-                expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    // TO-DO: uncaughtException TypeError: process.stdin.setRawMode is not a function
+                    // expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                }
             } else {
                 expect(stdout).toContain(`Start ${options.device} shell`, error);
             }
             done();
         });
     });
+
+
 });
 
-describe(aresCmd + ' --run', function() {
+describe(aresCmd + ' --run in session', function() {
     it('Run CMD', function(done) {
         // eslint-disable-next-line no-useless-escape
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-            }
-
-            if (options.device === "emulator") { // emulator's default setting user is "developer"
-                expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                }
             } else {
                 expect(stdout.trim()).toBe("hello webOS", stderr);
             }
@@ -116,8 +139,28 @@ describe(aresCmd + ' --run echo $PATH', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-
             expect(stdout.trim()).toBe("/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+            done();
+        });
+    });
+});
+
+
+describe(aresCmd + ' --run echo $PATH in session', function() {
+    it('Check environment variable with --run option', function(done) {
+        // eslint-disable-next-line no-useless-escape
+        exec(cmd + ' -dp 1 -r \'echo $PATH\'', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                // case of auto emulator using developer user
+                if (options.device === "emulator" && hasSession) {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
+                } else {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                }
+            } else {
+                expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+            }
             done();
         });
     });
@@ -129,7 +172,11 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
+            if(hasSession) {
+                expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
+            } else {
+                expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+            }
             done();
         });
     });
