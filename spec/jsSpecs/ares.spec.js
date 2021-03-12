@@ -73,7 +73,7 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stderr).toContain("ares ERR! [Tips]: This command is invalid. Please check the supported command by ares -l");
+            expect(stderr).toContain("ares ERR! [Tips]: This command is invalid. Please check the supported commands using ares -l");
             done();
         });
     });
