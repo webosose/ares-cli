@@ -287,7 +287,7 @@ PalmPackage.prototype = {
             ],
             this.finish.bind(this));
     },
-    
+
     checkApplication: function() {
         async.series([
                 version.checkNodeVersion,
