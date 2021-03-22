@@ -367,7 +367,7 @@ describe(aresCmd + ' --encrypt(-enc)', function() {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-package ERR! [syscall failure]: ENOENT: no such file or directory," + 
                                         " open '/home/ye0607kim/project/github/ares-cli/files/conf/pubkey.pem'", error);
-                expect(stderr).toContain("ares-package ERR! [Tips]: Please check the file or directory exists in the path " + 
+                expect(stderr).toContain("ares-package ERR! [Tips]: Please check if the path is valid " + 
                                         "</home/ye0607kim/project/github/ares-cli/files/conf/pubkey.pem>", error);
             }
             expect(fs.existsSync(appPkgPath)).toBe(false);

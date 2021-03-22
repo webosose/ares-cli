@@ -115,7 +115,7 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-pull ERR! [syscall failure]: ENOENT: no such file or directory, lstat 'invalidDir'");
-                expect(stderr).toContain("ares-pull ERR! [Tips]: Please check the file or directory exists in the path <invalidDir>");
+                expect(stderr).toContain("ares-pull ERR! [Tips]: Please check if the path is valid <invalidDir>");
             }
             done();
         });
