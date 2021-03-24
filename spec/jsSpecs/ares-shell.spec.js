@@ -2,7 +2,7 @@
  * Copyright (c) 2020 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 /* eslint-disable no-useless-escape */
 const exec = require('child_process').exec,
