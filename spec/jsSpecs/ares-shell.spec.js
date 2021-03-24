@@ -1,7 +1,7 @@
 /*
-* Copyright (c) 2020 LG Electronics Inc.
-*
-* SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2020 LG Electronics Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
 */
 
 /* eslint-disable no-useless-escape */
@@ -142,7 +142,7 @@ describe(aresCmd + ' --run echo $PATH', function() {
         if (osType === "Windows_NT") {
             tmpCmd = cmd + ' -r \"echo $PATH\"';
         }
-        console.log(cmd);
+
         exec(tmpCmd, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -160,7 +160,7 @@ describe(aresCmd + ' --run echo $PATH in session', function() {
         if (osType === "Windows_NT") {
             tmpCmd = cmd + ' -dp 1 -r \"echo $PATH\"';
         }
-        console.log(tmpCmd);
+
         exec(tmpCmd, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
