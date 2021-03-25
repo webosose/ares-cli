@@ -6,18 +6,15 @@
 
 /* eslint-disable no-useless-escape */
 const exec = require('child_process').exec,
-    os = require('os'),
     common = require('./common-spec');
 
 const aresCmd = 'ares-shell';
 
 let cmd,
     options,
-    hasSession = false,
-    osType;
+    hasSession = false;
 
 beforeAll(function (done) {
-    osType = os.type();
     cmd = common.makeCmd(aresCmd);
     common.getOptions()
     .then(function(result){
@@ -139,7 +136,7 @@ describe(aresCmd + ' --run in session', function() {
 describe(aresCmd + ' --run echo $PATH', function() {
     it('Check environment variable with --run option', function(done) {
         let tmpCmd = cmd + ' -r \"echo \\$PATH\"';
-        if (osType === "Windows_NT") {
+        if (process.platform === "win32") {
             tmpCmd = cmd + ' -r \"echo $PATH\"';
         }
 
@@ -157,7 +154,7 @@ describe(aresCmd + ' --run echo $PATH', function() {
 describe(aresCmd + ' --run echo $PATH in session', function() {
     it('Check environment variable with --run option', function(done) {
         let tmpCmd = cmd + ' -dp 1 -r \"echo \\$PATH\"';
-        if (osType === "Windows_NT") {
+        if (process.platform === "win32") {
             tmpCmd = cmd + ' -dp 1 -r \"echo $PATH\"';
         }
 
