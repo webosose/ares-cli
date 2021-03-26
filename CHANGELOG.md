@@ -10,7 +10,6 @@
 * Fixed an issue that environment variables using the `ares-shell -r` command were different from environment variables of the target device.
 
 ## 2.0.3 (January 22, 2021)
-
 ### ares
 * Updated help message.
 
