@@ -259,7 +259,6 @@ describe(aresCmd + ' negative TC ', function() {
         exec(cmd + ` -a ${deivceName}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 expect(stderr).toContain("Invalid device name. Please use letters, numbers and allowed characters ('-', '_', '#')");
             }
             done();
