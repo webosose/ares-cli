@@ -18,8 +18,7 @@ const cliControl = commonTools.cliControl,
     version = commonTools.version,
     help = commonTools.help,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg,
-    finish = errHndl.finish;
+    errHndl = commonTools.errMsg;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -120,4 +119,30 @@ function display (next) {
 
 function showUsage () {
     help.display(processName, appdata.getConfig(true).profile);
+}
+
+function finish(err, value) {
+    if(err) {
+        if (typeof(err) === "string") {
+            log.error(err.toString());
+            log.verbose(err.stack);
+        } else if (typeof(err) === "object") {
+            if (err.length === undefined) { // single error
+                log.error(err.heading, err.message);
+                log.verbose(err.stack);
+            } else if (err.length > 0) { // [service/system] + [tips] error
+                for(const index in err) {
+                    log.error(err[index].heading, err[index].message);
+                }
+                log.verbose(err[0].stack);
+            }
+        }
+        cliControl.end(-1);
+    } else {
+        log.info('finish():', value);
+        if (value && value.msg) {
+            console.log(value.msg);
+        }
+        cliControl.end();
+    }
 }
