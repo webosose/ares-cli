@@ -235,13 +235,13 @@ function _queryAddRemove(ssdpDevices, next) {
                 },
                 validate: function(input) {
                     if (input.length < 1) {
-                        return "Please enter device name.";
+                        return errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME");
                     }
                     if (deviceNames.indexOf(input) !== -1) {
-                        return "Device name is duplicated. Please use another name.";
+                        return errHndl.changeErrMsg("EXISTING_VALUE", "DEVICE_NAME", input);
                     }
                     if (!isValidDeviceName(input)) {
-                        return "Invalid name. Please do not use letters starting with '%' or '$'.";
+                        return errHndl.changeErrMsg("INVALID_DEVICENAME");
                     }
                     return true;
                 }
