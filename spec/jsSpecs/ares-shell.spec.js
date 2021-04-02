@@ -174,11 +174,11 @@ describe(aresCmd + ' --run echo $PATH in session', function() {
 
 describe(aresCmd + ' negative TC', function() {
     it('Set invalid display', function(done) {
-        exec(cmd + ` -dp 10`, function (error, stdout, stderr) {
+        exec(cmd + ` -dp 9`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if(hasSession) {
-                    expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 10");
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 9");
                 } else {
                     expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
