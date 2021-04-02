@@ -259,7 +259,7 @@ describe(aresCmd + ' negative TC ', function() {
         exec(cmd + ` -a ${deivceName}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("Invalid device name. Please use letters, numbers and allowed characters ('-', '_', '#')");
+                expect(stderr).toContain("Invalid device name. The device name should consist of letters, numbers, and special characters");
             }
             done();
         });
