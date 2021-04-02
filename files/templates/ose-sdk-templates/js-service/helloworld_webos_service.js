@@ -28,7 +28,7 @@ service.register("hello", function(message) {
 });
 
 // set some state in the service
-service.register("config/setGreeting", function(message) {
+service.register("/config/setGreeting", function(message) {
     console.log(logHeader, "SERVICE_METHOD_CALLED:/config/setGreeting");
     console.log("In setGreeting callback");
     if (message.payload.greeting) {

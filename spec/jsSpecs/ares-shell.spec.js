@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/* eslint-disable no-useless-escape */
 const exec = require('child_process').exec,
     common = require('./common-spec');
 
@@ -112,7 +113,6 @@ describe(aresCmd + ' --display(-dp)', function() {
 
 describe(aresCmd + ' --run in session', function() {
     it('Run CMD', function(done) {
-        // eslint-disable-next-line no-useless-escape
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -130,10 +130,15 @@ describe(aresCmd + ' --run in session', function() {
     });
 });
 
+
 describe(aresCmd + ' --run echo $PATH', function() {
     it('Check environment variable with --run option', function(done) {
-        // eslint-disable-next-line no-useless-escape
-        exec(cmd + ' -r \'echo $PATH\'', function (error, stdout, stderr) {
+        let tmpCmd = cmd + ' -r \"echo \\$PATH\"';
+        if (process.platform === "win32") {
+            tmpCmd = cmd + ' -r \"echo $PATH\"';
+        }
+
+        exec(tmpCmd, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -145,8 +150,12 @@ describe(aresCmd + ' --run echo $PATH', function() {
 
 describe(aresCmd + ' --run echo $PATH in session', function() {
     it('Check environment variable with --run option', function(done) {
-        // eslint-disable-next-line no-useless-escape
-        exec(cmd + ' -dp 1 -r \'echo $PATH\'', function (error, stdout, stderr) {
+        let tmpCmd = cmd + ' -dp 1 -r \"echo \\$PATH\"';
+        if (process.platform === "win32") {
+            tmpCmd = cmd + ' -dp 1 -r \"echo $PATH\"';
+        }
+
+        exec(tmpCmd, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 // case of auto emulator using developer user
