@@ -212,6 +212,7 @@ describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
         }, 2000);
     });
 });
+
 describe(aresCmd + ' --reset(-R)', function() {
     it('Add DEVICE', function(done) {
         const host = '192.168.0.5';
@@ -247,6 +248,19 @@ describe(aresCmd + ' --reset(-R)', function() {
             expect(stdout).toContain(initDevice.host);
             expect(stdout).toContain(initDevice.port);
             expect(stdout).toContain(initDevice.profile);
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC ', function() {
+    it('Add invalid DEVICE', function(done) {
+        const deivceName = "invalid#@!";
+        exec(cmd + ` -a ${deivceName}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("Invalid device name. The device name should consist of letters, numbers, and special characters");
+            }
             done();
         });
     });
