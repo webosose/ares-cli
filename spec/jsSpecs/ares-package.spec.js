@@ -466,11 +466,11 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
-                                        "\nares-package ERR! [Tips]: main is required" +
-                                        "\nares-package ERR! [Tips]: title is required" +
-                                        "\nares-package ERR! [Tips]: icon is required" +
-                                        "\nares-package ERR! [Tips]: type is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :");
+                expect(stderr).toContain("ares-package ERR! [Tips]: main is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: title is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: icon is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: type is required");
             }
             done();
         });
@@ -497,8 +497,8 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :" +
-                                         "\nares-package ERR! [Tips]: type is not one of enum values: " +
+                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :");
+                expect(stderr).toContain("ares-package ERR! [Tips]: type is not one of enum values: " +
                                          "web,stub,native,native_builtin,native_appshell,qml", error);
             }
             done();

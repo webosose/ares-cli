@@ -135,11 +135,11 @@ function captureScreen() {
 }
 
 function finish(err, value) {
-    if(err) {
-        if (typeof(err) === "string") {
+    if (err) {
+        if (typeof err === "string") {
             log.error(err.toString());
             log.verbose(err.stack);
-        } else if (typeof(err) === "object") {
+        } else if (typeof err === "object") {
             if (err.length === undefined) { // single error
                 log.error(err.heading, err.message);
                 log.verbose(err.stack);
