@@ -212,6 +212,7 @@ describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
         }, 2000);
     });
 });
+
 describe(aresCmd + ' --reset(-R)', function() {
     it('Add DEVICE', function(done) {
         const host = '192.168.0.5';
@@ -268,6 +269,17 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-setup-device ERR! [Tips]: Cannot remove the device <emulator>");
+            }
+            done();
+        });
+    });
+    
+    it('Add invalid DEVICE', function(done) {
+        const deivceName = "invalid#@!";
+        exec(cmd + ` -a ${deivceName}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Invalid device name. The device name should consist");
             }
             done();
         });
