@@ -144,18 +144,16 @@ function inspect(){
 
 function finish(err, value) {
     if (err) {
-        if (typeof err === "string") {
-            log.error(err);
-        } else if (typeof err === "object") {
-            if (err.length && err.length > 0) { // [service/system] + [tips] error
-                for(const index in err) {
-                    log.error(err[index].heading, err[index].message);
-                }
-                log.verbose(err[0].stack);
-            } else { // single error
-                log.error(err.toString());
-                log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+            log.error(err[index].heading, err[index].message);
             }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
         }
         cliControl.end(-1);
     } else {
