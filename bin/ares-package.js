@@ -17,8 +17,8 @@ const fs = require('fs'),
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
     help = commonTools.help,
-    errHndl = commonTools.errMsg,
-    appdata = commonTools.appdata;
+    appdata = commonTools.appdata,
+    errHndl = commonTools.errMsg;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -293,7 +293,7 @@ PalmPackage.prototype = {
                 version.checkNodeVersion,
                 this.checkInputDir.bind(this)
             ],
-            this.finish.bind(this, null, {msg:"no problems detected"}));
+            this.finish.bind(this, null, {msg: "no problems detected"}));
     },
 
     finish: function(err, value) {
