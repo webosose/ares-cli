@@ -292,8 +292,12 @@ PalmPackage.prototype = {
         async.series([
                 version.checkNodeVersion,
                 this.checkInputDir.bind(this)
-            ],
-            this.finish.bind(this, null, {msg: "no problems detected"}));
+            ], function(err) {
+                if (err) {
+                    return this.finish(err);
+                }
+                return this.finish(null, {msg: "no problems detected"});
+            }.bind(this));
     },
 
     finish: function(err, value) {
