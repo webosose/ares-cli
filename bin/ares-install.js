@@ -135,10 +135,10 @@ function install() {
     const pkgPath = argv.install || argv.argv.remain[0];
     log.info("install():", "pkgPath:", pkgPath);
     if (!pkgPath) {
-        return finish(errHndl.changeErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
     } else {
         if (!fs.existsSync(path.normalize(pkgPath))) {
-            return finish(errHndl.changeErrMsg("NOT_EXIST_PATH", pkgPath));
+            return finish(errHndl.getErrMsg("NOT_EXIST_PATH", pkgPath));
         }
         installLib.install(options, pkgPath, finish);
     }
@@ -188,15 +188,24 @@ function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
     log.info("remove():", "pkgId:", pkgId);
     if (!pkgId) {
-        return finish(errHndl.changeErrMsg("EMPTY_VALUE", "APP_ID"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
-    installLib.remove(options, pkgId,finish);
+    installLib.remove(options, pkgId, finish);
 }
 
 function finish(err, value) {
     if (err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
         log.info('finish():', value);

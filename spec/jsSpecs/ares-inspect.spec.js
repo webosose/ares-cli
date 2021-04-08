@@ -229,3 +229,27 @@ describe(aresCmd, function() {
         });
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    it("Set invalid app which is not installed", function(done) {
+        exec(cmd + ' com.invalid.app', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-inspect ERR! [com.webos.applicationManager failure]:" +
+                                        " luna-send command failed <Cannot find proper launchPoint>");
+                expect(stderr).toContain("ares-inspect ERR! [Tips]: The app is not installed app. Please check the list by ares-install -l");
+            }
+            done();
+        });
+    });
+
+    it("Set invalid service which is not installed", function(done) {
+        exec(cmd + ' -s com.invalid.service', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-inspect ERR! [Tips]: Failed to get service installation path <com.invalid.service>");
+            }
+            done();
+        });
+    });
+});

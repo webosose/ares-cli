@@ -253,13 +253,33 @@ describe(aresCmd + ' --reset(-R)', function() {
     });
 });
 
-describe(aresCmd + ' negative TC ', function() {
+describe(aresCmd + ' negative TC', function() {
+    it('Remove invaild device target', function(done) {
+        exec(cmd + ` -r invalidTarget`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Invalid value <DEVICE_NAME> : invalidTarget");
+            }
+            done();
+        });
+    });
+
+    it('Remove emulator device', function(done) {
+        exec(cmd + ` -r emulator`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Cannot remove the device <emulator>");
+            }
+            done();
+        });
+    });
+    
     it('Add invalid DEVICE', function(done) {
         const deivceName = "invalid#@!";
         exec(cmd + ` -a ${deivceName}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("Invalid device name. The device name should consist of letters, numbers, and special characters");
+                expect(stderr).toContain("ares-setup-device ERR! [Tips]: Invalid device name. The device name should consist");
             }
             done();
         });

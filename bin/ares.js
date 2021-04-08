@@ -90,22 +90,30 @@ function commandList (next) {
         console.log(table.print());
         next();
     } catch (e){
-        next(errHndl.changeErrMsg("INVALID_JSON_FORMAT"));
+        next(errHndl.getErrMsg("INVALID_JSON_FORMAT"));
     }
 }
 
 function display (next) {
     let commandsList;
+    let found = false;
     try{
         commandsList = JSON.parse(fs.readFileSync(path.join(__dirname, '../', 'files', 'conf', 'ares.json')));
         for(const arg in argv){
             if(Object.hasOwnProperty.call(commandsList, 'ares-'+ arg) && fs.existsSync(path.join(__dirname, 'ares-'+ arg + '.js'))){
                 help.display('ares-'+arg, appdata.getConfig(true).profile);
+                found = true;
             }
         }
-        next();
+
+        if (!found) {
+            next(errHndl.getErrMsg("INVALID_COMMAND"));
+        } else {
+            next();
+        }
+        
     } catch(e){
-        next(errHndl.changeErrMsg("INVALID_JSON_FORMAT"));
+        next(errHndl.getErrMsg("INVALID_JSON_FORMAT"));
     }
 }
 
@@ -115,10 +123,20 @@ function showUsage () {
 
 function finish(err, value) {
     if (err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
+        log.info('finish():', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

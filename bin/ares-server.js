@@ -67,11 +67,10 @@ log.verbose("argv", argv);
  */
 if (argv.level) {
     delete argv.level;
-    if (argv.argv.remain.length===0 && (Object.keys(argv)).length === 1) {
+    if (argv.argv.remain.length === 0 && (Object.keys(argv)).length === 1) {
         argv.help=true;
     }
 }
-
 
 let op;
 if (argv.help) {
@@ -102,7 +101,7 @@ function runServer() {
         appPath = argv.argv.remain.splice(0,1).join("");
 
     if (!appPath) {
-        return finish(errHndl.changeErrMsg("EMPTY_VALUE", "APP_DIR"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_DIR"));
     }
     appPath = fs.realpathSync(appPath);
 
@@ -151,10 +150,20 @@ function runServer() {
 
 function finish(err, value) {
     if (err) {
-        log.error(err);
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
+        log.info('finish():', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

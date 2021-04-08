@@ -365,7 +365,8 @@ describe(aresCmd + ' --encrypt(-enc)', function() {
         exec(cmd + ` -enc ${sampleAppPath} ${sampleServicePaths[0]} -o ${outputPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain('no such file or directory, open');
+                expect(stderr).toContain("ares-package ERR! [syscall failure]: ENOENT: no such file or directory, open", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Please check if the path is valid", error);
             }
             expect(fs.existsSync(appPkgPath)).toBe(false);
             done();
@@ -441,7 +442,8 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Please input required field <id>", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Please input required field <id>", error);
+                
             }
             done();
         });
@@ -464,8 +466,11 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Invalid file <appinfo.json> :\nmain is required\ntitle is required\nicon is required" +
-                                        "\ntype is required", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :");
+                expect(stderr).toContain("ares-package ERR! [Tips]: main is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: title is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: icon is required");
+                expect(stderr).toContain("ares-package ERR! [Tips]: type is required");
             }
             done();
         });
@@ -492,8 +497,9 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Invalid file <appinfo.json> :" +
-                                        "\ntype is not one of enum values: web,stub,native,native_builtin,native_appshell,qml", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <appinfo.json> :");
+                expect(stderr).toContain("ares-package ERR! [Tips]: type is not one of enum values: " +
+                                         "web,stub,native,native_builtin,native_appshell,qml", error);
             }
             done();
         });
@@ -511,7 +517,7 @@ describe(aresCmd + ' negative TC', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr = stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Do not use together with options <pkgid, pkgversion, pkginfofile>", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Do not use together with options <pkgid, pkgversion, pkginfofile>", error);
             }
             done();
         });
@@ -529,7 +535,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: packageId must be provided by using either the '--pkgid' or the '--pkginfofile' option", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: packageId must be provided by using either the '--pkgid' or the '--pkginfofile' option", error);
             }
             done();
         });
@@ -547,7 +553,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Do not use together with options <pkginfofile, pkgid>", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Do not use together with options <pkginfofile, pkgid>", error);
             }
             done();
         });
@@ -576,7 +582,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Invalid file <packageinfo.json> ", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Invalid file <packageinfo.json>", error);
             }
             done();
         });
@@ -605,7 +611,7 @@ describe(aresCmd + ' negative TC for services packaging', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 stderr.trim().replace(/\s+['\n']/g, '\n');
-                expect(stderr).toContain("ares-package ERR! CLI: Please input required field <id>", error);
+                expect(stderr).toContain("ares-package ERR! [Tips]: Please input required field <id>", error);
             }
             done();
         });

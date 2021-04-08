@@ -186,7 +186,7 @@ function getParams() {
     });
 
     if (argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish(errHndl.changeErrMsg("INVALID_DISPLAY"));
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
 
     log.info("getParams():", "params:", JSON.stringify(params));
@@ -224,10 +224,20 @@ function running() {
 
 function finish(err, value) {
     if (err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
+        log.info('finish():', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

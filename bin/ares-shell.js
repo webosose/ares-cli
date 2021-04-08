@@ -17,7 +17,8 @@ const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
-    appdata = commonTools.appdata;
+    appdata = commonTools.appdata,
+    errHndl = commonTools.errMsg;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -85,24 +86,34 @@ function showUsage() {
 
 function run() {
     if(argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish("Please use nonnegative integer values for a \"display\" option");
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
     shellLib.remoteRun(options, argv.run, finish);
 }
 
 function shell() {
     if(argv.display !== undefined && isNaN(Number(argv.display))) {
-        return finish("Please use nonnegative integer values for a \"display\" option");
+        return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
     shellLib.shell(options, finish);
 }
 
 function finish(err, value) {
     if (err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
+        log.info('finish():', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

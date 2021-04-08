@@ -96,13 +96,12 @@ describe(aresCmd + ' --display(-dp)', function() {
         exec(cmd + ' -dp 1', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-
                 // case of auto emulator using developer user
                 if (options.device === "emulator" && hasSession) {
-                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
                 } else {
                     // TO-DO: uncaughtException TypeError: process.stdin.setRawMode is not a function
-                    // expect(stderr).toContain("This device does not support the session.");
+                    // expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
                 expect(stdout).toContain(`Start ${options.device} shell`, error);
@@ -117,12 +116,11 @@ describe(aresCmd + ' --run in session', function() {
         exec(cmd + ' -dp 1 -r \"echo hello webOS\"', function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-
                 // case of auto emulator using developer user
                 if (options.device === "emulator" && hasSession) {
-                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
                 } else {
-                    expect(stderr).toContain("This device does not support the session.");
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
                 expect(stdout.trim()).toBe("hello webOS", stderr);
@@ -144,7 +142,6 @@ describe(aresCmd + ' --run echo $PATH', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-
             expect(stdout.trim()).toBe("/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             done();
         });
@@ -161,15 +158,30 @@ describe(aresCmd + ' --run echo $PATH in session', function() {
         exec(tmpCmd, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-
                 // case of auto emulator using developer user
                 if (options.device === "emulator" && hasSession) {
-                    expect(stderr).toContain("Unable to connect to the target device. root access required <connect user session>", error);
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Unable to connect to the target device. root access required <connect user session>", error);
                 } else {
-                    expect(stderr).toContain("This device does not support the session.");
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
                 expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC', function() {
+    it('Set invalid display', function(done) {
+        exec(cmd + ` -dp 9`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if(hasSession) {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: Invalid value <DISPLAY_ID> : 9");
+                } else {
+                    expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
+                }
             }
             done();
         });

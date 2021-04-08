@@ -54,3 +54,15 @@ describe(aresCmd + ' --prefile-details(-c)', function() {
         });
     });
 });
+
+describe(aresCmd + ' negative TC', function() {
+    it("Set invalid device profile", function(done) {
+        exec(cmd + ' -p test', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain(`ares-config ERR! [Tips]: Invalid value <profile> : test`, error);
+            }
+            done();
+        });
+    });
+});
