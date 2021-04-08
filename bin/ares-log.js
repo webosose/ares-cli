@@ -98,8 +98,6 @@ const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display
 const journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", 
                             "boot", "output", "file", "priority", "save", "display", "level", "device"];
 
-console.log(argv.argv.cooked)
-
 let op;
 if (argv['device-list']) {
     setupDevice.showDeviceListAndExit();
