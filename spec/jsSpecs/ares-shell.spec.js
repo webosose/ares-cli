@@ -123,7 +123,7 @@ describe(aresCmd + ' --run in session', function() {
                     expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
-                expect(stdout.trim()).toBe("hello webOS", stderr);
+                expect(stdout.trim()).toContain("hello webOS", stderr);
             }
             done();
         });
@@ -142,7 +142,7 @@ describe(aresCmd + ' --run echo $PATH', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout.trim()).toBe("/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+            expect(stdout.trim()).toContain("/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             done();
         });
     });
@@ -165,7 +165,7 @@ describe(aresCmd + ' --run echo $PATH in session', function() {
                     expect(stderr).toContain("ares-shell ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
-                expect(stdout.trim()).toBe("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
+                expect(stdout.trim()).toContain("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", stderr);
             }
             done();
         });
