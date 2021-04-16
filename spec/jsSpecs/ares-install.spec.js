@@ -93,7 +93,7 @@ describe(aresCmd + ' --listfull(-F)', function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(options.pkgId, stderr);
-            expect(stdout).toContain("version:0.0.1");
+            expect(stdout).toContain("version : 0.0.1");
             done();
         });
     });

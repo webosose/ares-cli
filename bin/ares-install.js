@@ -12,7 +12,8 @@ const fs = require('fs'),
     log = require('npmlog'),
     nopt = require('nopt'),
     installLib = require('./../lib/install'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    convertJsonToList = require('./../lib/util/json').convertJsonToList;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -92,7 +93,7 @@ const options = {
         appId: 'com.ares.defaultName',
         device: argv.device,
         opkg: argv.opkg || false,
-        opkg_param:  argv['opkg-param'],
+        opkg_param:  argv['opkg-param']
     };
 
 let op;
@@ -149,38 +150,25 @@ function list(){
         let strPkgs = "";
         let cnt = 0;
         if (pkgs instanceof Array) pkgs.forEach(function (pkg) {
-            if (argv.type) {
-                if (argv.type !== pkg.type) {
-                    return;
+            if (!argv.type || (argv.type && (argv.type === pkg.type))) {
+                if (cnt++ !== 0) {
+                    strPkgs = strPkgs.concat('\n');
                 }
+                strPkgs = strPkgs.concat(pkg.id);
             }
-            if (cnt++ !== 0) strPkgs = strPkgs.concat('\n');
-            strPkgs = strPkgs.concat(pkg.id);
         });
-        console.log(strPkgs);
-        finish(err);
+        finish(err, {msg : strPkgs.trim()});
     });
 }
 
 function listFull() {
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
-        if (pkgs instanceof Array) pkgs.forEach(function (pkg) {
-            if (argv.type) {
-                if (argv.type !== pkg.type) {
-                    return;
-                }
-            }
-            strPkgs = strPkgs.concat('----------------\n');
-            strPkgs = strPkgs.concat("id:"+ pkg.id+", ");
-            for (const key in pkg) {
-                if (key === "id") continue;
-                strPkgs = strPkgs.concat(key+":").concat(pkg[key]).concat(", ");
-            }
+        for (let index = 0; index < pkgs.length; index++) {
+            strPkgs += convertJsonToList(pkgs[index], 0);
             strPkgs = strPkgs.concat('\n');
-        });
-        process.stdout.write(strPkgs);
-        finish(err);
+        }
+        finish(err, {msg : strPkgs.trim()});
     });
 }
 
