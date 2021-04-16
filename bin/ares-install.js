@@ -152,9 +152,9 @@ function list(){
         if (pkgs instanceof Array) pkgs.forEach(function (pkg) {
             if (!argv.type || (argv.type && (argv.type === pkg.type))) {
                 if (cnt++ !== 0) {
-                    strPkgs = strPkgs.concat('\n');
+                    strPkgs += '\n';
                 }
-                strPkgs = strPkgs.concat(pkg.id);
+                strPkgs += pkg.id;
             }
         });
         finish(err, {msg : strPkgs.trim()});
@@ -165,9 +165,9 @@ function listFull() {
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
         for (let index = 0; index < pkgs.length; index++) {
-            strPkgs = strPkgs.concat("id : "+ pkgs[index].id, '\n');
+            strPkgs += "id : "+ pkgs[index].id + '\n';
             delete pkgs[index].id;
-            strPkgs = strPkgs.concat(convertJsonToList(pkgs[index], 0), '\n');
+            strPkgs += convertJsonToList(pkgs[index], 0) + '\n';
         }
         finish(err, {msg : strPkgs.trim()});
     });
