@@ -165,8 +165,9 @@ function listFull() {
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
         for (let index = 0; index < pkgs.length; index++) {
-            strPkgs += convertJsonToList(pkgs[index], 0);
-            strPkgs = strPkgs.concat('\n');
+            strPkgs = strPkgs.concat("id : "+ pkgs[index].id, '\n');
+            delete pkgs[index].id;
+            strPkgs = strPkgs.concat(convertJsonToList(pkgs[index], 0), '\n');
         }
         finish(err, {msg : strPkgs.trim()});
     });
