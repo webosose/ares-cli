@@ -148,13 +148,9 @@ function install() {
 function list(){
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
-        let cnt = 0;
         if (pkgs instanceof Array) pkgs.forEach(function (pkg) {
             if (!argv.type || (argv.type && (argv.type === pkg.type))) {
-                if (cnt++ !== 0) {
-                    strPkgs += '\n';
-                }
-                strPkgs += pkg.id;
+                strPkgs += pkg.id + '\n';
             }
         });
         finish(err, {msg : strPkgs.trim()});
