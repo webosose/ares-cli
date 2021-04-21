@@ -69,25 +69,23 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Run a local web server', function(done) {
         const child = exec(cmd + ` ${sampleAppPath}`);
-        let result;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(data).toContain('Local server running on http://localhost');
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Local server running on http://localhost');
             done();
         }, 3000);
     });
@@ -96,25 +94,23 @@ describe(aresCmd, function() {
 describe(aresCmd + ' --open(o)', function() {
     it('Run a local web server on browser ', function(done) {
         const child = exec(cmd + ` ${sampleAppPath} -o`);
-        let result;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(data).toContain('Local server running on http://localhost');
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Local server running on http://localhost');
             done();
         }, 3000);
     });
@@ -129,25 +125,23 @@ describe(aresCmd +' --port', function() {
     it('Set port for running web server', function(done) {
         const port = Math.floor((Math.random()*(50000 - 10000 + 1)) + 10000);
         const child = exec(cmd + ` -p ${port} ${sampleAppPath}`);
-        let result;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(data).toContain(`Local server running on http://localhost:${port}`);
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain(`Local server running on http://localhost:${port}`);
             done();
         }, 3000);
     });

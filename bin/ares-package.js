@@ -296,7 +296,7 @@ PalmPackage.prototype = {
                 if (err) {
                     return this.finish(err);
                 }
-                return this.finish(null, {msg: "no problems detected"});
+                return this.finish(null, {msg : "no problems detected"});
             }.bind(this));
     },
 

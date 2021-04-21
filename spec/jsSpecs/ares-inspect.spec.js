@@ -80,24 +80,23 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Run web inspector for sample app', function(done) {
         const child = exec(cmd + ` -a ${options.pkgId} -dp 0`);
-        let result = "";
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).toContain('Application Debugging - http://localhost');
+            expect(stdoutData).toContain('Application Debugging - http://localhost');
             done();
         }, 7000);
     });
@@ -119,24 +118,23 @@ describe(aresCmd, function() {
 describe(aresCmd +' --open(-o)', function() {
     it('Open web inspector for sample app', function(done) {
         const child = exec(cmd + ` -a ${options.pkgId} -o -dp 1`);
-        let result = "";
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).toContain('Application Debugging - http://localhost');
+            expect(stdoutData).toContain('Application Debugging - http://localhost');
             done();
         }, 3000);
     });
@@ -156,42 +154,41 @@ describe(aresCmd +' --open(-o)', function() {
 });
 
 describe(aresCmd, function() {
-    let result = "";
+    let stdoutData = "";
 
     it('Run Node\'s Inspector for sample Service', function(done) {
         const child = exec(cmd + ` -s ${options.pkgService} -dp 1`);
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result += data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toContain("null");
-            expect(result).toContain("localhost");
+            expect(stdoutData).not.toContain("null");
+            expect(stdoutData).toContain("localhost");
             done();
         }, 10000);
     });
 });
 
 describe(aresCmd +' --open(-o)', function() {
-    let result = "";
+    let stdoutData = "";
 
     it('Open Node\'s Inspector for sample Service', function(done) {
         const child = exec(cmd + ` -s ${options.pkgService} -dp 0 -o`);
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
@@ -203,8 +200,8 @@ describe(aresCmd +' --open(-o)', function() {
 
         setTimeout(() => {
             child.kill();
-            expect(result).toContain("To debug your service, set \"localhost");
-            expect(result).toContain("Can not support \"--open option\" on platform node version 8 and later");
+            expect(stdoutData).toContain("To debug your service, set \"localhost");
+            expect(stdoutData).toContain("Can not support \"--open option\" on platform node version 8 and later");
             done();
         }, 7000);
     });
