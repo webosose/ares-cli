@@ -80,7 +80,6 @@ describe(aresCmd + ' --list(-l)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`Set target device to ${options.device}`);
             expect(stdout).toContain(options.pkgId, stderr);
             done();
         });
