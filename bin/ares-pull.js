@@ -110,7 +110,7 @@ function pull() {
         showUsage();
         cliControl.end(-1);
     }
-    pullLib.pull(options,finish);
+    pullLib.pull(options, finish);
 }
 
 function finish(err, value) {

@@ -232,26 +232,24 @@ describe(aresCmd +' --hosted(-H)', function() {
     });
 
     it('Launch -H SampleApp', function(done) {
-        let result = "";
+        let stdoutData = "";
         const child = exec(cmd + ` -H ${sampleAppPath}`);
         
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result += data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).toContain('Ares Hosted App is now running');
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Ares Hosted App is now running');
             done();
         }, 3000);
     });

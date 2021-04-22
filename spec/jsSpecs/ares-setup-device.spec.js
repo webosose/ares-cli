@@ -175,7 +175,6 @@ describe(aresCmd + ' --remove(-r)', function() {
 
 describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
     // Check only "Searching" print
-    let checkDone = false;
 
     beforeEach(function(done) {
         killUsedPort()
@@ -186,28 +185,23 @@ describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
 
     it('Search webOS Devices', function(done) {
         const child = exec(cmd + ' -s -t 1');
-        let result;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            if(!checkDone) {
-                expect(data).toContain("Searching...");
-                checkDone = true;
-            }
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain("Searching...");
             done();
         }, 2000);
     });

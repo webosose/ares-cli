@@ -54,7 +54,7 @@ log.level = argv.level || 'warn';
 log.verbose("argv", argv);
 
 const options = {
-        name: argv.device,
+        device: argv.device,
         display : argv.display
     };
 
