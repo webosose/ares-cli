@@ -175,7 +175,6 @@ describe(aresCmd + ' --remove(-r)', function() {
 
 describe(aresCmd + ' --search(-s), --timeout(-t)', function() {
     // Check only "Searching" print
-    let checkDone = false;
 
     beforeEach(function(done) {
         killUsedPort()

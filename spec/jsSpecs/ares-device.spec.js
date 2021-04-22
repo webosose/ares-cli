@@ -143,6 +143,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).not.toContain(options.device);
+            expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));
 
@@ -157,6 +159,7 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).toContain(options.device);
             expect(stdout).toContain(new Date().getFullYear());
             expect(stdout).toContain("display1");
             expect(stdout).toContain(".png");
@@ -177,6 +180,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).not.toContain(options.device);
+            expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.bmp");
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
@@ -190,6 +195,8 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).not.toContain(options.device);
+            expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
             expect(stdout).toContain(captureDirPath);
             expect(fs.existsSync(captureDirPath)).toBe(true);
