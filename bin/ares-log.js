@@ -98,7 +98,7 @@ log.heading = processName;
 log.level = argv.level || 'warn';
 log.verbose("argv", argv);
 
-let options = {
+const options = {
     device: argv.device,
     display: argv.display,
     argv: argv
@@ -172,8 +172,8 @@ function switchDaemon() {
         return finish(new Error("input wanted daemon name"));
     }
     
-    //to-do: Input only in case of pmlogd, journald, and other error processing
-    //to-do: Write to the changed daemon in the config file
+    // to-do: Input only in case of pmlogd, journald, and other error processing
+    // to-do: Write to the changed daemon in the config file
 
     return finish(null, "Switched log daemon to " + argv['switch-daemon']);
 }
