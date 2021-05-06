@@ -17,5 +17,5 @@
         "removeIpkAfterInst" : true
     },
     "dataDir":".webos/ose",
-    "logDaemon" : "journald"
+    "logDaemon": "journald"
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- * Copyright (c) 2020 LG Electronics Inc.
+ * Copyright (c) 2021 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -41,6 +41,7 @@ const knownOpts = {
     // command options
     "switch-daemon":   String,
     "current-daemon":   Boolean,
+    // show options
     "lines":    Number,
     "reverse":  Boolean,
     "follow":   Boolean,
@@ -54,7 +55,14 @@ const knownOpts = {
     // output option
     "output":   Boolean,
     // save option
-    "save":     String
+    "save":     Boolean,
+    // read options
+    "file": String,
+    "file-list": Boolean,
+    // unit options
+    "unit":     String,
+    "unit-list": Boolean,
+    "display": [String, null]
 };
 
 const shortHands = {
@@ -76,27 +84,29 @@ const shortHands = {
     "b": ["--boot"],
     "pid": ["--pid"],
     "o": ["--output"],
-    "s": ["--save"]
+    "s": ["--save"],
+    "file": ["--file"],
+    "fl": ["--file-list"],
+    "u" : ["--unit"],
+    "ul" : ["--unit-list"],
+    "dp" : ["--display"]
 };
-
 
 const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js'*/);
 
 log.heading = processName;
 log.level = argv.level || 'warn';
+log.verbose("argv", argv);
 
 let options = {
     device: argv.device,
+    display: argv.display,
     argv: argv
 };
 
-const configFiles = {
-    "ose" : "files/conf-base/profile/config-ose.json"
-};
-
-const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display", "level", "device"];
-const journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", 
-                            "boot", "output", "file", "priority", "save", "display", "level", "device"];
+const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display", "level", "device"],
+    journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
+                        "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
 let op;
 if (argv['device-list']) {
@@ -106,13 +116,15 @@ if (argv['device-list']) {
 } else if (argv.help) {
     help.display(processName, appdata.getConfig(true).profile);
     cliControl.end();
-} else if (argv.argv.cooked.includes('--current-daemon')) { //-cc
+} else if (argv['current-daemon']) {
     op = checkCurrentDaemon;
-} else if (argv.argv.cooked.includes('--switch-daemon')) {
+} else if (argv['switch-daemon']) {
     op = switchDaemon;
-} else if (argv['save']) { //to-do: -ss
-    op = saveLog;
-} else { //to-do: ares-log에서 지원하지 않는 옵션을 걸러야함
+} else if (argv['unit-list']) {
+    op = showUnitList;
+} else if (argv['file-list'] || argv.file) {
+    op = readMode;
+} else {
     op = showLog;
 }
 if (op) {
@@ -132,14 +144,20 @@ function showLog() {
     logLib.show(options, finish);
 }
 
-function saveLog() {
-    log.info("ares-log#save");
+function readMode() {
+    log.info("ares-log#readMode");
 
     checkOption();
-    logLib.save(options, finish);
+    logLib.readMode(options, finish);
 }
 
-// 현재 선택된 로그 데몬 출력, default=journald
+function showUnitList() {
+    log.info("ares-log#showUnitList");
+
+    checkOption();
+    logLib.printUnitList(options, finish);
+}
+
 function checkCurrentDaemon() {
     log.info("ares-log#checkCurrentDaemon");
 
@@ -147,7 +165,6 @@ function checkCurrentDaemon() {
     return finish(null, "Current log daemon is " + options.currentDaemon);
 }
 
-// 입력된 로그 데몬으로 변경, to-do
 function switchDaemon() {
     log.info("ares-log#switchDaemon");
 
@@ -155,16 +172,12 @@ function switchDaemon() {
         return finish(new Error("input wanted daemon name"));
     }
     
-    //to-do: pmlogd, journald 인 경우만 입력 그 외는 error처리
+    //to-do: Input only in case of pmlogd, journald, and other error processing
+    //to-do: Write to the changed daemon in the config file
 
-    const config = appdata.getConfig(true);
-    //to-do: config파일에 변경된 데몬으로 write
-    
-    return finish(null, "Switch log daemon to " + argv['switch-daemon']);
+    return finish(null, "Switched log daemon to " + argv['switch-daemon']);
 }
 
-// 입력한 옵션이 현재 선택된 로그 데몬에서 지원하는 옵션인지 여부 판별
-// 입력한 옵션은 ares-log에서 지원하는 옵션 내에서 선택(그 외 옵션을 따로 처리하도록 수정 필요)
 function checkOption() {
     log.info("ares-log#checkOption");
 
@@ -174,6 +187,7 @@ function checkOption() {
 
     if (options.currentDaemon === "journald") {
         log.info("journald options");
+
         options.currentOption.forEach(function(item){
             if (!journalLogOptions.includes(item)) {
                 return finish(new Error("Journal daemon is not suppported \"" + item +"\" option"));
@@ -181,12 +195,13 @@ function checkOption() {
         });
     } else if (options.currentDaemon === "pmLogd") {
         log.info("pmlogd options");
+
         options.currentOption.forEach(function(item){
             if(!pmLogOptions.includes(item)) {
                 return finish(new Error("PmLog daemon is not suppported \"" + item +"\" option"));
             }
         });
-    } else { //journald, pmlogd가 아닌 것이 선택된 경우, switchDaemon error처리 정상적으로 하면 발생할 경우 없음.
+    } else {
         return finish(new Error("Do not support daemon"));
     }
 }
