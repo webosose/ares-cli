@@ -72,7 +72,7 @@
     "eslint-plugin-import": "2.22.0",
     "jasmine": "3.6.1",
     "jasmine-pretty-html-reporter": "0.2.5",
-    "jasmine-spec-reporter": "4.2.1"
+    "jasmine-spec-reporter": "^4.2.1"
   },
   "scripts": {
     "test": "jasmine"
