@@ -87,7 +87,7 @@ describe(aresCmd + " -cd", function() {
 });
 
 describe(aresCmd + " -sd", function() {
-    it("Print current log daemon", function(done) {
+    it("Print switch log daemon", function(done) {
         exec(cmd + " -sd journald", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -153,7 +153,7 @@ describe(aresCmd + " -ul -dp 1", function() {
             exec(cmd + " -ul -dp 1", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("This device does not support the session.");
+                expect(stderr).toContain("[Tips]: This device does not support multiple sessions");
             } else {
                 expect(stdout).toContain("sam.service");
             }
@@ -283,7 +283,7 @@ describe(aresCmd +" -u sam -dp 1", function() {
             exec(cmd + " -u sam -dp 1", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("This device does not support the session.");
+                expect(stderr).toContain("[Tips]: This device does not support multiple sessions");
             } else {
                 const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ sam/g;
                 expect(stdout).toContain("-- Logs begin at");
@@ -326,7 +326,7 @@ describe(aresCmd + " -aaa", function() {
             exec(cmd + " -aaa", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("is not suppported \"aaa\" option");
+                expect(stderr).toContain("[Tips]: Journal daemon do not suppport the option <aaa>");
             }
             done();
         });

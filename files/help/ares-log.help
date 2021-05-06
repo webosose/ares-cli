@@ -1,0 +1,29 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-log - View log of webOS",
+    "synopsis" : {
+        "default" : [
+            "ares-log [OPTION...]"
+        ]
+    },
+    "description" : [
+        "This command...."
+    ],
+    "examples" : [
+        "# Switch log daemon",
+        "ares-log -sd ose",
+        "",
+        "# Currently configured log daemon",
+        "ares-log -cd",
+        ""
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["profile", "profile-details", "help", "version" ],
+        "profile" : "-p, --profile <DEVICE> @TAB@ Specify a device profile (webOS device type) to configure for CLI",
+        "profile-details" : "-c, --profile-details @TAB@ Current configured profile",
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info"
+    }
+}

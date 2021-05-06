@@ -169,7 +169,7 @@ function switchDaemon() {
     log.info("ares-log#switchDaemon");
 
     if (argv['switch-daemon'] === "true") {
-        return finish(new Error("input wanted daemon name"));
+        return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
     }
     
     // to-do: Input only in case of pmlogd, journald, and other error processing
@@ -190,7 +190,7 @@ function checkOption() {
 
         options.currentOption.forEach(function(item){
             if (!journalLogOptions.includes(item)) {
-                return finish(new Error("Journal daemon is not suppported \"" + item +"\" option"));
+                return finish(errHndl.getErrMsg("NOT_SUPPORT_JOURNALD", item));
             }
         });
     } else if (options.currentDaemon === "pmLogd") {
@@ -198,27 +198,11 @@ function checkOption() {
 
         options.currentOption.forEach(function(item){
             if(!pmLogOptions.includes(item)) {
-                return finish(new Error("PmLog daemon is not suppported \"" + item +"\" option"));
+                return finish(errHndl.getErrMsg("NOT_SUPPORT_PMLOGD", item));
             }
         });
-    } else {
-        return finish(new Error("Do not support daemon"));
     }
 }
-
-// function finish(err, value) {
-//     if (err) {
-//         log.error(err.toString());
-//         log.verbose(err.stack);
-//         cliControl.end(-1);
-//     } else {
-//         log.info('finish():', value);
-//         if (value) {
-//             console.log(value);
-//         }
-//         cliControl.end();
-//     }
-// }
 
 function finish(err, value) {
     if (err) {
@@ -236,8 +220,8 @@ function finish(err, value) {
         cliControl.end(-1);
     } else {
         log.info('finish():', value);
-        if (value && value.msg) {
-            console.log(value.msg);
+        if (value) {
+            console.log(value);
         }
         cliControl.end();
     }
