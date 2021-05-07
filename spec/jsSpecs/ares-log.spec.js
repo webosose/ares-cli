@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 LG Electronics Inc.
+ * Copyright (c) 2021 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -169,6 +169,7 @@ describe(aresCmd + "-n 2 -s logfile", function() {
                 common.detectNodeMessage(stderr);
             }
             expect(fs.existsSync(savedlogPath)).toBe(true);
+            expect(stdout).toContain("Created");
             done();
         });
     });
@@ -320,8 +321,7 @@ describe(aresCmd + " -U yesterday", function() {
     });
 });
 
-// negative tc
-describe(aresCmd + " -aaa", function() {
+describe(aresCmd + " negative tc", function() {
     it("Not support option", function(done) {
             exec(cmd + " -aaa", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {

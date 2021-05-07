@@ -30,6 +30,11 @@
         "knownOpts" : "launch",
         "shortHands" : {"L":  ["--launch"]}
     },
+    "ares-log" : {
+        "description" : "Show and save log",
+        "knownOpts" : "log",
+        "shortHands" : {"log":  ["--log"]}
+    },
     "ares-package" : {
         "description" : "Create a package containing a webOS app or service",
         "knownOpts" : "package",

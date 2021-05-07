@@ -127,6 +127,7 @@ if (argv['device-list']) {
 } else {
     op = showLog;
 }
+
 if (op) {
     version.checkNodeVersion(function(err) {
         if (err)
@@ -162,7 +163,7 @@ function checkCurrentDaemon() {
     log.info("ares-log#checkCurrentDaemon");
 
     options.currentDaemon = appdata.getConfig(true).logDaemon;
-    return finish(null, "Current log daemon is " + options.currentDaemon);
+    return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
 }
 
 function switchDaemon() {
@@ -175,7 +176,7 @@ function switchDaemon() {
     // to-do: Input only in case of pmlogd, journald, and other error processing
     // to-do: Write to the changed daemon in the config file
 
-    return finish(null, "Switched log daemon to " + argv['switch-daemon']);
+    return finish(null, {msg : "Switched log daemon to " + argv['switch-daemon']});
 }
 
 function checkOption() {
@@ -193,7 +194,7 @@ function checkOption() {
                 return finish(errHndl.getErrMsg("NOT_SUPPORT_JOURNALD", item));
             }
         });
-    } else if (options.currentDaemon === "pmLogd") {
+    } else if (options.currentDaemon === "pmlogd") {
         log.info("pmlogd options");
 
         options.currentOption.forEach(function(item){
@@ -220,8 +221,8 @@ function finish(err, value) {
         cliControl.end(-1);
     } else {
         log.info('finish():', value);
-        if (value) {
-            console.log(value);
+        if (value && value.msg) {
+            console.log(value.msg);
         }
         cliControl.end();
     }
