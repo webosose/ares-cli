@@ -1,0 +1,97 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-log - Show and save logs of webOS's apps and services",
+    "synopsis" : {
+        "default" : [
+           "ares-log [OPTION...]",
+            "ares-log [OPTION...] -f, --follow",
+            "ares-log [OPTION...] -r, --reverse",
+            "ares-log [OPTION...] -n, --lines <LINE>",
+            "",
+            "ares-log [OPTION...] -b, --boot",
+            "ares-log [OPTION...] -k, --dmesg",
+            "ares-log [OPTION...] -p, --priority <PRIORITY>",
+            "ares-log [OPTION...] -pid, --pid <PID>",
+            "ares-log [OPTION...] -S, --since <DATE>",
+            "ares-log [OPTION...] -U, --until <DATE>",
+            "",
+            "ares-log [OPTION...] -ul, --unit-list",
+            "ares-log [OPTION...] -u, --unit <UNIT>",
+            "",
+            "ares-log [OPTION...] -fl, --file-list",
+            "ares-log [OPTION...] -file, --file <JOURNAL_FILE>"
+        ]
+    },
+    "description" : [
+        "This command shows and saves log of webOS",
+        "",
+        "** Attributes **",
+        "  LINE         [number]   Number of lines",
+        "  PRIORITY     [string]   Priority of logs ex)info, notice, warning, err",
+        "  PID          [number]   Process ID",
+        "  DATE         [string]   Date format ex)2021-03-18 21:38:00",
+        "  UNIT         [string]   One of the unitnames from --unit-list",
+        "  JOURNAL_FILE [string]   One of the filenames from --file-list",
+        "  OUTPUT_MODE  [string]   Output format ex)json, json-pretty, cat",
+        "  SAVED_FILE   [string]   File name or path to save log",
+        "  DISPLAY_ID   [number]   Number of Display",
+        "",
+        "If you want to know more about ares-log, please visit below web site.", 
+        "https://www.webosose.org/docs/guides/development/logging/viewing-logs/viewing-logs-journald/"
+    ],
+    "examples" : [
+        "# Currently configured log daemon",
+        "ares-log -cd",
+        "",
+        "# Follow the journal",
+        "ares-log -f",
+        "",
+        "# Number of journal entries to show",
+        "ares-log -n 10",
+        "",
+        "# Show logs between the specified dates",
+        "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
+        "",
+        "# Show storeds jorunal files",
+        "ares-log -fl",
+        "",
+        "# Show stored logs from system.journal by changing it to json",
+        "ares-log -file system.journal -o json",
+        "",
+        "# Show logs from process ID 1735 and save the logs to pid_1735.log",
+        "ares-log -pid 1735 -s pid_1735.log",
+        "",
+        "# Show unit list of host",
+        "ares-log -ul",
+        "",
+        "# Show logs from sam of display ID 1",
+        "ares-log -u sam -dp 1",
+        ""
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["output","save", "display", "level", "device", "help", "version", "verbose"],
+        "output" : [
+            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to <OUTPUT_MODE>",
+            "@TAB@ Only use it with the option to output logs",
+            "@TAB@ Cannot be used alone"
+        ],
+        "save" : [
+            "-s, --save <SAVED_FILE>@TAB@ Save logs to <SAVED_FILE>",
+            "@TAB@ Only use it with the option to output logs",
+            "@TAB@ Cannot be used alone"
+        ],
+        "display" : [
+            "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
+            "@TAB@ Only use it with unit and unit-list options"
+        ],
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
+            "@TAB@ If not specified, set to default device"
+        ],
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log"
+    }
+}

@@ -13,7 +13,7 @@ const exec = require('child_process').exec,
 
 const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
-    exp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g;
+    logRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g;
 
 let cmd,
     options;
@@ -105,7 +105,7 @@ describe(aresCmd + " -n 2", function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("-- Logs begin at");
-            expect(stdout.match(exp).length).toBe(2);
+            expect(stdout.match(logRegExp).length).toBe(2);
             done();
         });
     });
@@ -130,7 +130,7 @@ describe(aresCmd + " --file", function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("-- Logs begin at");
-            expect(stdout.match(exp).length > 0).toBeTrue();
+            expect(stdout.match(logRegExp).length > 0).toBeTrue();
             done();
         });
     });
@@ -326,7 +326,7 @@ describe(aresCmd + " negative tc", function() {
             exec(cmd + " -aaa", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("[Tips]: Journal daemon do not suppport the option <aaa>");
+                expect(stderr).toContain("ares-log ERR! [Tips]: Journal daemon do not suppport the option <aaa>");
             }
             done();
         });
@@ -352,7 +352,7 @@ describe(aresCmd + " -f", function() {
         setTimeout(() => {
             child.kill();
             expect(result).toContain("-- Logs begin at");
-            expect(result.match(exp).length > 0).toBeTrue();
+            expect(result.match(logRegExp).length > 0).toBeTrue();
             done();
         }, 1000);
     });
@@ -377,7 +377,7 @@ describe(aresCmd + " -r", function() {
         setTimeout(() => {
             child.kill();
             expect(result).toContain('-- Logs begin at');
-            expect(result.match(exp).length > 0).toBeTrue();
+            expect(result.match(logRegExp).length > 0).toBeTrue();
             done();
         }, 1000);
     });

@@ -31,7 +31,7 @@
         "shortHands" : {"L":  ["--launch"]}
     },
     "ares-log" : {
-        "description" : "Show and save log",
+        "description" : "Show and save logs",
         "knownOpts" : "log",
         "shortHands" : {"log":  ["--log"]}
     },
