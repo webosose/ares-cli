@@ -16,5 +16,6 @@
         "changeTempDir" : true,
         "removeIpkAfterInst" : true
     },
-    "dataDir":".webos/ose"
+    "dataDir":".webos/ose",
+    "logDaemon": "journald"
 }
