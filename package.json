@@ -17,6 +17,7 @@
     "ares-inspect": "bin/ares-inspect.js",
     "ares-install": "bin/ares-install.js",
     "ares-launch": "bin/ares-launch.js",
+    "ares-log": "bin/ares-log.js",
     "ares-package": "bin/ares-package.js",
     "ares-push": "bin/ares-push.js",
     "ares-pull": "bin/ares-pull.js",

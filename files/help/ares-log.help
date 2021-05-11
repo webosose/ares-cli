@@ -1,10 +1,10 @@
 {
     "display" : ["name", "synopsis", "options", "description", "examples"],
     "notab":["examples"],
-    "name" : "ares-log - Show and save logs of webOS's apps and services",
+    "name" : "ares-log - Show and save logs of webOS apps and services",
     "synopsis" : {
         "default" : [
-           "ares-log [OPTION...]",
+            "ares-log [OPTION...]",
             "ares-log [OPTION...] -f, --follow",
             "ares-log [OPTION...] -r, --reverse",
             "ares-log [OPTION...] -n, --lines <LINE>",
@@ -24,26 +24,21 @@
         ]
     },
     "description" : [
-        "This command shows and saves log of webOS",
+        "This command shows and saves log of webOS by using journald",
         "",
         "** Attributes **",
         "  LINE         [number]   Number of lines",
-        "  PRIORITY     [string]   Priority of logs ex)info, notice, warning, err",
+        "  PRIORITY     [string]   Priority of logs (e.g.,info, notice, warning, err)",
         "  PID          [number]   Process ID",
-        "  DATE         [string]   Date format ex)2021-03-18 21:38:00",
+        "  DATE         [string]   Date format (e.g.,YYYY-MM-DD hh:mm:ss)",
         "  UNIT         [string]   One of the unitnames from --unit-list",
         "  JOURNAL_FILE [string]   One of the filenames from --file-list",
-        "  OUTPUT_MODE  [string]   Output format ex)json, json-pretty, cat",
+        "  OUTPUT_MODE  [string]   Output format (e.g.,json, json-pretty, cat)",
         "  SAVED_FILE   [string]   File name or path to save log",
         "  DISPLAY_ID   [number]   Number of Display",
-        "",
-        "If you want to know more about ares-log, please visit below web site.", 
-        "https://www.webosose.org/docs/guides/development/logging/viewing-logs/viewing-logs-journald/"
+        ""
     ],
     "examples" : [
-        "# Currently configured log daemon",
-        "ares-log -cd",
-        "",
         "# Follow the journal",
         "ares-log -f",
         "",
@@ -53,7 +48,7 @@
         "# Show logs between the specified dates",
         "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
         "",
-        "# Show storeds jorunal files",
+        "# Show storeds journal files",
         "ares-log -fl",
         "",
         "# Show stored logs from system.journal by changing it to json",
@@ -65,7 +60,7 @@
         "# Show unit list of host",
         "ares-log -ul",
         "",
-        "# Show logs from sam of display ID 1",
+        "# Show logs from sam of display 1",
         "ares-log -u sam -dp 1",
         ""
     ],

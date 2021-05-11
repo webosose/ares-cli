@@ -1,0 +1,85 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-log - Show and save webOS's logs",
+    "synopsis" : {
+        "default" : [
+            "ares-log [OPTION...]",
+            "ares-log [OPTION...] -f, --follow",
+            "ares-log [OPTION...] -r, --reverse",
+            "ares-log [OPTION...] -n, --lines <LINE>",
+            "",
+            "ares-log [OPTION...] -b, --boot",
+            "ares-log [OPTION...] -k, --dmesg",
+            "ares-log [OPTION...] -S, --since <DATE>",
+            "ares-log [OPTION...] -U, --until <DATE>",
+            "ares-log [OPTION...] -p, --priority <PRIORITY>",
+            "ares-log [OPTION...] -pid, --pid <PID>",
+            "",
+            "ares-log [OPTION...] -ul, --unit-list",
+            "ares-log [OPTION...] -u, --unit <UNIT>",
+            "",
+            "ares-log [OPTION...] -fl, --file-list",
+            "ares-log [OPTION...] -file, --file <JOURNAL_FILE>"
+        ]
+    },
+    "description" : [
+        "This command...."
+    ],
+    "examples" : [
+        "# Currently configured log daemon",
+        "ares-log -cd",
+        "",
+        "# Follow the journal",
+        "ares-log -f",
+        "",
+        "# Number of journal entries to show",
+        "ares-log -n 10",
+        "",
+        "# Show storeds jorunal files",
+        "ares-log -fl",
+        "",
+        "# Show stored logs from <JOURNAL_FILE> Change journal output mode",
+        "ares-log -file system.journal -o json",
+        "",
+        "# Save logs to <FILE_PATH> from Show logs from the specified pid",
+        "ares-log -f -pid 1735 -s pid_1735.log",
+        "",
+        "# Show unit list of host",
+        "ares-log -ul",
+        "",
+        "# Show logs from sam of session 1",
+        "ares-log -u sam -dp 1",
+        "",
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["output","save", "display", "level", "device", "help", "version", "verbose"],
+        "follow" : "-f, --follow @TAB@ Follow the journal",
+        "reverse" : "-r, --reverse @TAB@ Show the newest entries first",
+        "lines" : "-n, --lines @TAB@ Number of journal entries to show",
+        "since" : "-S, --since @TAB@ Show entries not older than the specified date",
+        "until" : "-U, --until @TAB@ Show entries not newer than the specified date",
+        "priority" : "-p, --priority @TAB@ Show entries with the specified priority",
+        "dmesg" : "-k, --dmesg @TAB@ Show kernel message log from the current boot",
+        "boot" : "-b, --boot @TAB@ Show current boot or the specified boot",
+        "pid" : "-pid, --pid @TAB@ Show logs from the specified pid",
+        "output" : "-o, --output @TAB@ Change journal output mode",
+        "unit-list" : "-ul, --unit-list @TAB@ Show unit list",
+        "unit" : "-u, --unit <UNIT_NAME>@TAB@ Show logs from the specified unit",
+        "file-list" : "-fl, --file-list @TAB@ Show storeds jorunal files",
+        "file" : "-file, --file <JOURNAL_FILE>@TAB@ Show stored logs from <JOURNAL_FILE>",
+        "save" : "-s, --save <FILE_PATH>@TAB@ Save logs to <FILE_PATH>",
+        "display" : [
+            "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
+            "@TAB@ Only use it with unit and unit-list option"
+        ],
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
+            "@TAB@ If not specified, set to default device"
+        ],
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log"
+    }
+}
