@@ -48,7 +48,7 @@
         "# Show logs between the specified dates",
         "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
         "",
-        "# Show storeds journal files",
+        "# Show stored journal files",
         "ares-log -fl",
         "",
         "# Show stored logs from system.journal by changing it to json",
