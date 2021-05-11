@@ -189,7 +189,7 @@ describe(aresCmd + " -ul -dp 1", function() {
                 if (options.device === "emulator") {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 } else if (options.device !== "emulator" && !hasSession) {
-                    expect(stderr).toContain("[Tips]: This device does not support multiple sessions");
+                    expect(stderr).toContain("ares-log ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
                 expect(stdout).toContain("sam.service");
@@ -354,7 +354,7 @@ describe(aresCmd +" -u sam -dp 1", function() {
                 if (options.device === "emulator") {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 } else if (options.device !== "emulator" && !hasSession) {
-                    expect(stderr).toContain("[Tips]: This device does not support multiple sessions");
+                    expect(stderr).toContain("ares-log ERR! [Tips]: This device does not support multiple sessions");
                 }
             } else {
                 const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ sam/g;
