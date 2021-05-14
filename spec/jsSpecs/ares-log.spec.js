@@ -163,6 +163,20 @@ describe(aresCmd + " --file", function() {
             done();
         });
     });
+
+    it("Show log with --file and --output option", function(done) {
+        exec(cmd + " --file system.journal --output json", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(typeof JSON.parse(stdout.split("\n")[0])).toBe('object');
+            }
+            done();
+        });
+    });
 });
 
 describe(aresCmd + " -ul", function() {
