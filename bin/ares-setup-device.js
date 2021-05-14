@@ -235,13 +235,13 @@ function _queryAddRemove(ssdpDevices, next) {
                 },
                 validate: function(input) {
                     if (input.length < 1) {
-                        return "Please enter device name.";
+                        return errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME");
                     }
                     if (deviceNames.indexOf(input) !== -1) {
-                        return "Device name is duplicated. Please use another name.";
+                        return errHndl.changeErrMsg("EXISTING_VALUE", "DEVICE_NAME", input);
                     }
                     if (!isValidDeviceName(input)) {
-                        return "Invalid name. Please do not use letters starting with '%' or '$'.";
+                        return errHndl.changeErrMsg("INVALID_DEVICENAME");
                     }
                     return true;
                 }
@@ -420,7 +420,7 @@ function _queryDeviceInfo(selDevice, next) {
                 inDevice.passphrase = answers.ssh_passphrase || "@DELETE@";
                 inDevice.privateKeyName = "@DELETE@";
             } else {
-                return next(errHndl.changeErrMsg("NOT_SUPPORT_AUTHTYPE", answers.auth_type));
+                return next(errHndl.getErrMsg("NOT_SUPPORT_AUTHTYPE", answers.auth_type));
             }
         }
 
@@ -551,16 +551,16 @@ function modifyDeviceInfo(next) {
     try {
         const mode = (argv.add)? "add" : (argv.modify)? "modify" : null;
         if (!mode) {
-            return next(errHndl.changeErrMsg("INVALID_MODE"));
+            return next(errHndl.getErrMsg("INVALID_MODE"));
         }
         if (argv[mode].match(/^-/)) {
-            return next(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+            return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
         }
         const argName = (argv.info)? "info" : mode;
         const inDevice = _getParams(argName);
         if (!inDevice.name) {
             if (argv[mode] === "true") {
-                return next(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+                return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
             }
             inDevice.name = argv[mode];
         }
@@ -592,13 +592,13 @@ function modifyDeviceInfo(next) {
         }
         // check validation
         if (!isValidDeviceName(inDevice.name)) {
-            return next(errHndl.changeErrMsg("INVALID_DEVICENAME"));
+            return next(errHndl.getErrMsg("INVALID_DEVICENAME"));
         }
         if (inDevice.host && !isValidIpv4(inDevice.host)) {
-            return next(errHndl.changeErrMsg("INVALID_VALUE", "host", inDevice.host));
+            return next(errHndl.getErrMsg("INVALID_VALUE", "host", inDevice.host));
         }
         if (inDevice.port && !isValidPort(inDevice.port)) {
-            return next(errHndl.changeErrMsg("INVALID_VALUE", "port", inDevice.port));
+            return next(errHndl.getErrMsg("INVALID_VALUE", "port", inDevice.port));
         }
         if (inDevice.port) {
             inDevice.port = Number(inDevice.port);
@@ -644,7 +644,7 @@ function setDefaultDeviceInfo(next) {
 function removeDeviceInfo(next) {
     try {
         if (argv.remove === 'true') {
-            return finish(errHndl.changeErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
         }
 
         const resolver = this.resolver || (this.resolver = new novacom.Resolver()),
@@ -666,8 +666,17 @@ function removeDeviceInfo(next) {
 
 function finish(err, value) {
     if (err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
+        // handle err from getErrMsg()
+        if (Array.isArray(err) && err.length > 0) {
+            for(const index in err) {
+                log.error(err[index].heading, err[index].message);
+            }
+            log.verbose(err[0].stack);
+        } else {
+            // handle general err (string & object)
+            log.error(err.toString());
+            log.verbose(err.stack);
+        }
         cliControl.end(-1);
     } else {
         log.info('finish():', value);

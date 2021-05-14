@@ -93,7 +93,7 @@ describe(aresCmd + ' --listfull(-F)', function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(options.pkgId, stderr);
-            expect(stdout).toContain("version:0.0.1");
+            expect(stdout).toContain("version : 0.0.1");
             done();
         });
     });
@@ -118,6 +118,29 @@ describe(aresCmd + ' --list(-l)', function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).not.toContain(options.pkgId, stderr);
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC', function() {
+    it("Set invalid app ipk which is not exist", function(done) {
+        exec(cmd + ' com.invalid.app.ipk', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-install ERR! [Tips]: The specified path does not exist <com.invalid.app.ipk>");
+            }
+            done();
+        });
+    });
+
+    it("Remove invalid app which is not installed", function(done) {
+        exec(cmd + ' -r com.invalid.app', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-install ERR! [com.webos.appInstallService failure]: luna-send command failed <FAILED_REMOVE>");
+                expect(stderr).toContain("ares-install ERR! [Tips]: Please check app is installed to device by ares-install -l");
+            }
             done();
         });
     });

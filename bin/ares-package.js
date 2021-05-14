@@ -17,8 +17,8 @@ const fs = require('fs'),
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
     help = commonTools.help,
-    errHndl = commonTools.errMsg,
-    appdata = commonTools.appdata;
+    appdata = commonTools.appdata,
+    errHndl = commonTools.errMsg;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -168,7 +168,7 @@ PalmPackage.prototype = {
         if (Object.hasOwnProperty.call(this.argv, 'app-exclude')) {
             for(const excl_file in this.argv) {
                 if ((this.argv[excl_file]).toString() === "appinfo.json") {
-                    this.exitOnError(errHndl.changeErrMsg("NOT_EXCLUDE_APPINFO"));
+                    this.finish(errHndl.getErrMsg("NOT_EXCLUDE_APPINFO"));
                 }
             }
             this.options.excludefiles = this.argv['app-exclude'];
@@ -188,14 +188,14 @@ PalmPackage.prototype = {
 
         if (Object.hasOwnProperty.call(this.argv, 'sign')) {
             if (!fs.existsSync(path.resolve(this.argv.sign))) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.sign));
+                this.finish(errHndl.getErrMsg("NOT_EXIST_PATH", this.argv.sign));
             }
             this.options.sign = this.argv.sign;
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'certificate')) {
             if (!fs.existsSync(path.resolve(this.argv.certificate))) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_EXIST_PATH", this.argv.certificate));
+                this.finish(errHndl.getErrMsg("NOT_EXIST_PATH", this.argv.certificate));
             }
             this.options.certificate = this.argv.certificate;
         }
@@ -203,7 +203,7 @@ PalmPackage.prototype = {
         // check sign option must be used with certificate option
         if ((this.options.sign && !this.options.certificate) ||
                 (this.options.certificate && !this.options.sign)) {
-            this.exitOnError(errHndl.changeErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
+            this.finish(errHndl.getErrMsg("USE_WITH_OPTIONS", "sign, certificate"));
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'pkgid')) {
@@ -219,37 +219,7 @@ PalmPackage.prototype = {
         }
     },
 
-    exitOnError: function(err) {
-        log.error(err.toString());
-        log.verbose(err.stack);
-        cliControl.end(-1);
-    },
-
-    packageReady: function(err, results) {
-        log.info("projectReady");
-        if (err) {
-            log.error(err.toString());
-            log.verbose(err.stack);
-            cliControl.end(-1);
-        } else {
-            if (results && results[results.length-1] && results[results.length-1].msg) {
-                console.log(results[results.length-1].msg);
-            }
-            cliControl.end();
-        }
-    },
-
-    appOk: function(err) {
-        log.info("appOk");
-        if (err) {
-            log.error(err.toString());
-            log.verbose(err.stack);
-            cliControl.end(-1);
-        } else {
-            console.log("no problems detected");
-            cliControl.end();
-        }
-    },
+    
 
     setOutputDir: function(next) {
         log.info("setOutputDir");
@@ -266,7 +236,7 @@ PalmPackage.prototype = {
         if (fs.existsSync(this.destination)) {
             const stats = fs.statSync(this.destination);
             if (!stats.isDirectory()) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_DIRTYPE_PATH", this.destination));
+                this.finish(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
             }
         } else {
             log.verbose("creating directory '" + this.destination + "' ...");
@@ -287,7 +257,7 @@ PalmPackage.prototype = {
         const packager = new packageLib.Packager(this.options);
         if(this.appCnt === 0) { // only service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
+                this.finish(errHndl.getErrMsg("NOT_USE_WITH_OPTIONS", "pkginfofile, pkgid"));
                 cliControl.end(-1);
             }
             else if (Object.hasOwnProperty.call(this.options, 'pkgid')) {
@@ -297,12 +267,12 @@ PalmPackage.prototype = {
                 packager.servicePackaging(this.argv.argv.remain, this.destination, this.options, next);
             }
             else {
-                this.exitOnError(errHndl.changeErrMsg("USE_PKGID_PKGINFO"));
+                this.finish(errHndl.getErrMsg("USE_PKGID_PKGINFO"));
                 cliControl.end(-1);
             }
         } else { // app+service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkgid') || Object.hasOwnProperty.call(this.options, 'pkgversion') || Object.hasOwnProperty.call(this.options, 'pkginfofile')) {
-                this.exitOnError(errHndl.changeErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
+                this.finish(errHndl.getErrMsg("NOT_USE_WITH_OPTIONS", "pkgid, pkgversion, pkginfofile"));
             }
             packager.generatePackage(this.argv.argv.remain, this.destination, this.options, next);
         }
@@ -315,15 +285,44 @@ PalmPackage.prototype = {
                 this.checkInputDir.bind(this),
                 this.packageApp.bind(this)
             ],
-            this.packageReady.bind(this));
+            this.finish.bind(this));
     },
 
     checkApplication: function() {
         async.series([
                 version.checkNodeVersion,
                 this.checkInputDir.bind(this)
-            ],
-            this.appOk.bind(this));
+            ], function(err) {
+                if (err) {
+                    return this.finish(err);
+                }
+                return this.finish(null, {msg : "no problems detected"});
+            }.bind(this));
+    },
+
+    finish: function(err, value) {
+        if (err) {
+            // handle err from getErrMsg()
+            if (Array.isArray(err) && err.length > 0) {
+                for(const index in err) {
+                    log.error(err[index].heading, err[index].message);
+                }
+                log.verbose(err[0].stack);
+            } else {
+                // handle general err (string & object)
+                log.error(err.toString());
+                log.verbose(err.stack);
+            }
+            cliControl.end(-1);
+        } else {
+            log.info('finish():', value);
+            if (value && value[value.length-1] && value[value.length-1].msg) {
+                console.log(value[value.length-1].msg);
+            } else if (value && value.msg) {
+                console.log(value.msg);
+            }
+            cliControl.end();
+        }
     },
 
     exec: function() {

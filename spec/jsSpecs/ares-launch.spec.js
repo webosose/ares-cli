@@ -232,26 +232,24 @@ describe(aresCmd +' --hosted(-H)', function() {
     });
 
     it('Launch -H SampleApp', function(done) {
-        let result = "";
+        let stdoutData = "";
         const child = exec(cmd + ` -H ${sampleAppPath}`);
         
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result += data;
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result += data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).toContain('Ares Hosted App is now running');
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Ares Hosted App is now running');
             done();
         }, 3000);
     });
@@ -264,6 +262,19 @@ describe(aresCmd +' --hosted(-H)', function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(`Removed package com.sdk.ares.hostedapp`, stderr);
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC', function() {
+    it("Close a invalid app ipk which is not running", function(done) {
+        exec(cmd + ' -c com.invalid.app', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-launch ERR! [com.webos.applicationManager failure]: luna-send command failed <com.invalid.app is not running>");
+                expect(stderr).toContain("ares-launch ERR! [Tips]: Please check the list of running apps using ares-launch -r");
+            }
             done();
         });
     });

@@ -80,25 +80,23 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Run web inspector for sample app', function(done) {
         const child = exec(cmd + ` -a ${options.pkgId} -dp 0`);
-        let result = null;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(data).toContain('Application Debugging - http://localhost');
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Application Debugging - http://localhost');
             done();
         }, 7000);
     });
@@ -112,7 +110,7 @@ describe(aresCmd, function() {
             expect(stdout).toContain(`Closed application ${options.pkgId}`, error);
             setTimeout(function(){
                 done();
-            },3000);
+            }, 3000);
         });
     });
 });
@@ -120,25 +118,23 @@ describe(aresCmd, function() {
 describe(aresCmd +' --open(-o)', function() {
     it('Open web inspector for sample app', function(done) {
         const child = exec(cmd + ` -a ${options.pkgId} -o -dp 1`);
-        let result = null;
+        let stdoutData = "";
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(data).toContain('Application Debugging - http://localhost');
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).toContain('Application Debugging - http://localhost');
             done();
         }, 3000);
     });
@@ -152,66 +148,60 @@ describe(aresCmd +' --open(-o)', function() {
             expect(stdout).toContain(`Closed application ${options.pkgId}`, error);
             setTimeout(function(){
                 done();
-            },3000);
+            }, 3000);
         });
     });
 });
 
 describe(aresCmd, function() {
-    let result = null;
+    let stdoutData = "";
 
     it('Run Node\'s Inspector for sample Service', function(done) {
         const child = exec(cmd + ` -s ${options.pkgService} -dp 1`);
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data;
-            expect(result).not.toContain("null");
-            expect(result).toContain("localhost");
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
-            expect(result).not.toBeNull();
+            expect(stdoutData).not.toContain("null");
+            expect(stdoutData).toContain("localhost");
             done();
         }, 10000);
     });
 });
 
 describe(aresCmd +' --open(-o)', function() {
-    let result = null;
+    let stdoutData = "";
 
     it('Open Node\'s Inspector for sample Service', function(done) {
         const child = exec(cmd + ` -s ${options.pkgService} -dp 0 -o`);
-        const guideTexts = ["To debug your service, set \"localhost",
-                            "Can not support \"--open option\" on platform node version 8 and later",
-                            "nodeInsptUrl" ];
 
         child.stdout.on('data', function (data) {
             process.stdout.write(data);
-            result = data.trim().replace(/\s+['\n']/g, '\n');
-            expect(result).not.toContain("null");
-            expect(guideTexts).toContain(String(result).split(":")[0]);
+            stdoutData += data;
         });
 
         child.stderr.on('data', function (data) {
             if (data && data.length > 0) {
                 common.detectNodeMessage(data);
             }
-            result = data;
             expect(data).toBeNull();
         });
 
         setTimeout(() => {
             child.kill();
+            expect(stdoutData).toContain("To debug your service, set \"localhost");
+            expect(stdoutData).toContain("Can not support \"--open option\" on platform node version 8 and later");
             done();
         }, 7000);
     });
@@ -225,6 +215,30 @@ describe(aresCmd, function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(`Removed package ${options.pkgId}`, stderr);
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' negative TC', function() {
+    it("Set invalid app which is not installed", function(done) {
+        exec(cmd + ' com.invalid.app', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-inspect ERR! [com.webos.applicationManager failure]:" +
+                                        " luna-send command failed <Cannot find proper launchPoint>");
+                expect(stderr).toContain("ares-inspect ERR! [Tips]: The app is not installed app. Please check the list by ares-install -l");
+            }
+            done();
+        });
+    });
+
+    it("Set invalid service which is not installed", function(done) {
+        exec(cmd + ' -s com.invalid.service', function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-inspect ERR! [Tips]: Failed to get service installation path <com.invalid.service>");
+            }
             done();
         });
     });

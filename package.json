@@ -1,6 +1,6 @@
 {
   "name": "@webosose/ares-cli",
-  "version": "2.0.3-T.2",
+  "version": "2.1.0-T.1",
   "description": "Command Line Interface for development webOS application and service",
   "main": "./bin/ares.js",
   "author": "ye.kim",
@@ -17,6 +17,7 @@
     "ares-inspect": "bin/ares-inspect.js",
     "ares-install": "bin/ares-install.js",
     "ares-launch": "bin/ares-launch.js",
+    "ares-log": "bin/ares-log.js",
     "ares-package": "bin/ares-package.js",
     "ares-push": "bin/ares-push.js",
     "ares-pull": "bin/ares-pull.js",
