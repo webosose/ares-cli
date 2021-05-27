@@ -18,11 +18,13 @@ const version = commonTools.version,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
     appdata = commonTools.appdata,
-    errHndl = commonTools.errMsg;
+    errHndl = commonTools.errMsg,
+    statusHndl = commonTools.status;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function(err) {
+    statusHndl.stopAndPersistSpinner();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -135,6 +137,7 @@ function captureScreen() {
 }
 
 function finish(err, value) {
+    statusHndl.stopAndPersistSpinner();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {

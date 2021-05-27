@@ -143,7 +143,6 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));
@@ -180,7 +179,6 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.bmp");
             expect(stdout).toContain(captureDirPath);
@@ -195,7 +193,6 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
             expect(stdout).toContain(captureDirPath);
