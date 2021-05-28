@@ -89,6 +89,7 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).toContain("Set target device : " + options.device);
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             setTimeout(function(){
                 done();

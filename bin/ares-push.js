@@ -9,8 +9,8 @@
 const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
-    commonTools = require('./../lib/base/common-tools'),
     spinner = require('./../lib/util/spinner'),
+    commonTools = require('./../lib/base/common-tools'),
     Pusher = require('./../lib/pusher');
 
 const version = commonTools.version,

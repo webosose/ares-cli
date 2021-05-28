@@ -173,6 +173,8 @@ describe(aresCmd, function() {
 
         setTimeout(() => {
             child.kill();
+            expect(stdoutData).toContain("Set target device : " + options.device);
+            expect(stdoutData).toContain("Processing");
             expect(stdoutData).not.toContain("null");
             expect(stdoutData).toContain("localhost");
             done();

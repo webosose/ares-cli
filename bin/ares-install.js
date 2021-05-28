@@ -12,8 +12,8 @@ const fs = require('fs'),
     log = require('npmlog'),
     nopt = require('nopt'),
     installLib = require('./../lib/install'),
+    spinner = require('../lib/util/spinner'),
     commonTools = require('./../lib/base/common-tools'),
-    spinner  = require('../lib/util/spinner'),
     convertJsonToList = require('./../lib/util/json').convertJsonToList;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
