@@ -85,7 +85,7 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`Start ${options.device} shell`, error);
+            expect(stdout).not.toContain(options.device);
             done();
         });
     });

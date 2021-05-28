@@ -10,19 +10,19 @@ const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
     commonTools = require('./../lib/base/common-tools'),
+    spinner = require('./../lib/util/spinner'),
     Pusher = require('./../lib/pusher');
 
 const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
-    appdata = commonTools.appdata,
-    statusHndl  = commonTools.status;
+    appdata = commonTools.appdata;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function(err) {
-    statusHndl.stopAndPersistSpinner();
+    spinner.stopAndPersist();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -114,7 +114,7 @@ function push() {
 }
 
 function finish(err, value) {
-    statusHndl.stopAndPersistSpinner();
+    spinner.stopAndPersist();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
