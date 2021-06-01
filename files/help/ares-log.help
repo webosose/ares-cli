@@ -1,7 +1,7 @@
 {
     "display" : ["name", "synopsis", "options", "description", "examples"],
     "notab":["examples"],
-    "name" : "ares-log - Show and save logs of webOS apps and services",
+    "name" : "ares-log - Show or save logs of webOS apps and services",
     "synopsis" : {
         "default" : [
             "ares-log [OPTION...]",
@@ -24,67 +24,62 @@
         ]
     },
     "description" : [
-        "This command shows and saves log of webOS by using journald",
+        "This command shows or saves logs of webOS apps and services using journald",
         "",
         "** Attributes **",
-        "  LINE         [number]   Number of lines",
-        "  PRIORITY     [string]   Priority of logs (e.g.,info, notice, warning, err)",
-        "  PID          [number]   Process ID",
-        "  DATE         [string]   Date format (e.g.,YYYY-MM-DD hh:mm:ss)",
-        "  UNIT         [string]   One of the unitnames from --unit-list",
-        "  JOURNAL_FILE [string]   One of the filenames from --file-list",
-        "  OUTPUT_MODE  [string]   Output format (e.g.,json, json-pretty, cat)",
-        "  SAVED_FILE   [string]   File name or path to save log",
-        "  DISPLAY_ID   [number]   Number of Display",
+        "  LINE         [integer]  Number of lines",
+        "  PRIORITY     [string]   Priority of logs (e.g., info, notice, warning, err)",
+        "  PID          [integer]  Process ID",
+        "  DATE         [string]   Date format (e.g., YYYY-MM-DD hh:mm:ss)",
+        "  UNIT         [string]   One of the unit names from --unit-list",
+        "  JOURNAL_FILE [string]   One of the file names from --file-list",
+        "  OUTPUT_MODE  [string]   Output format (e.g., json, json-pretty, cat)",
+        "  SAVED_FILE   [string]   File name or path to save logs",
         ""
     ],
     "examples" : [
         "# Follow the journal",
-        "ares-log -f",
+        "ares-log -f -d DEVICE",
         "",
         "# Number of journal entries to show",
-        "ares-log -n 10",
+        "ares-log -n 10 -d DEVICE",
         "",
-        "# Show logs between the specified dates",
+        "# Show logs between the two DATEs",
         "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
         "",
-        "# Show stored journal files",
-        "ares-log -fl",
+        "# Show a list of the stored journal files",
+        "ares-log -fl -d DEVICE",
         "",
-        "# Show stored logs from system.journal by changing it to json",
-        "ares-log -file system.journal -o json",
+        "# Show stored logs from system.journal in the JSON format",
+        "ares-log -file system.journal -o json -d DEVICE",
         "",
-        "# Show logs from process ID 1735 and save the logs to pid_1735.log",
-        "ares-log -pid 1735 -s pid_1735.log",
+        "# Show logs of specified process ID and save them to a log file",
+        "ares-log -pid 1735 -s pid_1735.log -d DEVICE",
         "",
-        "# Show unit list of host",
-        "ares-log -ul",
-        "",
-        "# Show logs from sam of display 1",
-        "ares-log -u sam -dp 1",
+        "# Show logs of SAM",
+        "ares-log -u sam -d DEVICE",
         ""
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["output","save", "display", "level", "device", "help", "version", "verbose"],
+        "default" : ["output","save", "display", "level", "device", "device-list", "help", "version", "verbose"],
         "output" : [
-            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to <OUTPUT_MODE>",
-            "@TAB@ Only use it with the option to output logs",
-            "@TAB@ Cannot be used alone"
+            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
+            "@TAB@ Must use with the option outputting logs"
         ],
         "save" : [
-            "-s, --save <SAVED_FILE>@TAB@ Save logs to <SAVED_FILE>",
-            "@TAB@ Only use it with the option to output logs",
-            "@TAB@ Cannot be used alone"
+            "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
+            "@TAB@ Must use with the option outputting logs"
         ],
         "display" : [
             "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
-            "@TAB@ Only use it with unit and unit-list options"
+            "@TAB@ Must use with the unit and unit-list options"
         ],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
         ],
+        "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log"
