@@ -26,7 +26,7 @@ const version = commonTools.version,
     errHndl = commonTools.errMsg;
 
 process.on('uncaughtException', function (err) {
-    spinner.stopAndPersist();
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -188,7 +188,7 @@ function remove() {
 }
 
 function finish(err, value) {
-    spinner.stopAndPersist();
+    spinner.stop();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {

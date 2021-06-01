@@ -85,7 +85,7 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain("Set target device : " + options.device);
+            expect(stdout).not.toContain("[INFO] Set target device : " + options.device);
             done();
         });
     });

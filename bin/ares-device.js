@@ -11,7 +11,6 @@ const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
     deviceLib = require('./../lib/device'),
-    spinner = require('./../lib/util/spinner'),
     commonTools = require('./../lib/base/common-tools');
 
 const version = commonTools.version,
@@ -24,7 +23,6 @@ const version = commonTools.version,
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function(err) {
-    spinner.stopAndPersist();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -137,7 +135,6 @@ function captureScreen() {
 }
 
 function finish(err, value) {
-    spinner.stopAndPersist();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {

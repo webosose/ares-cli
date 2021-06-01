@@ -22,7 +22,7 @@ const version = commonTools.version,
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function(err) {
-    spinner.stopAndPersist();
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -116,7 +116,7 @@ function pull() {
 }
 
 function finish(err, value) {
-    spinner.stopAndPersist();
+    spinner.stop();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
