@@ -56,7 +56,7 @@
         "# Show logs of specified process ID and save them to a log file",
         "ares-log -pid 1735 -s pid_1735.log -d DEVICE",
         "",
-        "# Show logs of SAM",
+        "# Show logs of specified unit",
         "ares-log -u sam -d DEVICE",
         ""
     ],
