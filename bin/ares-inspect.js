@@ -99,7 +99,7 @@ if (argv.help || argv['hidden-help']) {
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else {
     op = inspect;
 }
@@ -110,6 +110,10 @@ if (op) {
             op.bind(this)
         ],finish);
     });
+}
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
 }
 
 function showUsage(hiddenFlag) {

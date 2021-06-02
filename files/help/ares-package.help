@@ -67,9 +67,9 @@
             "              +-- etc/boo.conf",
             "                            '-f, --force' option will keep this structure in .ipk"
             ],
-            "pkgid" : "-pi, --pkgid <ID> @TAB@ Set package id for packaging about only services\n@TAB@@TAB@ Can not use with pkginfofile option",
+            "pkgid" : "-pi, --pkgid <ID> @TAB@ Set package id for packaging about only services\n@TAB@@TAB@ Cannot use with pkginfofile option",
             "pkgversion" : "-pv, --pkgversion <VERSION> @TAB@ Set package version for packaging about only services",
-            "pkginfofile" : "-pf, --pkginfofile <PKGINFOFILE> @TAB@ Set package meta by pkginfofile for packaging about only services\n@TAB@@TAB@ Can not use with pkgid option",
+            "pkginfofile" : "-pf, --pkginfofile <PKGINFOFILE> @TAB@ Set package meta by pkginfofile for packaging about only services\n@TAB@@TAB@ Cannot use with pkgid option",
             "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
         }
     },

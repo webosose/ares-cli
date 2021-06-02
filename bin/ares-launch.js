@@ -115,7 +115,7 @@ if (argv.help || argv['hidden-help']) {
 } else if (argv.running) {
     op = running;
 } else if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.hosted){
@@ -139,6 +139,10 @@ function showUsage(hiddenFlag) {
     } else {
         help.display(processName, appdata.getConfig(true).profile);
     }
+}
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
 }
 
 function launch() {

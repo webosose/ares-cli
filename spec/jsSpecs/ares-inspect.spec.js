@@ -201,7 +201,7 @@ describe(aresCmd +' --open(-o)', function() {
         setTimeout(() => {
             child.kill();
             expect(stdoutData).toContain("To debug your service, set \"localhost");
-            expect(stdoutData).toContain("Can not support \"--open option\" on platform node version 8 and later");
+            expect(stdoutData).toContain("Cannot support \"--open option\" on platform node version 8 and later");
             done();
         }, 7000);
     });

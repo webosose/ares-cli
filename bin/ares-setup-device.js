@@ -94,9 +94,9 @@ const totChoices = inqChoices.concat(rmChoices, dfChoices);
 let questions = [];
 let op;
 if (argv.list) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.listfull) {
-    setupDevice.showDeviceListAndExit('full');
+    op = deviceListFull;
 } else if (argv.reset) {
     op = reset;
 } else if (argv.search || argv.timeout) {
@@ -129,6 +129,26 @@ const _needInq = function(choice) {
         return (choices.indexOf(choice) !== -1);
     };
 };
+
+function deviceList(next) {
+    async.series([
+        function(next) {
+            setupDevice.showDeviceList(next);
+        }
+    ], function(err) {
+        next(err);
+    });
+}
+
+function deviceListFull(next) {
+    async.series([
+        function(next) {
+            setupDevice.showDeviceListFull(next);
+        }
+    ], function(err) {
+        next(err);
+    });
+}
 
 function reset(next) {
     async.series([
