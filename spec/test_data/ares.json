@@ -6,7 +6,7 @@
             "ares-inspect       Enable Web Inspector or Node's Inspector",
             "ares-install       Install or Remove app from a device",
             "ares-launch        Launch or close apps",
-            "ares-log           Show and save logs",
+            "ares-log           Show or save logs of webOS apps and services",
             "ares-package       Create a package containing a webOS app or service",
             "ares-pull          Pull file from a device",
             "ares-push          Push the file to target device",
