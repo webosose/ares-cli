@@ -11,8 +11,8 @@ const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
     inspectLib = require('./../lib/inspect'),
-    spinner = require('../lib/util/spinner'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    spinner = require('../lib/util/spinner');
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,

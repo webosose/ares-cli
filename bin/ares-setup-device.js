@@ -13,8 +13,8 @@ const async = require('async'),
     path = require('path'),
     Ssdp = require('ssdp-js');
 
-const novacom = require('./../lib/base/novacom'),
-    commonTools = require('./../lib/base/common-tools');
+const commonTools = require('./../lib/base/common-tools'),
+    novacom = require('./../lib/base/novacom');
 
 const version = commonTools.version,
     cliControl = commonTools.cliControl,

@@ -9,9 +9,9 @@
 const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
-    spinner = require('./../lib/util/spinner'),
+    Pusher = require('./../lib/pusher'),
     commonTools = require('./../lib/base/common-tools'),
-    Pusher = require('./../lib/pusher');
+    spinner = require('./../lib/util/spinner');
 
 const version = commonTools.version,
     cliControl = commonTools.cliControl,

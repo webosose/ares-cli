@@ -11,8 +11,8 @@ const nopt = require('nopt'),
     path = require('path'),
     fs = require('fs'),
     log = require('npmlog'),
-    commonTools = require('./../lib/base/common-tools'),
-    Table = require('easy-table');
+    Table = require('easy-table'),
+    commonTools = require('./../lib/base/common-tools');
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,

@@ -124,7 +124,7 @@ describe(aresCmd + " -n 2", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).not.toContain("[INFO] Set target device : " + options.device);
+                expect(stdout).not.toContain("[Info] Set target device : " + options.device);
                 expect(stdout).toContain("-- Logs begin at");
                 expect(stdout.match(logRegExp).length).toBe(2);
             }

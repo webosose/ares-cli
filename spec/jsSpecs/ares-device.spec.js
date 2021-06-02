@@ -143,7 +143,7 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain("[INFO] Set target device : " + options.device);
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));

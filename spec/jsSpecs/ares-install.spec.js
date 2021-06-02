@@ -68,7 +68,7 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain("[INFO] Set target device : " + options.device);
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
             expect(stdout).toContain("Processing");
             expect(stdout).toContain("Success", stderr);
             done();
