@@ -208,6 +208,10 @@ function running() {
     launchLib.listRunningApp(options, function(err, runningApps) {
         let strRunApps = "";
         let cnt = 0;
+
+        if (err) {
+            return finish(err);
+        }
         if (runningApps instanceof Array) runningApps.forEach(function (runApp) {
             if (cnt++ !== 0) {
                 strRunApps = strRunApps.concat('\n');
@@ -217,8 +221,7 @@ function running() {
                 strRunApps += " - display " + runApp.displayId;
             }
         });
-        console.log(strRunApps);
-        finish(err);
+        finish(null, {msg : strRunApps});
     });
 }
 

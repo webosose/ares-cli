@@ -31,7 +31,7 @@
         "shortHands" : {"L":  ["--launch"]}
     },
     "ares-log" : {
-        "description" : "Show and save logs",
+        "description" : "Show or save logs of webOS apps and services",
         "knownOpts" : "log",
         "shortHands" : {"log":  ["--log"]}
     },
