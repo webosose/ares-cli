@@ -65,7 +65,7 @@ const shortHands = {
     "hh": ["--hidden-help"],
     "v": ["--level", "verbose"]
 };
-const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-install.js'*/);
+const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js' */);
 
 log.heading = processName;
 log.level = argv.level || 'warn';
