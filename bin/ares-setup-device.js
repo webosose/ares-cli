@@ -235,13 +235,13 @@ function _queryAddRemove(ssdpDevices, next) {
                 },
                 validate: function(input) {
                     if (input.length < 1) {
-                        return errHndl.getErrMsgFromMap("EMPTY_VALUE");
+                        return errHndl.getErrStr("EMPTY_VALUE");
                     }
                     if (deviceNames.indexOf(input) !== -1) {
-                        return errHndl.getErrMsgFromMap("EXISTING_VALUE");
+                        return errHndl.getErrStr("EXISTING_VALUE");
                     }
                     if (!isValidDeviceName(input)) {
-                        return errHndl.getErrMsgFromMap("INVALID_DEVICENAME");
+                        return errHndl.getErrStr("INVALID_DEVICENAME");
                     }
                     return true;
                 }
@@ -286,7 +286,7 @@ function _queryDeviceInfo(selDevice, next) {
         },
         validate: function(answers) {
             if (!isValidIpv4(answers)) {
-                return errHndl.getErrMsgFromMap("INVALID_VALUE");
+                return errHndl.getErrStr("INVALID_VALUE");
             }
             return true;
         },
@@ -302,7 +302,7 @@ function _queryDeviceInfo(selDevice, next) {
         },
         validate: function(answers) {
             if (!isValidPort(answers)) {
-                return errHndl.getErrMsgFromMap("INVALID_VALUE");
+                return errHndl.getErrStr("INVALID_VALUE");
             }
             return true;
         },
