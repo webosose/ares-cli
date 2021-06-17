@@ -45,7 +45,7 @@
         "ares-log -n 10 -d DEVICE",
         "",
         "# Show logs between the two DATEs",
-        "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
+        "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00 -d DEVICE",
         "",
         "# Show a list of the stored journal files",
         "ares-log -fl -d DEVICE",
@@ -65,11 +65,11 @@
         "default" : ["output","save", "display", "level", "device", "device-list", "help", "version", "verbose"],
         "output" : [
             "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
-            "@TAB@ Must use with the option outputting logs"
+            "@TAB@ Must use with the options outputting logs"
         ],
         "save" : [
             "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
-            "@TAB@ Must use with the option outputting logs"
+            "@TAB@ Must use with the options outputting logs"
         ],
         "display" : [
             "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
