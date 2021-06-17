@@ -36,7 +36,7 @@ The list of ares-cli commands is as follows:
 - `ares-push`: Pushes file(s) from a host machine to a target device.
 - `ares-pull`: Pulls file(s) from a target device to a host machine.
 - `ares-device`: Displays the device information.
-- `ares-log`: Show or save logs of webOS apps and services.
+- `ares-log`: Shows or saves logs of webOS apps and services.
 
 ## Documentations
 
