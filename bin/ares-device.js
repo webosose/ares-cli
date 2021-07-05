@@ -56,7 +56,7 @@ const shortHands = {
     "v": ["--level", "verbose"]
 };
 
-const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-install.js'*/);
+const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js' */);
 
 log.heading = processName;
 log.level = argv.level || 'warn';
@@ -87,7 +87,7 @@ const options = {
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
@@ -120,6 +120,10 @@ if (op) {
 
 function showUsage() {
     help.display(processName, appdata.getConfig(true).profile);
+}
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
 }
 
 function getDeviceInfo() {

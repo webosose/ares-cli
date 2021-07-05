@@ -94,9 +94,9 @@ const totChoices = inqChoices.concat(rmChoices, dfChoices);
 let questions = [];
 let op;
 if (argv.list) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.listfull) {
-    setupDevice.showDeviceListAndExit('full');
+    op = deviceListFull;
 } else if (argv.reset) {
     op = reset;
 } else if (argv.search || argv.timeout) {
@@ -129,6 +129,14 @@ const _needInq = function(choice) {
         return (choices.indexOf(choice) !== -1);
     };
 };
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
+function deviceListFull() {
+    setupDevice.showDeviceListFull(finish);
+}
 
 function reset(next) {
     async.series([
@@ -436,7 +444,7 @@ function _queryDeviceInfo(selDevice, next) {
         async.series([
             resolver.load.bind(resolver),
             resolver.modifyDeviceFile.bind(resolver, mode, inDevice),
-            setupDevice.showDeviceList.bind()
+            setupDevice.showDeviceList.bind(this)
         ], function(err) {
             if (err) {
                 return next(err);

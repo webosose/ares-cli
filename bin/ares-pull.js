@@ -83,7 +83,7 @@ const options = {
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
@@ -101,6 +101,10 @@ if (op) {
 
 function showUsage() {
     help.display(processName, appdata.getConfig(true).profile);
+}
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
 }
 
 function pull() {

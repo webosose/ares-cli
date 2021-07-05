@@ -127,7 +127,7 @@ const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
@@ -153,6 +153,10 @@ if (op) {
             op.bind(this)
         ],finish);
     });
+}
+
+function deviceList() {
+    setupDevice.showDeviceList(finish);
 }
 
 function showLog() {
