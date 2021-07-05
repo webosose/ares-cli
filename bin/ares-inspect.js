@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     inspectLib = require('./../lib/inspect'),
     commonTools = require('./../lib/base/common-tools'),
     spinner = require('../lib/util/spinner');

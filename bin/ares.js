@@ -6,12 +6,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const nopt = require('nopt'),
-    async = require('async'),
-    path = require('path'),
-    fs = require('fs'),
-    log = require('npmlog'),
+const async = require('async'),
     Table = require('easy-table'),
+    fs = require('fs'),
+    nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     commonTools = require('./../lib/base/common-tools');
 
 const cliControl = commonTools.cliControl,

@@ -6,24 +6,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const fs = require('fs'),
-    path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
+    fs = require('fs'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     installLib = require('./../lib/install'),
     commonTools = require('./../lib/base/common-tools'),
     convertJsonToList = require('./../lib/util/json').convertJsonToList,
     spinner = require('../lib/util/spinner');
-
-const processName = path.basename(process.argv[1]).replace(/.js/, '');
-
+    
 const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
     appdata = commonTools.appdata,
     errHndl = commonTools.errMsg;
+    
+const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
     spinner.stop();
