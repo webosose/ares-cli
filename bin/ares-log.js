@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
-    async = require('async'),
+    log = require('npmlog'),
+    path = require('path'),
     logLib = require('./../lib/log'),
     commonTools = require('./../lib/base/common-tools');
 

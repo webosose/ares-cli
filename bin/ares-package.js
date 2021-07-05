@@ -6,11 +6,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const fs = require('fs'),
-    path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
+    fs = require('fs'),
     mkdirp = require('mkdirp'),
+    nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     packageLib = require('../lib/package'),
     commonTools = require('./../lib/base/common-tools');
 
@@ -75,7 +76,7 @@ function PalmPackage() {
         "v":        ["--level", "verbose"]
     };
 
-    this.argv = require('nopt')(knownOpts, shortHands, process.argv, 2 /* drop 'node' & basename*/);
+    this.argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & basename*/);
 
     this.hiddenhelpString = [
         "",

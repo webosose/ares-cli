@@ -6,11 +6,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const fs = require('fs'),
-    path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
+    fs = require('fs'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     launchLib = require('./../lib/launch'),
     commonTools = require('./../lib/base/common-tools');
 

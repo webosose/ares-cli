@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
-    async = require('async'),
+    log = require('npmlog'),
+    path = require('path'),
     commonTools = require('./../lib/base/common-tools');
 
 const version = commonTools.version,
@@ -143,6 +143,8 @@ function config() {
 
     const configData = require(path.join(__dirname, '..', configFiles[options.profile]));
     appdata.setConfig(configData, function(err, status){
+        // console.log(JSON.stringify(status))
+        // console.log(status.profile)
         if(typeof status === 'undefined'){
             return finish(errHndl.getErrMsg("INVALID_VALUE", "configuration"));
         } else {
