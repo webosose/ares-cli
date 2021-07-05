@@ -74,6 +74,8 @@ describe(aresCmd, function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain("Processing");
             expect(stdout).toContain("/tmp/copyFiles/testFile.txt");
             expect(stdout).toContain("/tmp/copyFiles/helloFile.txt");
             expect(stdout).toContain("2 file(s) pushed");

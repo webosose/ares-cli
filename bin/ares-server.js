@@ -11,8 +11,8 @@ const fs = require('fs'),
     log = require('npmlog'),
     nopt = require('nopt'),
     async = require('async'),
-    serverLib = require('./../lib/base/server'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    serverLib = require('./../lib/base/server');
 
 const version = commonTools.version,
     cliControl = commonTools.cliControl,

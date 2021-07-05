@@ -13,7 +13,8 @@ const fs = require('fs'),
     nopt = require('nopt'),
     installLib = require('./../lib/install'),
     commonTools = require('./../lib/base/common-tools'),
-    convertJsonToList = require('./../lib/util/json').convertJsonToList;
+    convertJsonToList = require('./../lib/util/json').convertJsonToList,
+    spinner = require('../lib/util/spinner');
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -25,6 +26,7 @@ const version = commonTools.version,
     errHndl = commonTools.errMsg;
 
 process.on('uncaughtException', function (err) {
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -186,6 +188,7 @@ function remove() {
 }
 
 function finish(err, value) {
+    spinner.stop();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {

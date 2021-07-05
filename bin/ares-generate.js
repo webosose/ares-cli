@@ -12,9 +12,9 @@ const path = require('path'),
     inquirer = require('inquirer'),
     log = require('npmlog');
 
-const readJsonSync = require('./../lib/util/json').readJsonSync,
-    GeneratorLib = require('./../lib/generator'),
-    commonTools = require('./../lib/base/common-tools');
+const GeneratorLib = require('./../lib/generator'),
+    commonTools = require('./../lib/base/common-tools'),
+    readJsonSync = require('./../lib/util/json').readJsonSync;
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,

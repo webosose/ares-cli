@@ -11,7 +11,8 @@ const path = require('path'),
     log = require('npmlog'),
     nopt = require('nopt'),
     inspectLib = require('./../lib/inspect'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    spinner = require('../lib/util/spinner');
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
@@ -23,6 +24,7 @@ const cliControl = commonTools.cliControl,
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -143,6 +145,7 @@ function inspect(){
 }
 
 function finish(err, value) {
+    spinner.stop();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
