@@ -101,7 +101,6 @@ if (argv.list) {
 } else if (argv.search || argv.timeout) {
     op = search;
 } else if (argv.add || argv.modify || argv.info) {
-    // console.log("?")
     op = modifyDeviceInfo;
 } else if (argv.default) {
     op = setDefaultDeviceInfo;
