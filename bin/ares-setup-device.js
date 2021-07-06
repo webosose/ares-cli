@@ -11,7 +11,7 @@ const async = require('async'),
     nopt = require('nopt'),
     log = require('npmlog'),
     path = require('path'),
-    Ssdp = require('ssdp-js');
+    Ssdp = require('ssdp-js'),
     commonTools = require('./../lib/base/common-tools'),
     novacom = require('./../lib/base/novacom');
 
