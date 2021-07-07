@@ -8,12 +8,11 @@
 
 const async = require('async'),
     inquirer = require('inquirer'),
-    log = require('npmlog'),
     nopt = require('nopt'),
+    log = require('npmlog'),
     path = require('path'),
-    Ssdp = require('ssdp-js');
-
-const commonTools = require('./../lib/base/common-tools'),
+    Ssdp = require('ssdp-js'),
+    commonTools = require('./../lib/base/common-tools'),
     novacom = require('./../lib/base/novacom');
 
 const version = commonTools.version,
@@ -449,9 +448,7 @@ function _queryDeviceInfo(selDevice, next) {
             if (err) {
                 return next(err);
             }
-            next(null, {
-                "msg": "Success to " + mode + " a device!!"
-            });
+            next();
         });
     });
 }
@@ -623,7 +620,7 @@ function modifyDeviceInfo(next) {
             if (err) {
                 return next(err);
             }
-            next(null, {"msg": "Success to " + mode + " a device named " + inDevice.name + "!!"});
+            next();
         });
     } catch (err) {
         next(err);
@@ -642,7 +639,7 @@ function setDefaultDeviceInfo(next) {
             if (err) {
                 return next(err);
             }
-            next(null, {"msg": "Success to set device named " + argv.default + " to default!!"});
+            next();
         });
     } catch (err) {
         next(err);
@@ -665,7 +662,7 @@ function removeDeviceInfo(next) {
             if (err) {
                 return next(err);
             }
-            next(null, {"msg": "Success to remove a device named " + argv.remove + "!!"});
+            next();
         });
     } catch (err) {
         next(err);

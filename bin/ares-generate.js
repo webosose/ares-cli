@@ -6,13 +6,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    nopt = require('nopt'),
-    async = require('async'),
+const async = require('async'),
     inquirer = require('inquirer'),
-    log = require('npmlog');
-
-const GeneratorLib = require('./../lib/generator'),
+    nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
+    GeneratorLib = require('./../lib/generator'),
     commonTools = require('./../lib/base/common-tools'),
     readJsonSync = require('./../lib/util/json').readJsonSync;
 
