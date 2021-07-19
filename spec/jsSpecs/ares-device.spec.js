@@ -67,141 +67,141 @@ describe(aresCmd + ' --device-list(-D)', function() {
     });
 });
 
-// describe(aresCmd, function() {
-//     it('Retrieve device information', function(done) {
-//         const keys = ["webos_build_id","webos_imagename","webos_name","webos_release",
-//                     "webos_manufacturing_version", "core_os_kernel_version", "device_name",
-//                     "device_id", "chromium_version", "qt_version"];
-//         exec(cmd + ` -i ${options.device}`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             keys.forEach(function(key) {
-//                 expect(stdout).toContain(key);
-//             });
-//             done();
-//         });
-//     });
-// });
+describe(aresCmd, function() {
+    it('Retrieve device information', function(done) {
+        const keys = ["webos_build_id","webos_imagename","webos_name","webos_release",
+                    "webos_manufacturing_version", "core_os_kernel_version", "device_name",
+                    "device_id", "chromium_version", "qt_version"];
+        exec(cmd + ` -i ${options.device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            keys.forEach(function(key) {
+                expect(stdout).toContain(key);
+            });
+            done();
+        });
+    });
+});
 
-// describe(aresCmd, function() {
-//     it('Retrieve session information', function(done) {
-//         const keys = ["sessionId", "displayId"];
-//         exec(cmd + ` -s ${options.device}`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//                 expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
-//                                         "luna-send command failed <Service does not exist: com.webos.service.sessionmanager.>");
-//                 expect(stderr).toContain("ares-device ERR! [Tips]: This device does not support multiple sessions");
-//             }
-//             else {
-//                 keys.forEach(function(key) {
-//                     expect(stdout).toContain(key);
-//                 });
-//             }
-//             done();
-//         });
-//     });
-// });
+describe(aresCmd, function() {
+    it('Retrieve session information', function(done) {
+        const keys = ["sessionId", "displayId"];
+        exec(cmd + ` -s ${options.device}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
+                                        "luna-send command failed <Service does not exist: com.webos.service.sessionmanager.>");
+                expect(stderr).toContain("ares-device ERR! [Tips]: This device does not support multiple sessions");
+            }
+            else {
+                keys.forEach(function(key) {
+                    expect(stdout).toContain(key);
+                });
+            }
+            done();
+        });
+    });
+});
 
-// describe(aresCmd + ' --capture-screen(-c)', function() {
-//     let generatedFile = "";
+describe(aresCmd + ' --capture-screen(-c)', function() {
+    let generatedFile = "";
 
-//     beforeEach(function(done) {
-//         generatedFile = "";
-//         common.removeOutDir(captureDirPath);
-//         done();
-//     });
-//     afterEach(function(done) {
-//         common.removeOutDir(generatedFile);
-//         common.removeOutDir(captureDirPath);
-//         done();
-//     });
+    beforeEach(function(done) {
+        generatedFile = "";
+        common.removeOutDir(captureDirPath);
+        done();
+    });
+    afterEach(function(done) {
+        common.removeOutDir(generatedFile);
+        common.removeOutDir(captureDirPath);
+        done();
+    });
 
-//     it('Capture', function(done) {
-//         exec(cmd + ` -c`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             expect(stdout).toContain(options.device);
-//             expect(stdout).toContain(new Date().getFullYear());
-//             expect(stdout).toContain("display0");
-//             expect(stdout).toContain(".png");
-//             expect(stdout).toContain(path.resolve('.'));
+    it('Capture', function(done) {
+        exec(cmd + ` -c`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(options.device);
+            expect(stdout).toContain(new Date().getFullYear());
+            expect(stdout).toContain("display0");
+            expect(stdout).toContain(".png");
+            expect(stdout).toContain(path.resolve('.'));
 
-//             const matchedFiles = stdout.match(dateFileReg);
+            const matchedFiles = stdout.match(dateFileReg);
 
-//             generatedFile = path.join(path.resolve('.'), matchedFiles[0]);
-//             console.log("capture file name : " + matchedFiles[0]);
-//             expect(fs.existsSync(generatedFile)).toBe(true);
-//             done();
-//         });
-//     });
+            generatedFile = path.join(path.resolve('.'), matchedFiles[0]);
+            console.log("capture file name : " + matchedFiles[0]);
+            expect(fs.existsSync(generatedFile)).toBe(true);
+            done();
+        });
+    });
 
-//     it('Capture with filename', function(done) {
-//         exec(cmd + ` -c screen.png`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             expect(stdout).toContain("[Info] Set target device : " + options.device);
-//             expect(stdout).not.toContain("display0");
-//             expect(stdout).toContain("screen.png");
-//             expect(stdout).toContain(path.resolve('.'));
+    it('Capture with filename', function(done) {
+        exec(cmd + ` -c screen.png`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).not.toContain("display0");
+            expect(stdout).toContain("screen.png");
+            expect(stdout).toContain(path.resolve('.'));
 
-//             generatedFile = path.join(path.resolve('.'), "screen.png");
-//             expect(fs.existsSync(generatedFile)).toBe(true);
-//             done();
-//         });
-//     });
+            generatedFile = path.join(path.resolve('.'), "screen.png");
+            expect(fs.existsSync(generatedFile)).toBe(true);
+            done();
+        });
+    });
 
-//     it('Capture with directory Path & display option', function(done) {
-//         exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             expect(stdout).toContain(options.device);
-//             expect(stdout).toContain(new Date().getFullYear());
-//             expect(stdout).toContain("display1");
-//             expect(stdout).toContain(".png");
-//             expect(stdout).toContain(captureDirPath);
-//             expect(fs.existsSync(captureDirPath)).toBe(true);
+    it('Capture with directory Path & display option', function(done) {
+        exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(options.device);
+            expect(stdout).toContain(new Date().getFullYear());
+            expect(stdout).toContain("display1");
+            expect(stdout).toContain(".png");
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
 
-//             const matchedFiles = stdout.match(dateFileReg);
+            const matchedFiles = stdout.match(dateFileReg);
 
-//             console.log("capture file name : " + matchedFiles[0]);
-//             expect(fs.existsSync(path.join(captureDirPath, matchedFiles[0]))).toBe(true);
-//             done();
-//         });
-//     });
+            console.log("capture file name : " + matchedFiles[0]);
+            expect(fs.existsSync(path.join(captureDirPath, matchedFiles[0]))).toBe(true);
+            done();
+        });
+    });
 
-//     it('Capture with directory & file path(bmp)', function(done) {
-//         const captureFilePath = path.join(captureDirPath, "screen.bmp");
-//         exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             expect(stdout).not.toContain("display0");
-//             expect(stdout).toContain("screen.bmp");
-//             expect(stdout).toContain(captureDirPath);
-//             expect(fs.existsSync(captureDirPath)).toBe(true);
-//             done();
-//         });
-//     });
+    it('Capture with directory & file path(bmp)', function(done) {
+        const captureFilePath = path.join(captureDirPath, "screen.bmp");
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).not.toContain("display0");
+            expect(stdout).toContain("screen.bmp");
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
+            done();
+        });
+    });
 
-//     it('Capture with directory & file path(jpg)', function(done) {
-//         const captureFilePath = path.join(captureDirPath, "screen.jpg");
-//         exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
-//             if (stderr && stderr.length > 0) {
-//                 common.detectNodeMessage(stderr);
-//             }
-//             expect(stdout).not.toContain("display0");
-//             expect(stdout).toContain("screen.jpg");
-//             expect(stdout).toContain(captureDirPath);
-//             expect(fs.existsSync(captureDirPath)).toBe(true);
-//             done();
-//         });
-//     });
-// });
+    it('Capture with directory & file path(jpg)', function(done) {
+        const captureFilePath = path.join(captureDirPath, "screen.jpg");
+        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).not.toContain("display0");
+            expect(stdout).toContain("screen.jpg");
+            expect(stdout).toContain(captureDirPath);
+            expect(fs.existsSync(captureDirPath)).toBe(true);
+            done();
+        });
+    });
+});
 
 describe(aresCmd + ' negative TC', function() {
     const noPermDirPath = path.join(__dirname, "..", "tempFiles", "noPermDir");
@@ -230,7 +230,6 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c ${noPermDirPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                console.log(stderr);
                 expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, open");
                 expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
             }

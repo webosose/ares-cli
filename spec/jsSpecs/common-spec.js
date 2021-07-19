@@ -41,19 +41,22 @@ commonSpec.getOptions = function() {
     return new Promise(function(resolve, reject){
         const argv = nopt(knownOpts, shortHands, process.argv, 2);
 
-        if(argv.device)
+        if (argv.device) {
             options.device = argv.device;
-        if(argv.ip)
+        }
+        if (argv.ip) {
             options.ip = argv.ip;
-        if(options.device !== "emulator")
+        }
+        if (options.device !== "emulator") {
             options.port = argv.port ? argv.port : 22;
+        }
 
         console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}`);
 
         // set profile
         const cmd = commonSpec.makeCmd('ares-config');
         exec(cmd, function (error, stdout) {
-            if(error){
+            if (error) {
                 console.error("set config error " +  error);
                 reject(stdout);
             }
@@ -79,7 +82,7 @@ commonSpec.resetDeviceList = function() {
     return new Promise(function(resolve, reject) {
         const cmd = commonSpec.makeCmd('ares-setup-device');
         exec(cmd + ' -R', function (error, stdout, stderr) {
-            if(!stderr){
+            if (!stderr) {
                 resolve(true);
             } else {
                 reject(error);
@@ -93,7 +96,7 @@ commonSpec.addDeviceInfo = function() {
         const cmd = commonSpec.makeCmd('ares-setup-device');
         exec(cmd + ` -a ${options.device} -i port=${options.port} -i username=root -i host=${options.ip} -i default=true`,
         function (error, stdout, stderr) {
-            if(stderr) {
+            if (stderr) {
                 reject(stderr);
             } else {
                 resolve(stdout);
@@ -109,11 +112,11 @@ commonSpec.makeCmd = function(cmd) {
 commonSpec.createOutDir = function(filePath, mode) {
     if (!fs.existsSync(filePath)) {
         shelljs.mkdir(filePath);
-    }
-    if (mode) {
-        fs.chmodSync(filePath, mode);
-    }
 
+        if (mode) {
+            fs.chmodSync(filePath, mode);
+        }
+    }
 };
 
 commonSpec.removeOutDir = function(filePath) {
