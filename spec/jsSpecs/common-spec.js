@@ -106,9 +106,20 @@ commonSpec.makeCmd = function(cmd) {
     return `node ${path.join('bin', cmd + '.js')}`;
 };
 
+commonSpec.createOutDir = function(filePath, mode) {
+    if (!fs.existsSync(filePath)) {
+        shelljs.mkdir(filePath);
+    }
+    if (mode) {
+        fs.chmodSync(filePath, mode);
+    }
+
+};
+
 commonSpec.removeOutDir = function(filePath) {
-    if(fs.existsSync(filePath))
+    if (fs.existsSync(filePath)) {
         shelljs.rm('-rf', filePath);
+    }
 };
 
 commonSpec.detectNodeMessage = function(stderr) {
