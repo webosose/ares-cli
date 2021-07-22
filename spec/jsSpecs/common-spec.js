@@ -112,10 +112,10 @@ commonSpec.makeCmd = function(cmd) {
 commonSpec.createOutDir = function(filePath, mode) {
     if (!fs.existsSync(filePath)) {
         shelljs.mkdir(filePath);
+    }
 
-        if (mode) {
-            fs.chmodSync(filePath, mode);
-        }
+    if (mode) {
+        fs.chmodSync(filePath, mode);
     }
 };
 

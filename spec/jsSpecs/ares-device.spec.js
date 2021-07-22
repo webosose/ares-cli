@@ -230,7 +230,7 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -c ${noPermDirPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, open");
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied");
                 expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
             }
             done();
