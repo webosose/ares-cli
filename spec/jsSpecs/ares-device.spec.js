@@ -204,6 +204,18 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
+    const noPermDirPath = path.join(__dirname, "..", "tempFiles", "noPermDir");
+
+    beforeAll(function(done) { 
+        common.createOutDir(noPermDirPath, '0577');
+        done();
+    });
+
+    afterAll(function(done) {
+        common.removeOutDir(noPermDirPath);
+        done();
+    });
+    
     it('Capture with invalid file format', function(done) {
         exec(cmd + ` -c "test.abc"`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -215,11 +227,11 @@ describe(aresCmd + ' negative TC', function() {
     });
 
     it('Capture with invalid destiation Path', function(done) {
-        exec(cmd + ` -c /rootDir`, function (error, stdout, stderr) {
+        exec(cmd + ` -c ${noPermDirPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, mkdir '/rootDir'");
-                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission </rootDir>");
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied");
+                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
             }
             done();
         });
