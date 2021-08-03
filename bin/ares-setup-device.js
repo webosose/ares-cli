@@ -548,7 +548,7 @@ function _getParams(option) {
         params.default = (params.default === "true");
     }
 
-    log.info("getParams():", "params:", JSON.stringify(params));
+    log.info("getParams()", "params:", JSON.stringify(params));
     return params;
 }
 
@@ -684,7 +684,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.info('finish()', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

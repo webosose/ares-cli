@@ -140,7 +140,7 @@ function deviceList() {
 
 function install() {
     const pkgPath = argv.install || argv.argv.remain[0];
-    log.info("install():", "pkgPath:", pkgPath);
+    log.info("install()", "pkgPath:", pkgPath);
     if (!pkgPath) {
         return finish(errHndl.getErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
     } else {
@@ -184,7 +184,7 @@ function listFull() {
 
 function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
-    log.info("remove():", "pkgId:", pkgId);
+    log.info("remove()", "pkgId:", pkgId);
     if (!pkgId) {
         return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
@@ -207,7 +207,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.info('finish()', value);
         if (value && value.msg) {
             console.log(value.msg);
         }

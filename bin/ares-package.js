@@ -316,7 +316,7 @@ PalmPackage.prototype = {
             }
             cliControl.end(-1);
         } else {
-            log.info('finish():', value);
+            log.info('finish()', value);
             if (value && value[value.length-1] && value[value.length-1].msg) {
                 console.log(value[value.length-1].msg);
             } else if (value && value.msg) {

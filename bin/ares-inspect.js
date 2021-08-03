@@ -127,7 +127,7 @@ function showUsage(hiddenFlag) {
 }
 
 function inspect(){
-    log.info("inspect():", "AppId:", options.appId, "ServiceId:", options.serviceId);
+    log.info("inspect()", "AppId:", options.appId, "ServiceId:", options.serviceId);
 
     if (!options.appId && !options.serviceId){
         showUsage();
@@ -164,7 +164,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.info('finish()', value);
         if (value && value.msg) {
             console.log(value.msg);
         }
