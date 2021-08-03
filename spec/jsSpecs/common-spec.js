@@ -52,11 +52,11 @@ commonSpec.getOptions = function() {
         if (options.device !== "emulator") {
             options.port = argv.port ? argv.port : 22;
         }
-        if (argv.timeInterval){
+        if (argv.timeInterval) {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = argv.timeInterval;
         }
 
-        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}, TimeInterval : ${jasmine.DEFAULT_TIMEOUT_INTERVAL}`);
+        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}, timeInterval : ${jasmine.DEFAULT_TIMEOUT_INTERVAL}`);
 
         // set profile
         const cmd = commonSpec.makeCmd('ares-config');
