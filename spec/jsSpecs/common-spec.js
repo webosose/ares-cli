@@ -29,12 +29,14 @@ if (typeof module !== 'undefined' && module.exports) {
 const knownOpts = {
     "device":  String,
     "ip":  String,
-    "port": String
+    "port": String,
+    "timeInterval": Number
 };
 const shortHands = {
     "d": ["--device"],
     "ip": ["--ip"],
-    "port": ["--port"]
+    "port": ["--port"],
+    "ti": ["--timeInterval"]
 };
 
 commonSpec.getOptions = function() {
@@ -50,8 +52,11 @@ commonSpec.getOptions = function() {
         if (options.device !== "emulator") {
             options.port = argv.port ? argv.port : 22;
         }
+        if (argv.timeInterval) {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = argv.timeInterval;
+        }
 
-        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}`);
+        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}, timeInterval : ${jasmine.DEFAULT_TIMEOUT_INTERVAL}`);
 
         // set profile
         const cmd = commonSpec.makeCmd('ares-config');
