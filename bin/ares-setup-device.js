@@ -396,9 +396,9 @@ function _queryDeviceInfo(selDevice, next) {
 
     inquirer.prompt(questions).then(function(answers) {
         if (answers.confirm) {
-            log.info("setup-device#interactiveInput()", "Saved!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "Saved!");
         } else {
-            log.info("setup-device#interactiveInput()", "Canceled!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "Canceled!");
             return next(null, {
                 "msg": "Canceled"
             });

@@ -160,35 +160,35 @@ function deviceList() {
 }
 
 function showLog() {
-    log.info("ares-log#printLog");
+    log.info("showLog()");
 
     checkOption();
     logLib.show(options, finish);
 }
 
 function readMode() {
-    log.info("ares-log#readMode");
+    log.info("readMode()");
 
     checkOption();
     logLib.readMode(options, finish);
 }
 
 function showUnitList() {
-    log.info("ares-log#showUnitList");
+    log.info("showUnitList()");
 
     checkOption();
     logLib.printUnitList(options, finish);
 }
 
 function checkCurrentDaemon() {
-    log.info("ares-log#checkCurrentDaemon");
+    log.info("checkCurrentDaemon()");
 
     options.currentDaemon = appdata.getConfig(true).logDaemon;
     return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
 }
 
 function switchDaemon() {
-    log.info("ares-log#switchDaemon");
+    log.info("switchDaemon()");
 
     if (argv['switch-daemon'] === "true") {
         return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
@@ -201,14 +201,12 @@ function switchDaemon() {
 }
 
 function checkOption() {
-    log.info("ares-log#checkOption");
-
     options.currentDaemon = appdata.getConfig(true).logDaemon;
     options.currentOption = Object.keys(argv);
     options.currentOption.splice(-1, 1);
 
     if (options.currentDaemon === "journald") {
-        log.info("journald options");
+        log.info("checkOption()", "journald options");
 
         options.currentOption.forEach(function(item){
             if (!journalLogOptions.includes(item)) {
@@ -216,7 +214,7 @@ function checkOption() {
             }
         });
     } else if (options.currentDaemon === "pmlogd") {
-        log.info("pmlogd options");
+        log.info("checkOption()", "pmlogd options");
 
         options.currentOption.forEach(function(item){
             if(!pmLogOptions.includes(item)) {

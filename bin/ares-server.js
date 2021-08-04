@@ -107,7 +107,7 @@ function runServer() {
 
     if (!isNaN(argv.port)) {
         port = parseInt(argv.port);
-        log.verbose("runServer()#port:", port);
+        log.verbose("runServer()", "port:", port);
     }
 
     async.waterfall([

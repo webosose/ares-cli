@@ -113,7 +113,7 @@ if (op) {
 }
 
 function config() {
-    log.verbose("profile()", "options:", options);
+    log.verbose("config()", "options:", options);
 
     if (!Object.prototype.hasOwnProperty.call(configFiles, options.profile)) {
         return finish(errHndl.getErrMsg("INVALID_VALUE", "profile", options.profile));

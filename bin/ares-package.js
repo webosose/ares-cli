@@ -223,7 +223,7 @@ PalmPackage.prototype = {
     
 
     setOutputDir: function(next) {
-        log.info("setOutputDir");
+        log.info("setOutputDir()");
 
         if (this.argv.outdir) {
             this.destination = this.argv.outdir;
@@ -248,13 +248,13 @@ PalmPackage.prototype = {
     },
 
     checkInputDir: function(next) {
-        log.info("checkInputDir");
+        log.info("checkInputDir()");
         const packager = new packageLib.Packager(this.options);
         this.appCnt = packager.checkInputDirectories(this.argv.argv.remain, this.options, next);
     },
 
     packageApp: function(next) {
-        log.info("packageApp");
+        log.info("packageApp()");
         const packager = new packageLib.Packager(this.options);
         if(this.appCnt === 0) { // only service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
