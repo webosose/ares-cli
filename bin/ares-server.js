@@ -110,6 +110,8 @@ function runServer() {
         log.verbose("runServer()", "port:", port);
     }
 
+    log.info("runServer()", "appPath:", appPath, ", port:", port);
+
     async.waterfall([
         serverLib.runServer.bind(serverLib, appPath, port, _reqHandler),
         function(serverInfo, next) {
@@ -123,8 +125,10 @@ function runServer() {
                 async.series([
                     sdkenv.getEnvValue.bind(sdkenv, "BROWSER")
                 ], function(err, browserPath) {
-                    if (err)
+                    if (err) {
                         return next(err);
+                    }
+                    log.info("runServer()", "openUrl:", openUrl, "browserPath :", browserPath[0]);
                     serverLib.openBrowser(openUrl, browserPath[0]);
                 });
             }

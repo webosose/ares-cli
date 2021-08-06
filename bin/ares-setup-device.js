@@ -396,9 +396,9 @@ function _queryDeviceInfo(selDevice, next) {
 
     inquirer.prompt(questions).then(function(answers) {
         if (answers.confirm) {
-            log.info("interactiveInput()#_queryDeviceInfo()", "Saved!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "saved");
         } else {
-            log.info("interactiveInput()#_queryDeviceInfo()", "Canceled!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "canceled");
             return next(null, {
                 "msg": "Canceled"
             });
@@ -536,7 +536,7 @@ function _getParams(option) {
             const tokens = strParam.split('=');
             if (tokens.length === 2) {
                 params[tokens[0]] = tokens[1];
-                log.info("Inserting params ", tokens[0] + " = " + tokens[1]);
+                log.silly("Inserting params ", tokens[0] + " = " + tokens[1]);
             } else {
                 log.verbose('Ignoring invalid arguments:', strParam);
             }
@@ -548,7 +548,7 @@ function _getParams(option) {
         params.default = (params.default === "true");
     }
 
-    log.info("getParams()", "params:", JSON.stringify(params));
+    log.silly("_getParams()", "params:", JSON.stringify(params));
     return params;
 }
 
@@ -569,6 +569,8 @@ function modifyDeviceInfo(next) {
             }
             inDevice.name = argv[mode];
         }
+
+        log.info("modifyDeviceInfo()", "devicename:", inDevice.name, ", mode:", mode);
 
         if (inDevice.default !== undefined && mode === "modify") {
             log.verbose('Ignoring invalid arguments : default');
