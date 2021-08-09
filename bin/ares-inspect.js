@@ -127,7 +127,7 @@ function showUsage(hiddenFlag) {
 }
 
 function inspect(){
-    log.info("inspect()", "AppId:", options.appId, "ServiceId:", options.serviceId);
+    log.info("inspect()", "AppId:", options.appId, ", ServiceId:", options.serviceId);
 
     if (!options.appId && !options.serviceId){
         showUsage();

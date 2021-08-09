@@ -477,7 +477,7 @@ function search(next) {
         end = false;
 
     console.log("Searching...");
-    log.verbose("search()#timeout:", timeout);
+    log.verbose("search()", "timeout:", timeout);
     ssdp.start();
     ssdp.onDevice(function(device) {
         if (!device.headers || !device.headers.SERVER ||
@@ -503,7 +503,7 @@ function search(next) {
                     console.log("No devices is discovered.");
                     return outterNext();
                 }
-                log.verbose("search()#discovered:", discovered.length);
+                log.verbose("search()", "discovered:", discovered.length);
                 next(null, discovered);
             }, timeout);
         },
@@ -536,9 +536,9 @@ function _getParams(option) {
             const tokens = strParam.split('=');
             if (tokens.length === 2) {
                 params[tokens[0]] = tokens[1];
-                log.silly("Inserting params ", tokens[0] + " = " + tokens[1]);
+                log.silly("_getParams()", "Inserting params ", tokens[0] + " = " + tokens[1]);
             } else {
-                log.verbose('Ignoring invalid arguments:', strParam);
+                log.verbose("_getParams()", "Ignoring invalid arguments:", strParam);
             }
         }
     });
@@ -573,7 +573,7 @@ function modifyDeviceInfo(next) {
         log.info("modifyDeviceInfo()", "devicename:", inDevice.name, ", mode:", mode);
 
         if (inDevice.default !== undefined && mode === "modify") {
-            log.verbose('Ignoring invalid arguments : default');
+            log.verbose("modifyDeviceInfo()", "Ignoring invalid arguments : default");
             inDevice.default = undefined;
         }
 
