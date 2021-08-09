@@ -573,7 +573,7 @@ function modifyDeviceInfo(next) {
         log.info("modifyDeviceInfo()", "devicename:", inDevice.name, ", mode:", mode);
 
         if (inDevice.default !== undefined && mode === "modify") {
-            log.verbose("modifyDeviceInfo()", "Ignoring invalid arguments : default");
+            log.verbose("modifyDeviceInfo()", "Ignoring invalid arguments:default");
             inDevice.default = undefined;
         }
 

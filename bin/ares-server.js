@@ -128,7 +128,7 @@ function runServer() {
                     if (err) {
                         return next(err);
                     }
-                    log.info("runServer()", "openUrl:", openUrl, "browserPath :", browserPath[0]);
+                    log.info("runServer()", "openUrl:", openUrl, ", browserPath :", browserPath[0]);
                     serverLib.openBrowser(openUrl, browserPath[0]);
                 });
             }
