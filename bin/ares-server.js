@@ -111,7 +111,6 @@ function runServer() {
     }
 
     log.info("runServer()", "appPath:", appPath, ", port:", port);
-
     async.waterfall([
         serverLib.runServer.bind(serverLib, appPath, port, _reqHandler),
         function(serverInfo, next) {

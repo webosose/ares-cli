@@ -240,7 +240,7 @@ PalmPackage.prototype = {
                 this.finish(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
             }
         } else {
-            log.verbose("setOutputDir()", "creating directory:'" + this.destination + "' ...");
+            log.verbose("setOutputDir()", "creating directory '" + this.destination + "' ...");
             mkdirp.sync(this.destination);
         }
         this.destination = fs.realpathSync(this.destination);
