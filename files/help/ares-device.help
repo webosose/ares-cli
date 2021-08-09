@@ -19,7 +19,7 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
@@ -31,15 +31,8 @@
         "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
-    },
-    "extraoption" : {
-        "cmdOpt":"hidden",
-        "default" : {
-            "cmdOpt":"option",
-            "default" : ["level"],
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
-        }
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     },
     "examples" : {
         "default" : [

@@ -23,15 +23,16 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["list", "<COMMAND>","help", "version"],
+        "default" : ["list", "<COMMAND>", "help", "version", "verbose", "level"],
         "list" : [
             "-l, --list @TAB@ List all the ares commands"
         ],
         "<COMMAND>" : [
             "--<COMMAND> @TAB@ Display the help information of the COMMAND"
         ],
-        "level" : "--level <LEVEL> @TAB@ Tracing LEVEL is one of 'silly', 'verbose', 'info', 'http', 'warn', 'error' [warn]",
         "help" : "-h, --help @TAB@ Display this help",
-        "version" : "-V, --version @TAB@ Display version info"
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     }
 }

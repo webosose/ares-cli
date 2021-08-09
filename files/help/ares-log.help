@@ -62,7 +62,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["output","save", "display", "level", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["output","save", "display", "device", "device-list", "help", "version", "verbose",  "level"],
         "output" : [
             "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
             "@TAB@ Must use with the options outputting logs"
@@ -82,6 +82,7 @@
         "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     }
 }

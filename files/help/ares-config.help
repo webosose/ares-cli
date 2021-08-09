@@ -20,10 +20,12 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["profile", "profile-details", "help", "version" ],
+        "default" : ["profile", "profile-details", "help", "version", "verbose", "level"],
         "profile" : "-p, --profile <DEVICE> @TAB@ Specify a device profile (webOS device type) to configure for CLI",
         "profile-details" : "-c, --profile-details @TAB@ Current configured profile",
         "help" : "-h, --help @TAB@ Display this help",
-        "version" : "-V, --version @TAB@ Display version info"
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     }
 }

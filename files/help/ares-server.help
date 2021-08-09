@@ -8,12 +8,13 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["port", "open","help", "version", "verbose"],
+        "default" : ["port", "open","help", "version", "verbose", "level"],
         "port" : "-p, --port <PORT> @TAB@ Specify port to use [default:random]",
         "open" : "-o, --open @TAB@ Open localhost url with a web browser",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     },
     "description" : [
         "This command runs a local web server."

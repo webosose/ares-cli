@@ -21,7 +21,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["device", "device-list", "help", "version", "ignore", "verbose"],
+        "default" : ["device", "device-list", "help", "version", "ignore", "verbose", "level"],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -30,6 +30,7 @@
         "ignore" : "-i, --ignore @TAB@ Hide the detailed copy messages",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     }
 }

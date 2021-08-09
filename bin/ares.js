@@ -89,6 +89,7 @@ if (op) {
 }
 
 function commandList (next) {
+    log.info("commandList()");
     let commandsList;
     const table = new Table();
     const profile = appdata.getConfig(true).profile;
@@ -112,6 +113,7 @@ function commandList (next) {
 }
 
 function display (next) {
+    log.info("display()");
     let commandsList;
     let found = false;
     try{

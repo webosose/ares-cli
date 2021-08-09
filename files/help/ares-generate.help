@@ -34,7 +34,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["template", "list", "property", "servicename", "overwrite", "level", "help", "version", "verbose"],
+        "default" : ["template", "list", "property", "servicename", "overwrite", "help", "version", "verbose", "level"],
         "template" : [
             "-t, --template <TEMPLATE> @TAB@ Use the template named TEMPLATE"
         ],
@@ -50,14 +50,7 @@
         "overwrite" : "-f, --overwrite @TAB@ Overwrite existing files",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
-    },
-    "extraoption" : {
-        "cmdOpt":"hidden",
-        "default" : {
-            "cmdOpt":"option",
-            "default" : ["level"],
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
-        }
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
     }
 }
