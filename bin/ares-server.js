@@ -152,6 +152,7 @@ function runServer() {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -166,7 +167,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish()', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

@@ -536,7 +536,7 @@ function _getParams(option) {
             const tokens = strParam.split('=');
             if (tokens.length === 2) {
                 params[tokens[0]] = tokens[1];
-                log.silly("_getParams()", "Inserting params ", tokens[0] + " = " + tokens[1]);
+                log.verbose("_getParams()", "Inserting params ", tokens[0] + " = " + tokens[1]);
             } else {
                 log.verbose("_getParams()", "Ignoring invalid arguments:", strParam);
             }
@@ -672,6 +672,7 @@ function removeDeviceInfo(next) {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -686,7 +687,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish()', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

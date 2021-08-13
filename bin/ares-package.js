@@ -219,9 +219,7 @@ PalmPackage.prototype = {
             this.options.pkginfofile = this.argv.pkginfofile;
         }
     },
-
     
-
     setOutputDir: function(next) {
         log.info("setOutputDir()");
 
@@ -302,6 +300,7 @@ PalmPackage.prototype = {
     },
 
     finish: function(err, value) {
+        log.info("finish()");
         if (err) {
             // handle err from getErrMsg()
             if (Array.isArray(err) && err.length > 0) {
@@ -316,7 +315,7 @@ PalmPackage.prototype = {
             }
             cliControl.end(-1);
         } else {
-            log.info('finish()', value);
+            log.verbose("finish()", "value:", value);
             if (value && value[value.length-1] && value[value.length-1].msg) {
                 console.log(value[value.length-1].msg);
             } else if (value && value.msg) {

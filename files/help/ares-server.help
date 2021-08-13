@@ -14,7 +14,7 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'warn', 'error'"
+        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
     },
     "description" : [
         "This command runs a local web server."
