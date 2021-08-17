@@ -13,7 +13,8 @@
         "",
         "DISPLAY_ID is working on multi-user profile.",
         "If not specified, target's host terminal will be opened.",
-        ""
+        "",
+        "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Open a device terminial",
@@ -36,6 +37,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

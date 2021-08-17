@@ -14,7 +14,9 @@
             "This command displays the device information and supports screen capture.",
             "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
-            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default."
+            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
+            "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
         ]
     },
     "options" : {
@@ -32,7 +34,7 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "examples" : {
         "default" : [

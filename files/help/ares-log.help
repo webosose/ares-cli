@@ -26,6 +26,8 @@
     "description" : [
         "This command shows or saves logs of webOS apps and services using journald",
         "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)",
+        "",
         "** Attributes **",
         "  LINE         [integer]  Number of lines",
         "  PRIORITY     [string]   Priority of logs (e.g., info, notice, warning, err)",
@@ -34,8 +36,7 @@
         "  UNIT         [string]   One of the unit names from --unit-list",
         "  JOURNAL_FILE [string]   One of the file names from --file-list",
         "  OUTPUT_MODE  [string]   Output format (e.g., json, json-pretty, cat)",
-        "  SAVED_FILE   [string]   File name or path to save logs",
-        ""
+        "  SAVED_FILE   [string]   File name or path to save logs"
     ],
     "examples" : [
         "# Follow the journal",
@@ -83,6 +84,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

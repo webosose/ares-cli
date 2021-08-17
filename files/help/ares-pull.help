@@ -12,7 +12,9 @@
         "",
         "SOURCE is the path in the DEVICE, where files exist.",
         "",
-        "DESTINATION is the path in the host machine, where multiple files can be copied."
+        "DESTINATION is the path in the host machine, where multiple files can be copied.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Copy file or directory from the DEVICE to host machine",
@@ -31,6 +33,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

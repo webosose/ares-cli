@@ -11,7 +11,9 @@
     "description" : [
         "This command lists all ares commands or provides help information of the given command.",
         "",
-        "COMMAND is a postfix of the ares commands."
+        "COMMAND is a postfix of the ares commands.",
+        "",
+        "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# List all the ares commands",
@@ -33,6 +35,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

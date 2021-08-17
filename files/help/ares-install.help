@@ -10,7 +10,9 @@
         ]
     },
     "description" : [
-        "This command installs or removes packages on the DEVICE."
+        "This command installs or removes packages on the DEVICE.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         {
@@ -40,7 +42,7 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "extraoption" : {
         "cmdOpt":"hidden",

@@ -16,6 +16,8 @@
           "default": [
             "This command manages the information of the devices.",
             "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)",
+            "",
               "** Attributes of DEVICE_INFO **",
               "  description [string]   description of target device",
               "  host        [string]   ip address",
@@ -67,6 +69,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

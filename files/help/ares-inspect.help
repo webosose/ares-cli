@@ -13,7 +13,9 @@
         "This command launches Web Inspector for APP_ID or Node's Inspector for SERVICE_ID.",
         "",
         "APP_ID is an app id described in appinfo.json.",
-        "SERVICE_ID is a service id described in services.json."
+        "SERVICE_ID is a service id described in services.json.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "options" : {
         "cmdOpt":"option",
@@ -28,7 +30,7 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "extraoption" : {
         "cmdOpt":"hidden",

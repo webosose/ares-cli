@@ -16,7 +16,9 @@
         "PROPERTY defines properties to be used during generation",
         "Properties can be specified as key-value pairs of the form \"key=value\"",
         "or as JSON objects of the form \"{'key':'value', 'key2':'value2', ...}\".",
-        "Surrounding quotes are required in both cases."
+        "Surrounding quotes are required in both cases.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         {
@@ -51,6 +53,6 @@
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
         "verbose" : "-v @TAB@ Display this verbose log",
-        "level" : "--level <LEVEL> @TAB@ Display this LEVEL('silly', 'verbose', 'info', 'warn', 'error') log"
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }
