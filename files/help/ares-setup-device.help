@@ -16,8 +16,6 @@
           "default": [
             "This command manages the information of the devices.",
             "",
-            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)",
-            "",
               "** Attributes of DEVICE_INFO **",
               "  description [string]   description of target device",
               "  host        [string]   ip address",
@@ -28,9 +26,11 @@
               "  passphrase  [string]   passphrase used for generating ssh keys",
               "  password    [string]   password for ssh connection",
               "  default     [boolean]  set default device with 'add' option",
-              "",
-              "This command can set a default device.",
-              "If you don't specify a target device, the default device is used as the target device."
+            "",
+            "This command can set a default device.",
+            "If you don't specify a target device, the default device is used as the target device.",
+            "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
           ]
         }
     ],

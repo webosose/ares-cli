@@ -13,7 +13,7 @@
         "",
         "COMMAND is a postfix of the ares commands.",
         "",
-        "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# List all the ares commands",

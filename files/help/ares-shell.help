@@ -14,7 +14,7 @@
         "DISPLAY_ID is working on multi-user profile.",
         "If not specified, target's host terminal will be opened.",
         "",
-        "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Open a device terminial",

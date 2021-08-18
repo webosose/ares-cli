@@ -8,7 +8,7 @@
         ]
     },
     "description" : [
-        "This command used for configuring the webOS devices profile setting to work with CLI",
+        "This command used for configuring the webOS devices profile setting to work with CLI.",
         "",
         "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
