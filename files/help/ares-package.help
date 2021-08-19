@@ -17,7 +17,9 @@
             "",
             "SERVICE_DIR is a directory containing a valid services.json file.",
             "",
-            "APP_DIR or OUTPUT_DIR can be a relative or absolute path."
+            "APP_DIR or OUTPUT_DIR can be a relative or absolute path.",
+            "",
+            "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
           ]
         }
     ],
@@ -36,7 +38,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["check", "outdir", "app-exclude", "level", "help", "version", "verbose", "rom"],
+        "default" : ["check", "outdir", "app-exclude", "rom", "help", "version", "verbose", "level"],
         "check" : "-c, --check @TAB@ Check whether the app and service are valid, but don't package it",
         "outdir" : "-o, --outdir <OUTPUT_DIR> @TAB@ Use OUTPUT_DIR as the output directory",
         "no-minify" : "-n, --no-minify @TAB@ Skip the minification phase",
@@ -49,13 +51,14 @@
         "certificate" : "-crt, --certificate <CERTIFICATE> @TAB@ Add certificate.crt to pacakge",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "extraoption" : {
         "cmdOpt":"hidden",
         "default" : {
             "cmdOpt":"option",
-            "default" : ["force", "level"],
+            "default" : ["force"],
             "none" : ["pkgid", "pkgversion", "pkginfofile"],
             "force" : [
             "-f, --force @TAB@ Make .ipk package forcibly with same file structure in APP_DIR",
@@ -69,8 +72,7 @@
             ],
             "pkgid" : "-pi, --pkgid <ID> @TAB@ Set package id for packaging about only services\n@TAB@@TAB@ Cannot use with pkginfofile option",
             "pkgversion" : "-pv, --pkgversion <VERSION> @TAB@ Set package version for packaging about only services",
-            "pkginfofile" : "-pf, --pkginfofile <PKGINFOFILE> @TAB@ Set package meta by pkginfofile for packaging about only services\n@TAB@@TAB@ Cannot use with pkgid option",
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
+            "pkginfofile" : "-pf, --pkginfofile <PKGINFOFILE> @TAB@ Set package meta by pkginfofile for packaging about only services\n@TAB@@TAB@ Cannot use with pkgid option"
         }
     },
     "extraexample" : {

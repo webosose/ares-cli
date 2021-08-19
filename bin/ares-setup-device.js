@@ -396,9 +396,9 @@ function _queryDeviceInfo(selDevice, next) {
 
     inquirer.prompt(questions).then(function(answers) {
         if (answers.confirm) {
-            log.info("setup-device#interactiveInput()", "Saved!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "saved");
         } else {
-            log.info("setup-device#interactiveInput()", "Canceled!");
+            log.info("interactiveInput()#_queryDeviceInfo()", "canceled");
             return next(null, {
                 "msg": "Canceled"
             });
@@ -477,7 +477,7 @@ function search(next) {
         end = false;
 
     console.log("Searching...");
-    log.verbose("search()#timeout:", timeout);
+    log.verbose("search()", "timeout:", timeout);
     ssdp.start();
     ssdp.onDevice(function(device) {
         if (!device.headers || !device.headers.SERVER ||
@@ -503,7 +503,7 @@ function search(next) {
                     console.log("No devices is discovered.");
                     return outterNext();
                 }
-                log.verbose("search()#discovered:", discovered.length);
+                log.verbose("search()", "discovered:", discovered.length);
                 next(null, discovered);
             }, timeout);
         },
@@ -536,9 +536,9 @@ function _getParams(option) {
             const tokens = strParam.split('=');
             if (tokens.length === 2) {
                 params[tokens[0]] = tokens[1];
-                log.info("Inserting params ", tokens[0] + " = " + tokens[1]);
+                log.verbose("_getParams()", "Inserting params ", tokens[0] + " = " + tokens[1]);
             } else {
-                log.verbose('Ignoring invalid arguments:', strParam);
+                log.verbose("_getParams()", "Ignoring invalid arguments:", strParam);
             }
         }
     });
@@ -548,7 +548,7 @@ function _getParams(option) {
         params.default = (params.default === "true");
     }
 
-    log.info("getParams():", "params:", JSON.stringify(params));
+    log.silly("_getParams()", "params:", JSON.stringify(params));
     return params;
 }
 
@@ -570,8 +570,10 @@ function modifyDeviceInfo(next) {
             inDevice.name = argv[mode];
         }
 
+        log.info("modifyDeviceInfo()", "devicename:", inDevice.name, ", mode:", mode);
+
         if (inDevice.default !== undefined && mode === "modify") {
-            log.verbose('Ignoring invalid arguments : default');
+            log.verbose("modifyDeviceInfo()", "Ignoring invalid arguments:default");
             inDevice.default = undefined;
         }
 
@@ -670,6 +672,7 @@ function removeDeviceInfo(next) {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -684,7 +687,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

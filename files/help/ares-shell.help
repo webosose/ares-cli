@@ -13,7 +13,8 @@
         "",
         "DISPLAY_ID is working on multi-user profile.",
         "If not specified, target's host terminal will be opened.",
-        ""
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Open a device terminial",
@@ -25,7 +26,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["device", "run", "device-list", "display", "level", "help", "version", "verbose"],
+        "default" : ["device", "run", "device-list", "display", "help", "version", "verbose", "level"],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -35,6 +36,7 @@
         "display": "-dp,--display <DISPLAY_ID> @TAB@ Open shell of the specified display",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

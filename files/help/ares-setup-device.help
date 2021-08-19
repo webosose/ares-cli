@@ -26,9 +26,11 @@
               "  passphrase  [string]   passphrase used for generating ssh keys",
               "  password    [string]   password for ssh connection",
               "  default     [boolean]  set default device with 'add' option",
-              "",
-              "This command can set a default device.",
-              "If you don't specify a target device, the default device is used as the target device."
+            "",
+            "This command can set a default device.",
+            "If you don't specify a target device, the default device is used as the target device.",
+            "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
           ]
         }
     ],
@@ -60,12 +62,13 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["reset", "list", "listfull", "level", "help", "version", "verbose"],
+        "default" : ["reset", "list", "listfull", "help", "version", "verbose", "level"],
         "reset" : "-R, --reset @TAB@ Initialize the DEVICE list",
         "list" : "-l, --list @TAB@ List the available DEVICEs",
         "listfull" : "-F, --listfull @TAB@ List the available DEVICEs in detail",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

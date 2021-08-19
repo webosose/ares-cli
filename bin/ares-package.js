@@ -219,11 +219,9 @@ PalmPackage.prototype = {
             this.options.pkginfofile = this.argv.pkginfofile;
         }
     },
-
     
-
     setOutputDir: function(next) {
-        log.info("setOutputDir");
+        log.info("setOutputDir()");
 
         if (this.argv.outdir) {
             this.destination = this.argv.outdir;
@@ -240,7 +238,7 @@ PalmPackage.prototype = {
                 this.finish(errHndl.getErrMsg("NOT_DIRTYPE_PATH", this.destination));
             }
         } else {
-            log.verbose("creating directory '" + this.destination + "' ...");
+            log.verbose("setOutputDir()", "creating directory '" + this.destination + "' ...");
             mkdirp.sync(this.destination);
         }
         this.destination = fs.realpathSync(this.destination);
@@ -248,13 +246,13 @@ PalmPackage.prototype = {
     },
 
     checkInputDir: function(next) {
-        log.info("checkInputDir");
+        log.info("checkInputDir()");
         const packager = new packageLib.Packager(this.options);
         this.appCnt = packager.checkInputDirectories(this.argv.argv.remain, this.options, next);
     },
 
     packageApp: function(next) {
-        log.info("packageApp");
+        log.info("packageApp()");
         const packager = new packageLib.Packager(this.options);
         if(this.appCnt === 0) { // only service packaging
             if (Object.hasOwnProperty.call(this.options, 'pkginfofile') && Object.hasOwnProperty.call(this.options, 'pkgid')) {
@@ -302,6 +300,7 @@ PalmPackage.prototype = {
     },
 
     finish: function(err, value) {
+        log.info("finish()");
         if (err) {
             // handle err from getErrMsg()
             if (Array.isArray(err) && err.length > 0) {
@@ -316,7 +315,7 @@ PalmPackage.prototype = {
             }
             cliControl.end(-1);
         } else {
-            log.info('finish():', value);
+            log.verbose("finish()", "value:", value);
             if (value && value[value.length-1] && value[value.length-1].msg) {
                 console.log(value[value.length-1].msg);
             } else if (value && value.msg) {

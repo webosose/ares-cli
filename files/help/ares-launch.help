@@ -19,12 +19,13 @@
             "an app with id 'com.sdk.ares.hostedapp' is launched on the DEVICE",
             "and it opens the files in the directory.",
             "To close this app, use com.sdk.ares.hostedapp as APP_ID.",
-            ""
+            "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
         ]
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["device", "device-list", "close", "running", "display", "params", "hosted", "level", "help", "version", "verbose"],
+        "default" : ["device", "device-list", "close", "running", "display", "params", "hosted", "help", "version", "verbose", "level"],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -37,15 +38,8 @@
         "hosted" : "-H, --hosted <APP_DIR> @TAB@ Runs only an app without installation",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
-    },
-    "extraoption" : {
-        "cmdOpt":"hidden",
-        "default" : {
-            "cmdOpt":"option",
-            "default" : ["level"],
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
-        }
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "examples" : {
         "default" : [

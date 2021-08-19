@@ -35,7 +35,7 @@
         "  JOURNAL_FILE [string]   One of the file names from --file-list",
         "  OUTPUT_MODE  [string]   Output format (e.g., json, json-pretty, cat)",
         "  SAVED_FILE   [string]   File name or path to save logs",
-        ""
+        "  LEVEL        [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Follow the journal",
@@ -62,7 +62,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["output","save", "display", "level", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["output","save", "display", "device", "device-list", "help", "version", "verbose",  "level"],
         "output" : [
             "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
             "@TAB@ Must use with the options outputting logs"
@@ -82,6 +82,7 @@
         "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

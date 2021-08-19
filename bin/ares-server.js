@@ -107,9 +107,10 @@ function runServer() {
 
     if (!isNaN(argv.port)) {
         port = parseInt(argv.port);
-        log.verbose("runServer()#port:", port);
+        log.verbose("runServer()", "port:", port);
     }
 
+    log.info("runServer()", "appPath:", appPath, ", port:", port);
     async.waterfall([
         serverLib.runServer.bind(serverLib, appPath, port, _reqHandler),
         function(serverInfo, next) {
@@ -123,8 +124,10 @@ function runServer() {
                 async.series([
                     sdkenv.getEnvValue.bind(sdkenv, "BROWSER")
                 ], function(err, browserPath) {
-                    if (err)
+                    if (err) {
                         return next(err);
+                    }
+                    log.info("runServer()", "openUrl:", openUrl, ", browserPath :", browserPath[0]);
                     serverLib.openBrowser(openUrl, browserPath[0]);
                 });
             }
@@ -149,6 +152,7 @@ function runServer() {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -163,7 +167,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

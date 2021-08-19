@@ -13,11 +13,13 @@
         "This command launches Web Inspector for APP_ID or Node's Inspector for SERVICE_ID.",
         "",
         "APP_ID is an app id described in appinfo.json.",
-        "SERVICE_ID is a service id described in services.json."
+        "SERVICE_ID is a service id described in services.json.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["open", "device", "device-list", "display", "level", "help", "version", "verbose"],
+        "default" : ["open", "device", "device-list", "display", "help", "version", "verbose", "level"],
         "open" : "-o, --open @TAB@ Open url with a web browser",
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
@@ -27,15 +29,15 @@
         "display": "-dp,--display <DISPLAY_ID> @TAB@ Launches Inspector on the specified display",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "extraoption" : {
         "cmdOpt":"hidden",
         "default" : {
             "cmdOpt":"option",
             "default" : ["host-port", "level"],
-            "host-port" : "-P, --host-port @TAB@ Specify Host PC's port for remote Web/Node's Inspector",
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
+            "host-port" : "-P, --host-port @TAB@ Specify Host PC's port for remote Web/Node's Inspector"
         }
     },
     "examples" : {
