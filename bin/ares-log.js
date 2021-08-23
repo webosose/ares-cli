@@ -28,10 +28,6 @@ process.on('uncaughtException', function (err) {
     cliControl.end(-1);
 });
 
-if (process.argv.length === 2) {
-    process.argv.splice(2, 0, '--help');
-}
-
 const knownOpts = {
     "help":     Boolean,
     "version":  Boolean,
@@ -121,7 +117,7 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display", "level", "device"],
+const pmLogOptions = ["follow", "reverse", "lines", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
@@ -183,21 +179,23 @@ function showUnitList() {
 function checkCurrentDaemon() {
     log.info("checkCurrentDaemon()");
 
-    options.currentDaemon = appdata.getConfig(true).logDaemon;
+    options.currentDaemon = appdata.getConfig().logDaemon;
     return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
 }
 
 function switchDaemon() {
     log.info("switchDaemon()");
 
-    if (argv['switch-daemon'] === "true") {
+    if (argv['switch-daemon'] !== "journald" && argv['switch-daemon'] !== "pmlogd") {
         return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
     }
-    
-    // to-do: Input only in case of pmlogd, journald, and other error processing
-    // to-do: Write to the changed daemon in the config file
 
-    return finish(null, {msg : "Switched log daemon to " + argv['switch-daemon']});
+    const configData = appdata.getConfig();
+    configData.logDaemon = argv['switch-daemon'];
+    appdata.setConfig(configData);
+    options.currentDaemon = configData.logDaemon;
+
+    return finish(null, {msg : "Switched log daemon to " + options.currentDaemon});
 }
 
 function checkOption() {

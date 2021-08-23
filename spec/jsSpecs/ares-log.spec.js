@@ -13,23 +13,24 @@ const exec = require('child_process').exec,
 
 const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
-    logRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g;
+    journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g,
+    pmlogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g;
 
 let cmd,
     options,
     hasSession = false;
 
-beforeAll(function (done) {
+beforeAll(function(done) {
     cmd = common.makeCmd(aresCmd);
     common.removeOutDir(savedlogPath);
     common.getOptions()
-    .then(function(result){
+    .then(function(result) {
         options = result;
         done();
     });
 });
 
-afterAll(function (done) {
+afterAll(function(done) {
     common.removeOutDir(savedlogPath);
     done();
 });
@@ -51,7 +52,7 @@ describe(aresCmd + " -h -v", function() {
 describe(aresCmd, function() {
     it("Add device with ares-setup-device", function(done) {
         common.resetDeviceList()
-        .then(function(){
+        .then(function() {
             return common.addDeviceInfo();
         }).then(function(result) {
             expect(result).toContain(options.device);
@@ -81,7 +82,7 @@ describe(aresCmd + " -cd", function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain("Current log daemon is journald");
+            expect(stdout).toContain("Current log daemon is");
             done();
         });
     });
@@ -89,11 +90,11 @@ describe(aresCmd + " -cd", function() {
 
 describe(aresCmd + " -sd", function() {
     it("Print switch log daemon", function(done) {
-        exec(cmd + " -sd journald", function (error, stdout, stderr) {
+        exec(cmd + ` -sd ${options.logDaemon}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain("Switched log daemon to journald");
+            expect(stdout).toContain(`Switched log daemon to ${options.logDaemon}`);
             done();
         });
     });
@@ -123,91 +124,13 @@ describe(aresCmd + " -n 2", function() {
                 if (options.device === "emulator") {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
-            } else {
+            } else if (options.logDaemon === "journald") {
                 expect(stdout).not.toContain("[Info] Set target device : " + options.device);
                 expect(stdout).toContain("-- Journal begins at");
-                expect(stdout.match(logRegExp).length).toBe(2);
-            }
-            done();
-        });
-    });
-});
-
-describe(aresCmd + " -fl", function() {
-    it("Print .journal log file list", function(done) {
-        exec(cmd + " -fl", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                }
-            } else {
-                expect(stdout).toContain("system.journal");
-            }
-            done();
-        });
-    });
-});
-
-describe(aresCmd + " --file", function() {
-    it("Show log with --file option", function(done) {
-        exec(cmd + " --file system.journal", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                }
-            } else {
-                expect(stdout).toContain("-- Journal begins at");
-                expect(stdout.match(logRegExp).length > 0).toBeTrue();
-            }
-            done();
-        });
-    });
-
-    it("Show log with --file and --output option", function(done) {
-        exec(cmd + " --file system.journal --output json", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                }
-            } else {
-                expect(typeof JSON.parse(stdout.split("\n")[0])).toBe('object');
-            }
-            done();
-        });
-    });
-});
-
-describe(aresCmd + " -ul", function() {
-    it("Print unit list", function(done) {
-        exec(cmd + " -ul", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                }
-            } else {
-                expect(stdout).toContain("bootd.service");
-            }
-            done();
-        });
-    });
-});
-
-describe(aresCmd + " -ul -dp 1", function() {
-    it("Print unit list with dp option", function(done) {
-            exec(cmd + " -ul -dp 1", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                } else if (options.device !== "emulator" && !hasSession) {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: This device does not support multiple sessions");
-                }
-            } else {
-                expect(stdout).toContain("sam.service");
+                expect(stdout.match(journalLogRegExp).length).toBe(2);
+            } else if (options.logDaemon === "pmlogd") {
+                expect(stdout).not.toContain("[Info] Set target device : " + options.device);
+                expect(stdout.match(pmlogRegExp).length).toBe(2);
             }
             done();
         });
@@ -231,8 +154,107 @@ describe(aresCmd + "-n 2 -s logfile", function() {
     });
 });
 
+describe(aresCmd + " -fl", function() {
+    it("Print .journal log file list", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -fl", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain("system.journal");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " --file", function() {
+    it("Show log with --file option", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " --file system.journal", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain("-- Journal begins at");
+                expect(stdout.match(journalLogRegExp).length > 0).toBeTrue();
+            }
+            done();
+        });
+    });
+
+    it("Show log with --file and --output option", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " --file system.journal --output json", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(typeof JSON.parse(stdout.split("\n")[0])).toBe('object');
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " -ul", function() {
+    it("Print unit list", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -ul", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain("bootd.service");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " -ul -dp 1", function() {
+    it("Print unit list with dp option", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -ul -dp 1", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                } else if (options.device !== "emulator" && !hasSession) {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: This device does not support multiple sessions");
+                }
+            } else {
+                expect(stdout).toContain("sam.service");
+            }
+            done();
+        });
+    });
+});
+
 describe(aresCmd + " -n 1 -o json", function() {
     it("Show log with output option", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
         exec(cmd + " -n 1 -o json", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -249,7 +271,10 @@ describe(aresCmd + " -n 1 -o json", function() {
 
 describe(aresCmd + " -k", function() {
     it("Show kenel log with --kernel option", function(done) {
-            exec(cmd + " -k", function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -k", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if (options.device === "emulator") {
@@ -265,6 +290,9 @@ describe(aresCmd + " -k", function() {
 
 describe(aresCmd + " -b", function() {
     it("Show boot log with --boot option", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
         exec(cmd + " -b", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -282,6 +310,9 @@ describe(aresCmd + " -b", function() {
 describe(aresCmd + " --pid", function() {
     let pid;
     it("Get a pid from log", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
         const pidExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[(\d+)]:/;
             exec(cmd + " -n 1", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -298,7 +329,10 @@ describe(aresCmd + " --pid", function() {
         });        
     });
     it("Show log with --pid option", function(done) {
-            exec(cmd + ` --pid ${pid} -n 3`, function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + ` --pid ${pid} -n 3`, function (error, stdout, stderr) {
             const expectedPid = `[${pid}]`;
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -316,6 +350,9 @@ describe(aresCmd + " --pid", function() {
 
 describe(aresCmd + " --unit memorymanager", function() {
     it("Install sample ipk to device with ares-install", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
         const installCmd = common.makeCmd("ares-install");
         exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -331,6 +368,9 @@ describe(aresCmd + " --unit memorymanager", function() {
     });
 
     it("Launch sample App", function(done) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
         const launchCmd = common.makeCmd("ares-launch");
         exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -338,14 +378,17 @@ describe(aresCmd + " --unit memorymanager", function() {
             } else {
                 expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             }
-            setTimeout(function(){
+            setTimeout(function() {
                 done();
             }, 1000);
         });
     });
 
     it("Show log with --unit option", function(done) {
-            exec(cmd + " --unit memorymanager", function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " --unit memorymanager", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if (options.device === "emulator") {
@@ -363,7 +406,10 @@ describe(aresCmd + " --unit memorymanager", function() {
 
 describe(aresCmd +" -u sam -dp 1", function() {
     it("Show log with unit and dp option", function(done) {
-            exec(cmd + " -u sam -dp 1", function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -u sam -dp 1", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if (options.device === "emulator") {
@@ -383,7 +429,10 @@ describe(aresCmd +" -u sam -dp 1", function() {
 
 describe(aresCmd + " -S today", function() {
     it("Show log with --since option", function(done) {
-            exec(cmd + " -S today", function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -S today", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if (options.device === "emulator") {
@@ -399,7 +448,10 @@ describe(aresCmd + " -S today", function() {
 
 describe(aresCmd + " -U yesterday", function() {
     it("Show log with --until option", function(done) {
-            exec(cmd + " -U yesterday", function (error, stdout, stderr) {
+        if (options.logDaemon === "pmlogd") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        exec(cmd + " -U yesterday", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 if (options.device === "emulator") {
@@ -415,10 +467,10 @@ describe(aresCmd + " -U yesterday", function() {
 
 describe(aresCmd + " negative tc", function() {
     it("Not support option", function(done) {
-            exec(cmd + " -aaa", function (error, stdout, stderr) {
+        exec(cmd + " -aaa", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-log ERR! [Tips]: Journal daemon does not support the option <aaa>");
+                expect(stderr).toContain("daemon does not support the option <aaa>");
             }
             done();
         });
@@ -445,11 +497,13 @@ describe(aresCmd + " -f", function() {
             child.kill();
             if (options.device === "emulator") {
                 expect(result).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-            } else {
+            } else if (options.logDaemon === "journald") {
                 expect(result).toContain("-- Journal begins at");
-                expect(result.match(logRegExp).length > 0).toBeTrue();
+                expect(result.match(journalLogRegExp).length > 0).toBeTrue();
+            } else if (options.logDaemon === "pmlogd") {
+                expect(result.match(pmlogRegExp).length > 0).toBeTrue();
             }
-            done();
+                done();
         }, 1000);
     });
 });
@@ -474,12 +528,13 @@ describe(aresCmd + " -r", function() {
             child.kill();
             if (options.device === "emulator") {
                 expect(result).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-            } else {
-                expect(result).toContain('-- Journal begins at');
-                expect(result.match(logRegExp).length > 0).toBeTrue();
+            } else if (options.logDaemon === "journald") {
+                expect(result).toContain("-- Journal begins at");
+                expect(result.match(journalLogRegExp).length > 0).toBeTrue();
+            } else if (options.logDaemon === "pmlogd") {
+                expect(result.match(pmlogRegExp).length > 0).toBeTrue();
             }
             done();
         }, 1000);
     });
 });
-

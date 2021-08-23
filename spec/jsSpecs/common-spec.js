@@ -19,7 +19,8 @@ const options = {
     pkgId : "com.jasmine.web.app",
     pkgService : "com.jasmine.web.app.service",
     ipkFile : "com.jasmine.web.app_0.0.1_all.ipk",
-    ipkPath : path.join(__dirname, "..", "tempFiles",  "com.jasmine.web.app_0.0.1_all.ipk")
+    ipkPath : path.join(__dirname, "..", "tempFiles",  "com.jasmine.web.app_0.0.1_all.ipk"),
+    logDaemon : "journald"
 };
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -30,13 +31,15 @@ const knownOpts = {
     "device":  String,
     "ip":  String,
     "port": String,
-    "timeInterval": Number
+    "timeInterval": Number,
+    "logDaemon": String
 };
 const shortHands = {
     "d": ["--device"],
     "ip": ["--ip"],
     "port": ["--port"],
-    "ti": ["--timeInterval"]
+    "ti": ["--timeInterval"],
+    "logd": ["--logDaemon"]
 };
 
 commonSpec.getOptions = function() {
@@ -54,6 +57,9 @@ commonSpec.getOptions = function() {
         }
         if (argv.timeInterval) {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = argv.timeInterval;
+        }
+        if (argv.logDaemon) {
+            options.logDaemon = argv.logDaemon;
         }
 
         console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}, timeInterval : ${jasmine.DEFAULT_TIMEOUT_INTERVAL}`);
