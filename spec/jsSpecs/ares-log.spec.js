@@ -76,18 +76,6 @@ describe(aresCmd + " --device-list(-D)", function() {
     });
 });
 
-describe(aresCmd + " -cd", function() {
-    it("Print current log daemon", function(done) {
-        exec(cmd + " -cd", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).toContain("Current log daemon is");
-            done();
-        });
-    });
-});
-
 describe(aresCmd + " -sd", function() {
     it("Print switch log daemon", function(done) {
         exec(cmd + ` -sd ${options.logDaemon}`, function (error, stdout, stderr) {
@@ -95,6 +83,18 @@ describe(aresCmd + " -sd", function() {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(`Switched log daemon to ${options.logDaemon}`);
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " -cd", function() {
+    it("Print current log daemon", function(done) {
+        exec(cmd + " -cd", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(`Current log daemon is ${options.logDaemon}`);
             done();
         });
     });
@@ -503,7 +503,7 @@ describe(aresCmd + " -f", function() {
             } else if (options.logDaemon === "pmlogd") {
                 expect(result.match(pmlogRegExp).length > 0).toBeTrue();
             }
-                done();
+            done();
         }, 1000);
     });
 });
