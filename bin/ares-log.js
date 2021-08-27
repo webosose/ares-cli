@@ -20,7 +20,7 @@ const version = commonTools.version,
     setupDevice = commonTools.setupDevice,
     errHndl = commonTools.errMsg;
 
-const processName = path.basename(process.argv[1]).replace(/.js/, '');
+let processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
     log.error('uncaughtException', err.toString());
@@ -127,7 +127,10 @@ if (argv['device-list']) {
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
-    help.display(processName, appdata.getConfig(true).profile);
+    if (appdata.getConfig().logDaemon === "pmlogd") {
+        processName += "_pmlog";
+    }
+    help.display(processName, appdata.getConfig().profile);
     cliControl.end();
 } else if (argv['current-daemon']) {
     op = checkCurrentDaemon;

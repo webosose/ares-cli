@@ -1,0 +1,53 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-log(pmlogd) - Show or save logs of webOS apps and service",
+    "synopsis" : {
+        "default" : [
+            "ares-log [OPTION...]",
+            "ares-log [OPTION...] -f, --follow",
+            "ares-log [OPTION...] -r, --reverse",
+            "ares-log [OPTION...] -n, --lines <LINE>"
+        ]
+    },
+    "description" : [
+        "This command shows or saves logs of webOS apps and services using pmlogd",
+        "",
+        "LINE is number of logs lines"
+    ],
+    "examples" : [
+        "# Follow the journal",
+        "ares-log -f -d DEVICE",
+        "",
+        "# Number of journal entries to show",
+        "ares-log -n 10 -d DEVICE",
+        "",
+        "# Show logs reversely and save them to a log file",
+        "ares-log -r -s reverse.log -d DEVICE"
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["save", "device", "device-list", "help", "version", "verbose",  "level"],
+        "output" : [
+            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
+            "@TAB@ Must use with the options outputting logs"
+        ],
+        "save" : [
+            "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
+            "@TAB@ Must use with the options outputting logs"
+        ],
+        "display" : [
+            "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
+            "@TAB@ Must use with the unit and unit-list options"
+        ],
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
+            "@TAB@ If not specified, set to default device"
+        ],
+        "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
+        "help" : "-h, --help @TAB@ Display this help",
+        "version" : "-V, --version @TAB@ Display version info",
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
+    }
+}
