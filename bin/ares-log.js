@@ -127,7 +127,8 @@ if (argv['device-list']) {
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
-    if (appdata.getConfig().logDaemon === "pmlogd") {
+    const currentDaemon = appdata.getConfig().logDaemon;
+    if (currentDaemon === "pmlogd") {
         processName += "_pmlog";
     }
     help.display(processName, appdata.getConfig().profile);
@@ -183,7 +184,7 @@ function checkCurrentDaemon() {
     log.info("checkCurrentDaemon()");
 
     options.currentDaemon = appdata.getConfig().logDaemon;
-    return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
+    logLib.checkLogDaemon(options, finish);
 }
 
 function switchDaemon() {
@@ -198,7 +199,7 @@ function switchDaemon() {
     appdata.setConfig(configData);
     options.currentDaemon = configData.logDaemon;
 
-    return finish(null, {msg : "Switched log daemon to " + options.currentDaemon});
+    logLib.checkLogDaemon(options, finish);
 }
 
 function checkOption() {

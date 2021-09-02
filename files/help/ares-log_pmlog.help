@@ -11,15 +11,25 @@
         ]
     },
     "description" : [
-        "This command shows or saves logs of webOS apps and services using pmlogd",
+        "This command shows or saves logs of webOS apps and services using pmlogd.",
         "",
-        "LINE is number of logs lines"
+        "** Attributes **",
+        "  LINE         [integer]  Number of lines",
+        "  LOG_DAEMON   [string]   Name of log daemon (e.g., pmlogd, journald)",
+        "  SAVED_FILE   [string]   File name or path to save logs",
+        "  LEVEL        [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
-        "# Follow the journal",
+        "# Check the current log daemon",
+        "ares-log -cd -d DEVICE",
+        "",
+        "# Change the current log daemon to journald",
+        "ares-log -sd journald -d DEVICE",
+        "",
+        "# Follow the pmlog",
         "ares-log -f -d DEVICE",
         "",
-        "# Number of journal entries to show",
+        "# Number of pmlog entries to show",
         "ares-log -n 10 -d DEVICE",
         "",
         "# Show logs reversely and save them to a log file",
@@ -27,18 +37,16 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["save", "device", "device-list", "help", "version", "verbose",  "level"],
-        "output" : [
-            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
-            "@TAB@ Must use with the options outputting logs"
+        "default" : ["current-daemon", "switch-daemon","save", "device", "device-list", "help", "version", "verbose",  "level"],
+        "current-daemon" : [
+            "-cd, --current-daemon @TAB@ Check current log daemon on CLI and target device"
+        ],
+        "switch-daemon" : [
+            "-sd, --switch <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
         ],
         "save" : [
             "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
             "@TAB@ Must use with the options outputting logs"
-        ],
-        "display" : [
-            "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
-            "@TAB@ Must use with the unit and unit-list options"
         ],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",

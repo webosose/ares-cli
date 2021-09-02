@@ -82,7 +82,7 @@ describe(aresCmd + " -sd", function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`Switched log daemon to ${options.logDaemon}`);
+            expect(stdout).toContain(`Current log daemon is ${options.logDaemon} on CLI`);
             done();
         });
     });
@@ -94,7 +94,7 @@ describe(aresCmd + " -cd", function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`Current log daemon is ${options.logDaemon}`);
+            expect(stdout).toContain(`Current log daemon is ${options.logDaemon} on CLI`);
             done();
         });
     });
