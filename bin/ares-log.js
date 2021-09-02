@@ -104,12 +104,6 @@ log.verbose("argv", argv);
  * (If any other are remained, it's mean another parameters ares input),
  * each command of webOS CLI print help message with log message.
  */
-if (argv.level) {
-    delete argv.level;
-    if (argv.argv.remain.length === 0 && (Object.keys(argv)).length === 1) {
-        argv.help = true;
-    }
-}
 
 const options = {
     device: argv.device,
@@ -129,7 +123,7 @@ if (argv['device-list']) {
 } else if (argv.help) {
     const currentDaemon = appdata.getConfig().logDaemon;
     if (currentDaemon === "pmlogd") {
-        processName += "_pmlog";
+        processName += "-pmlogd";
     }
     help.display(processName, appdata.getConfig().profile);
     cliControl.end();
@@ -191,7 +185,7 @@ function switchDaemon() {
     log.info("switchDaemon()");
 
     if (argv['switch-daemon'] !== "journald" && argv['switch-daemon'] !== "pmlogd") {
-        return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
+        return finish(errHndl.getErrMsg("NOT_EXIST_LOGDAEMON"));
     }
 
     const configData = appdata.getConfig();
