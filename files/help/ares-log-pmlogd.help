@@ -42,7 +42,7 @@
             "-cd, --current-daemon @TAB@ Check current log daemon on CLI and target device"
         ],
         "switch-daemon" : [
-            "-sd, --switch <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
+            "-sd, --switch-daemon <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
         ],
         "save" : [
             "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
