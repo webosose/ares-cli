@@ -74,7 +74,7 @@
             "-cd, --current-daemon @TAB@ Check current log daemon on CLI and target device"
         ],
         "switch-daemon" : [
-            "-sd, --switch <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
+            "-sd, --switch-daemon <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
         ],
         "output" : [
             "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
