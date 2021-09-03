@@ -1,7 +1,7 @@
 {
     "display" : ["name", "synopsis", "options", "description", "examples"],
     "notab":["examples"],
-    "name" : "ares-log - Show or save logs of webOS apps and services",
+    "name" : "ares-log(journald) - Show or save logs of webOS apps and services",
     "synopsis" : {
         "default" : [
             "ares-log [OPTION...]",
@@ -33,11 +33,18 @@
         "  DATE         [string]   Date format (e.g., YYYY-MM-DD hh:mm:ss)",
         "  UNIT         [string]   One of the unit names from --unit-list",
         "  JOURNAL_FILE [string]   One of the file names from --file-list",
+        "  LOG_DAEMON   [string]   Name of log daemon (e.g., journald, pmlogd)",
         "  OUTPUT_MODE  [string]   Output format (e.g., json, json-pretty, cat)",
         "  SAVED_FILE   [string]   File name or path to save logs",
         "  LEVEL        [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
+        "# Check the current log daemon",
+        "ares-log -cd -d DEVICE",
+        "",
+        "# Change the current log daemon to pmlogd",
+        "ares-log -sd pmlogd -d DEVICE",
+        "",
         "# Follow the journal",
         "ares-log -f -d DEVICE",
         "",
@@ -62,7 +69,13 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["output","save", "display", "device", "device-list", "help", "version", "verbose",  "level"],
+        "default" : ["current-daemon", "switch-daemon", "output", "save", "display", "device", "device-list", "help", "version", "verbose",  "level"],
+        "current-daemon" : [
+            "-cd, --current-daemon @TAB@ Check current log daemon on CLI and target device"
+        ],
+        "switch-daemon" : [
+            "-sd, --switch-daemon <LOG_DAEMON>@TAB@ Change current log daemon to <LOG_DAEMON> on CLI"
+        ],
         "output" : [
             "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
             "@TAB@ Must use with the options outputting logs"

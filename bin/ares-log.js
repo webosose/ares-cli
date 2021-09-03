@@ -20,17 +20,13 @@ const version = commonTools.version,
     setupDevice = commonTools.setupDevice,
     errHndl = commonTools.errMsg;
 
-const processName = path.basename(process.argv[1]).replace(/.js/, '');
+let processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
 });
-
-if (process.argv.length === 2) {
-    process.argv.splice(2, 0, '--help');
-}
 
 const knownOpts = {
     "help":     Boolean,
@@ -108,12 +104,6 @@ log.verbose("argv", argv);
  * (If any other are remained, it's mean another parameters ares input),
  * each command of webOS CLI print help message with log message.
  */
-if (argv.level) {
-    delete argv.level;
-    if (argv.argv.remain.length === 0 && (Object.keys(argv)).length === 1) {
-        argv.help = true;
-    }
-}
 
 const options = {
     device: argv.device,
@@ -121,7 +111,7 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display", "level", "device"],
+const pmLogOptions = ["follow", "reverse", "lines", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
@@ -131,7 +121,11 @@ if (argv['device-list']) {
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
-    help.display(processName, appdata.getConfig(true).profile);
+    const currentDaemon = appdata.getConfig().logDaemon;
+    if (currentDaemon === "pmlogd") {
+        processName += "-pmlogd";
+    }
+    help.display(processName, appdata.getConfig().profile);
     cliControl.end();
 } else if (argv['current-daemon']) {
     op = checkCurrentDaemon;
@@ -183,21 +177,23 @@ function showUnitList() {
 function checkCurrentDaemon() {
     log.info("checkCurrentDaemon()");
 
-    options.currentDaemon = appdata.getConfig(true).logDaemon;
-    return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
+    options.currentDaemon = appdata.getConfig().logDaemon;
+    logLib.checkLogDaemon(options, finish);
 }
 
 function switchDaemon() {
     log.info("switchDaemon()");
 
-    if (argv['switch-daemon'] === "true") {
-        return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
+    if (argv['switch-daemon'] !== "journald" && argv['switch-daemon'] !== "pmlogd") {
+        return finish(errHndl.getErrMsg("NOT_EXIST_LOGDAEMON"));
     }
-    
-    // to-do: Input only in case of pmlogd, journald, and other error processing
-    // to-do: Write to the changed daemon in the config file
 
-    return finish(null, {msg : "Switched log daemon to " + argv['switch-daemon']});
+    const configData = appdata.getConfig();
+    configData.logDaemon = argv['switch-daemon'];
+    appdata.setConfig(configData);
+    options.currentDaemon = configData.logDaemon;
+
+    logLib.checkLogDaemon(options, finish);
 }
 
 function checkOption() {
