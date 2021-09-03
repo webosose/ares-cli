@@ -14,7 +14,7 @@ const exec = require('child_process').exec,
 const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
     journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g,
-    pmlogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g;
+    pmLogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g;
 
 let cmd,
     options,
@@ -138,7 +138,7 @@ describe(aresCmd + " -n 2", function() {
                 expect(stdout.match(journalLogRegExp).length).toBe(2);
             } else if (targetLogDaemon === "pmlogd") {
                 expect(stdout).not.toContain("[Info] Set target device : " + options.device);
-                expect(stdout.match(pmlogRegExp).length).toBe(2);
+                expect(stdout.match(pmLogRegExp).length).toBe(2);
             }
             done();
         });
@@ -509,7 +509,7 @@ describe(aresCmd + " -f", function() {
                 expect(result).toContain("-- Journal begins at");
                 expect(result.match(journalLogRegExp).length > 0).toBeTrue();
             } else if (targetLogDaemon === "pmlogd") {
-                expect(result.match(pmlogRegExp).length > 0).toBeTrue();
+                expect(result.match(pmLogRegExp).length > 0).toBeTrue();
             }
             done();
         }, 1000);
@@ -540,7 +540,7 @@ describe(aresCmd + " -r", function() {
                 expect(result).toContain("-- Journal begins at");
                 expect(result.match(journalLogRegExp).length > 0).toBeTrue();
             } else if (targetLogDaemon === "pmlogd") {
-                expect(result.match(pmlogRegExp).length > 0).toBeTrue();
+                expect(result.match(pmLogRegExp).length > 0).toBeTrue();
             }
             done();
         }, 1000);
