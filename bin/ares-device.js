@@ -35,6 +35,12 @@ if (process.argv.length === 2) {
 const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
+    "resource-monitor": Boolean,
+    // resource-monitor parameter
+    "list" : Boolean,
+    "app" : [String, null],
+    "service" : [String, null],
+    "interval" : Number,
     "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
@@ -47,6 +53,7 @@ const knownOpts = {
 const shortHands = {
     "i": ["--system-info"],
     "s": ["--session-info"],
+    "r": ["--resource-monitor"],
     "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
@@ -80,9 +87,10 @@ if (argv.level) {
 }
 
 const options = {
+    interval : argv.interval || 0,
     device: argv.device,
     display : argv.display || 0,
-    outputPath : argv.argv.remain[0] || null,
+    outputPath : argv.argv.remain[0] || null
 };
 
 let op;
@@ -97,6 +105,8 @@ if (argv['device-list']) {
     op = getDeviceInfo;
 } else if (argv['session-info']) {
     op = getSessionInfo;
+} else if (argv['resource-monitor']) {
+    op = getResourceMonitor;
 } else if (argv['capture-screen']) {
     op = captureScreen;
 } else {
@@ -132,6 +142,14 @@ function getDeviceInfo() {
 
 function getSessionInfo() {
     deviceLib.sessionInfo(options, finish);
+}
+
+function getResourceMonitor() {
+    if(argv.list) {
+        deviceLib.resourceList(options, finish);
+    } else {
+        deviceLib.resourceMonitor(options, finish);
+    }
 }
 
 function captureScreen() {
