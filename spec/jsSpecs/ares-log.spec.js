@@ -162,6 +162,44 @@ describe(aresCmd + "-n 2 -s logfile", function() {
     });
 });
 
+describe(aresCmd + " -cl", function() {
+    it("Print context list", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of journald, skip this test case");
+        }
+        exec(cmd + " -cl", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain("Context 'WAM' = ");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " -sl WAM debug", function() {
+    it("Change specific context log level", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of journald, skip this test case");
+        }
+        exec(cmd + " -sl WAM debug", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain("Setting context level for \'WAM\'");
+            }
+            done();
+        });
+    });
+});
+
 describe(aresCmd + " -fl", function() {
     it("Print .journal log file list", function(done) {
         if (targetLogDaemon === "pmlogd") {
