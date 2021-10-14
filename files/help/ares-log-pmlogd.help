@@ -18,7 +18,7 @@
         "  LOG_DAEMON     [string]   Name of log daemon (e.g., pmlogd, journald)",
         "  SAVED_FILE     [string]   File name or path to save logs",
         "  CONTEXT        [string]   Name of logging context",
-        "  CONTEXT_LEVEL  [string]   Priority of specific context logs",
+        "  CONTEXT_LEVEL  [string]   Priority of specific context logs (e.g., info, notice, warning, err)",
         "  LEVEL          [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
@@ -35,35 +35,41 @@
         "ares-log -n 10 -d DEVICE",
         "",
         "# Show logs reversely and save them to a log file",
-        "ares-log -r -s reverse.log -d DEVICE"
+        "ares-log -r -s reverse.log -d DEVICE",
+        "",
+        "# Show context list on DEVICE",
+        "ares-log -cl -d DEVICE",
+        "",
+        "# Set the log level for a specific context to debug",
+        "ares-log -sl WAM debug -d DEVICE"
     ],
     "options" : {
         "cmdOpt":"option",
         "default" : ["current-daemon", "switch-daemon", "save", "context-list", "set-level", "device", "device-list", "help", "version", "verbose",  "level"],
         "current-daemon" : [
-            "-cd, --current-daemon @TAB@\tCheck current log daemon on CLI and target device"
+            "-cd, --current-daemon @TAB@ \tCheck current log daemon on CLI and target device"
         ],
         "switch-daemon" : [
-            "-sd, --switch-daemon <LOG_DAEMON> @TAB@\tChange current log daemon to <LOG_DAEMON> on CLI"
+            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ \tChange current log daemon to <LOG_DAEMON> on CLI"
         ],
         "save" : [
-            "-s, --save <SAVED_FILE> @TAB@\tSave logs to SAVED_FILE",
-            "@TAB@\tMust use with the options outputting logs"
+            "-s, --save <SAVED_FILE> @TAB@ \tSave logs to SAVED_FILE",
+            "@TAB@ \tMust use with the options outputting logs"
         ],
         "context-list" : [
-            "-cl, --context-list @TAB@\tList the contexts and log level"
+            "-cl, --context-list @TAB@ \tList the contexts and log level"
         ],
         "set-level" : [
-            "-sl, --set-level <CONTEXT> <CONTEXT_LEVEL> @TAB@Set the log level of CONTEXT to CONTEXT_LEVEL"
+            "-sl, --set-level <CONTEXT> <CONTEXT_LEVEL> @TAB@ Set the log level of CONTEXT to CONTEXT_LEVEL"
         ],
         "device" : [
-            "-d, --device <DEVICE> @TAB@\tSpecify DEVICE to use",
-            "@TAB@\tIf not specified, set to default device"
+            "-d, --device <DEVICE> @TAB@ \tSpecify DEVICE to use",
+            "@TAB@ \tIf not specified, set to default device"
         ],
-        "device-list" : "-D, --device-list @TAB@\tList the available DEVICEs",
-        "help" : "-h, --help @TAB@\tDisplay this help",
-        "version" : "-V, --version @TAB@\tDisplay version info",
-        "verbose" : "-v @TAB@\tDisplay this verbose log",
-        "level" : "--level <LEVEL> @TAB@\tSet log LEVEL and display log as set LEVEL"
+        "device-list" : "-D, --device-list @TAB@ \tList the available DEVICEs",
+        "help" : "-h, --help @TAB@ \tDisplay this help",
+        "version" : "-V, --version @TAB@ \tDisplay version info",
+        "verbose" : "-v @TAB@ \tDisplay this verbose log",
+        "level" : "--level <LEVEL> @TAB@ \tSet log LEVEL and display log as set LEVEL"
     }
 }
