@@ -36,10 +36,8 @@ const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
     "resource-monitor": Boolean,
-    // resource-monitor parameter
     "list" : Boolean,
-    "app" : [String, null],
-    "service" : [String, null],
+    // resource-monitor parameter
     "interval" : Number,
     "capture-screen" : Boolean,
     "display" : Number,
@@ -87,7 +85,6 @@ if (argv.level) {
 }
 
 const options = {
-    interval : argv.interval || 0,
     device: argv.device,
     display : argv.display || 0,
     outputPath : argv.argv.remain[0] || null
@@ -145,7 +142,11 @@ function getSessionInfo() {
 }
 
 function getResourceMonitor() {
+    options.interval = argv.interval || 0;
     if(argv.list) {
+        deviceLib.resourceList(options, finish);
+    } else if (argv.argv.remain.length !== 0) {
+        options.id = argv.argv.remain[0];
         deviceLib.resourceList(options, finish);
     } else {
         deviceLib.resourceMonitor(options, finish);
