@@ -103,6 +103,172 @@ describe(aresCmd, function() {
         });
     });
 });
+describe(aresCmd, function() {
+    it('Install sample ipk to device with ares-install', function(done) {
+        const installCmd = common.makeCmd('ares-install');
+        exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("Success", stderr);
+            setTimeout(function(){
+                done();
+            },3000);
+        });
+    });
+});
+
+describe(aresCmd + ' --resource-monitor(-r)', function() {
+    it('Print all system resource', function(done) {
+        exec(cmd + " -r", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("cpu0");
+                expect(stdout).toContain("memory");
+            }
+            done();
+        });
+    });
+
+    it('Print all system resource with --interval', function(done) {
+        const child = exec(cmd + " -r --interval 1");
+        let stdoutData;
+        child.stdout.on('data', function (data) {
+            stdoutData += data;
+        });
+
+        child.stderr.on('data', function (data) {
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            expect(data).toBeNull();
+        });
+
+        setTimeout(() => {
+            child.kill();
+            const regCpu = /cpu0/g;
+            const matchedCPU = ((stdoutData || '').match(regCpu) || []).length;
+            expect(matchedCPU).toBeGreaterThan(3);
+
+            const regMem= /memory/g;
+            const matchedMem = ((stdoutData || '').match(regMem) || []).length;
+            expect(matchedMem).toBeGreaterThan(3);
+            done();
+        }, 6000);
+    });
+
+    it('Print no running app/service message', function(done) {
+        exec(cmd + " -r --list", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("There is no runnig app/service");
+            }
+            done();
+        });
+    });
+});
+
+// Install sample app for resource-monitor option.
+describe(aresCmd, function() {
+    it('Launch sample App', function(done) {
+        const launchCmd = common.makeCmd('ares-launch');
+        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+            setTimeout(function(){
+                done();
+            },3000);
+        });
+    });
+});
+
+describe(aresCmd + ' --resource-monitor(-r)', function() {
+    it('Print running app process resource', function(done) {
+        exec(cmd + " -r --list", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain(options.pkgId, error);
+                expect(stdout).toContain("PID");
+                expect(stdout).toContain("CPU");
+                expect(stdout).toContain("MEMORY");
+            }
+            done();
+        });
+    });
+
+    it('Print running app process resource with interval', function(done) {
+        const child = exec(cmd + " -r --list --interval 1");
+        let stdoutData;
+        child.stdout.on('data', function (data) {
+            stdoutData += data;
+        });
+
+        child.stderr.on('data', function (data) {
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            expect(data).toBeNull();
+        });
+
+        setTimeout(() => {
+            child.kill();
+            const regId = new RegExp(options.pkgId, 'g');
+            const matchedApp = ((stdoutData || '').match(regId) || []).length;
+            expect(matchedApp).toBeGreaterThan(3);
+            done();
+        }, 6000);
+    });
+
+    it('Print an app process with appID', function(done) {
+        exec(cmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain(options.pkgId);
+                expect(stdout).toContain("PID");
+            }
+            done();
+        });
+    });
+
+    it('Print an app process that is not running', function(done) {
+        exec(cmd + ` -r com.test.app`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain("com.test.app is not running");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' --remove(-r)', function() {
+    it('Remove installed sample app', function(done) {
+        const installCmd = common.makeCmd('ares-install');
+        exec(installCmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(`Removed package ${options.pkgId}`, stderr);
+            done();
+        });
+    });
+});
 
 describe(aresCmd + ' --capture-screen(-c)', function() {
     let generatedFile = "";

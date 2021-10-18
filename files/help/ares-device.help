@@ -13,6 +13,11 @@
         "default": [
             "This command displays the device information and supports screen capture.",
             "",
+            "** Attributes of RESOURCE MONITOR **",
+            "  --interval     [number]   Set inverval time (second)",
+            "  --list         [boolean]  Display all running app and service CPU and memory usage",
+            "  ID             [string]   Specify running app or service ID",
+            "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
             "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
             "",
@@ -21,9 +26,13 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
+        "default" : ["system", "session", "resource", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
+        "resource" : [
+            "-r, --resource-monitor <ATTRIBUTES> @TAB@ Display the device CPU and memory information",
+            "@TAB@ \"--interval\", \"--list\", \"ID\" can be set as <ATTRIBUTES>"
+        ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
         "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture screen option",
         "device" : [
@@ -43,6 +52,15 @@
             "",
             "# Display session information",
             "ares-device -s -d DEVICE",
+            "",
+            "# Display cpu and memory usage with interval",
+            "ares-device -r --interval 1 -d DEVICE",
+            "",
+            "# Display cpu and memory usage of all running app and service",
+            "ares-device -r --list --interval 1 -d DEVICE",
+            "",
+            "# Display cpu and memory usage of specified running app",
+            "ares-device -r com.examples.app --interval 1 -d DEVICE",
             "",
             "# Capture the screen of display 1 as screen.png",
             "ares-device -c screen.png -dp 1 -d DEVICE",

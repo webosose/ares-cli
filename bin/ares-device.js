@@ -144,12 +144,12 @@ function getSessionInfo() {
 function getResourceMonitor() {
     options.interval = argv.interval || 0;
     if(argv.list) {
-        deviceLib.resourceList(options, finish);
+        deviceLib.resourceProcessList(options, finish);
     } else if (argv.argv.remain.length !== 0) {
         options.id = argv.argv.remain[0];
-        deviceLib.resourceList(options, finish);
+        deviceLib.resourceProcessList(options, finish);
     } else {
-        deviceLib.resourceMonitor(options, finish);
+        deviceLib.resourceSystem(options, finish);
     }
 }
 
