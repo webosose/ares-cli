@@ -148,13 +148,14 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
 
         setTimeout(() => {
             child.kill();
-            const regCpu = /cpu0/g;
-            const matchedCPU = ((stdoutData || '').match(regCpu) || []).length;
-            expect(matchedCPU).toBeGreaterThan(3);
+            // Check the menu item count in interval result
+            const regCPU = /cpu0/g,
+                regMemory= /memory/g,
+                matchedCPU = ((stdoutData || '').match(regCPU) || []).length,
+                matchedMemory = ((stdoutData || '').match(regMemory) || []).length;
 
-            const regMem= /memory/g;
-            const matchedMem = ((stdoutData || '').match(regMem) || []).length;
-            expect(matchedMem).toBeGreaterThan(3);
+            expect(matchedCPU).toBeGreaterThan(3);
+            expect(matchedMemory).toBeGreaterThan(3);
             done();
         }, 6000);
     });

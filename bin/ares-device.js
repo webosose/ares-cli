@@ -36,8 +36,8 @@ const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
     "resource-monitor": Boolean,
-    "list" : Boolean,
     // resource-monitor parameter
+    "list" : Boolean,
     "interval" : Number,
     "capture-screen" : Boolean,
     "display" : Number,
@@ -142,13 +142,19 @@ function getSessionInfo() {
 }
 
 function getResourceMonitor() {
-    options.interval = argv.interval || 0;
-    if(argv.list) {
+    options.interval = argv.interval;
+    if (options.interval <= 0) {
+        finish(errHndl.getErrMsg("INVALID_ARGV"));
+    }
+    if (argv.list) {
+        // Print all running app and service's resource usage
         deviceLib.resourceProcessList(options, finish);
     } else if (argv.argv.remain.length !== 0) {
+        // Print specified AppID or Service ID in argv
         options.id = argv.argv.remain[0];
         deviceLib.resourceProcessList(options, finish);
     } else {
+        // Print all CPU and memory usage
         deviceLib.resourceSystem(options, finish);
     }
 }
