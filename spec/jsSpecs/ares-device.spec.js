@@ -113,7 +113,7 @@ describe(aresCmd, function() {
             expect(stdout).toContain("Success", stderr);
             setTimeout(function(){
                 done();
-            },3000);
+            }, 3000);
         });
     });
 });
@@ -185,7 +185,7 @@ describe(aresCmd, function() {
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
             setTimeout(function(){
                 done();
-            },3000);
+            }, 3000);
         });
     });
 });
