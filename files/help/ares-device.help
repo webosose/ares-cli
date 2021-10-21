@@ -14,6 +14,9 @@
         "default": [
             "This command displays the device information and supports screen capture.",
             "",
+            "APP_ID is an app id described in appinfo.json.",
+            "SERVICE_ID is a service id described in services.json.",
+            "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
             "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
             "",
