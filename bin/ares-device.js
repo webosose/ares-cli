@@ -147,12 +147,18 @@ function getResourceMonitor() {
     options.interval = argv["time-interval"] || null;
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
         if (!argv["time-interval"]) {
-            return finish(errHndl.getErrMsg("INVALID_ARGV"));
+            // When user does not give the time-interval
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
+        } else if (argv.argv.original.indexOf(options.interval.toString()) === -1) {
+            // nopt set default value "1" when user puts only "-t" option without value
+            // Check the default value exist in argv.original or not
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         }
         if (options.interval <= 0) {
-            return finish(errHndl.getErrMsg("INVALID_ARGV"));
+            return finish(errHndl.getErrMsg("INVALID_INTERVAL"));
         }
     }
+    log.info("getResourceMonitor()", "interval:", options.interval);
 
     if (argv.list) {
         // Print all running app and service's resource usage
