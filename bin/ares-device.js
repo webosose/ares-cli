@@ -147,11 +147,12 @@ function getResourceMonitor() {
     options.interval = argv["time-interval"] || null;
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
         if (!argv["time-interval"]) {
-            // When user does not give the time-interval
+            // when user does not give the time-interval
+            // for example : ares-device -r -t -d target
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         } else if (argv.argv.original.indexOf(options.interval.toString()) === -1) {
             // nopt set default value "1" when user puts only "-t" option without value
-            // Check the default value exist in argv.original or not
+            // for example : ares-device -r t
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         }
         if (options.interval <= 0) {
@@ -161,14 +162,14 @@ function getResourceMonitor() {
     log.info("getResourceMonitor()", "interval:", options.interval);
 
     if (argv.list) {
-        // Print all running app and service's resource usage
+        // print all running app and service's resource usage
         deviceLib.processResource(options, finish);
     } else if (argv.argv.remain.length !== 0) {
-        // Print specified AppID or ServiceID in argv
+        // print specified AppID or ServiceID in argv
         options.id = argv.argv.remain[0];
         deviceLib.processResource(options, finish);
     } else {
-        // Print all CPUs and memories usage
+        // print all CPUs and memories usage
         deviceLib.systemResource(options, finish);
     }
 }

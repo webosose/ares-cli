@@ -7,15 +7,15 @@
         "default" : [
             "ares-device",
             "ares-device [OPTION...]",
-            "ares-device --resource-monitor <APP_ID> or <SERVICE_ID>"
+            "ares-device --resource-monitor <APP_ID || SERVICE_ID>"
         ]
     },
     "description" : {
         "default": [
             "This command displays the device information and supports screen capture.",
             "",
-            "APP_ID is an app id described in appinfo.json.",
-            "SERVICE_ID is a service id described in services.json.",
+            "APP_ID is ID of the specific app for display its resource usage.",
+            "SERVICE_ID ID of the specific service for display its resource usage.",
             "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
             "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
@@ -38,7 +38,10 @@
             "@TAB@ Use it with resource-monitor option"
         ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
-        "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture screen option",
+        "display" : [
+            "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID",
+            "@TAB@ Use it with capture screen option"
+        ],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -61,10 +64,10 @@
             "ares-device -r -t 1 -d DEVICE",
             "",
             "# Display CPUs and memories usage of running app and service",
-            "ares-device -r -l -t 1 -d DEVICE",
+            "ares-device -r -l -t 3 -d DEVICE",
             "",
             "# Display CPUs and memories usage of specified running app",
-            "ares-device -r com.examples.app -t 1 -d DEVICE",
+            "ares-device -r com.examples.app -t 5 -d DEVICE",
             "",
             "# Capture the screen of display 1 as screen.png",
             "ares-device -c screen.png -dp 1 -d DEVICE",
