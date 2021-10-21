@@ -35,6 +35,10 @@ if (process.argv.length === 2) {
 const knownOpts = {
     "system-info": Boolean,
     "session-info": Boolean,
+    "resource-monitor": Boolean,
+    // resource-monitor parameter
+    "list" : Boolean,
+    "time-interval" : Number,
     "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
@@ -47,6 +51,9 @@ const knownOpts = {
 const shortHands = {
     "i": ["--system-info"],
     "s": ["--session-info"],
+    "r": ["--resource-monitor"],
+    "l": ["--list"],
+    "t": ["--time-interval"],
     "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
@@ -82,7 +89,7 @@ if (argv.level) {
 const options = {
     device: argv.device,
     display : argv.display || 0,
-    outputPath : argv.argv.remain[0] || null,
+    outputPath : argv.argv.remain[0] || null
 };
 
 let op;
@@ -97,6 +104,8 @@ if (argv['device-list']) {
     op = getDeviceInfo;
 } else if (argv['session-info']) {
     op = getSessionInfo;
+} else if (argv['resource-monitor']) {
+    op = getResourceMonitor;
 } else if (argv['capture-screen']) {
     op = captureScreen;
 } else {
@@ -132,6 +141,37 @@ function getDeviceInfo() {
 
 function getSessionInfo() {
     deviceLib.sessionInfo(options, finish);
+}
+
+function getResourceMonitor() {
+    options.interval = argv["time-interval"] || null;
+    if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
+        if (!argv["time-interval"]) {
+            // when user does not give the time-interval
+            // for example : ares-device -r -t -d target
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
+        } else if (argv.argv.original.indexOf(options.interval.toString()) === -1) {
+            // nopt set default value "1" when user puts only "-t" option without value
+            // for example : ares-device -r t
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
+        }
+        if (options.interval <= 0) {
+            return finish(errHndl.getErrMsg("INVALID_INTERVAL"));
+        }
+    }
+    log.info("getResourceMonitor()", "interval:", options.interval);
+
+    if (argv.list) {
+        // print all running app and service's resource usage
+        deviceLib.processResource(options, finish);
+    } else if (argv.argv.remain.length !== 0) {
+        // print specified AppID or ServiceID in argv
+        options.id = argv.argv.remain[0];
+        deviceLib.processResource(options, finish);
+    } else {
+        // print all CPUs and memories usage
+        deviceLib.systemResource(options, finish);
+    }
 }
 
 function captureScreen() {
