@@ -58,7 +58,10 @@ const knownOpts = {
     // unit options
     "unit":     String,
     "unit-list": Boolean,
-    "display": [String, null]
+    "display": [String, null],
+    // context options
+    "context-list": Boolean,
+    "set-level": String
 };
 
 const shortHands = {
@@ -85,7 +88,9 @@ const shortHands = {
     "fl": ["--file-list"],
     "u" : ["--unit"],
     "ul" : ["--unit-list"],
-    "dp" : ["--display"]
+    "dp" : ["--display"],
+    "cl" : ["--context-list"],
+    "sl" : ["--set-level"]
 };
 
 const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js'*/);
@@ -111,7 +116,7 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "save", "level", "device"],
+const pmLogOptions = ["follow", "reverse", "lines", "context-list", "set-level", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
@@ -135,6 +140,8 @@ if (argv['device-list']) {
     op = showUnitList;
 } else if (argv['file-list'] || argv.file) {
     op = readMode;
+} else if (argv['context-list'] || argv['set-level']) {
+    op = contextMode;
 } else {
     op = showLog;
 }
@@ -172,6 +179,13 @@ function showUnitList() {
 
     checkOption();
     logLib.printUnitList(options, finish);
+}
+
+function contextMode() {
+    log.info("contextMode()");
+
+    checkOption();
+    logLib.contextMode(options, finish);
 }
 
 function checkCurrentDaemon() {

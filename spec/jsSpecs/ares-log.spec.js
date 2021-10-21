@@ -14,7 +14,10 @@ const exec = require('child_process').exec,
 const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
     journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g,
-    pmLogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g;
+    pmLogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g,
+    testAppId = "com.logtest.web.app",
+    testAppFileName = "com.logtest.web.app_1.0.0_all.ipk",
+    testAppPath = path.join(__dirname, "..", "tempFiles", testAppFileName);
 
 let cmd,
     options,
@@ -108,8 +111,8 @@ describe(aresCmd + " -sd", function() {
     });
 });
 
-describe('Check if there are sessions on the device', function() {
-    it('Check session', function(done) {
+describe('Set and check configuration for this test', function() {
+    it('Check if there are sessions on the device', function(done) {
         const deviceCmd = common.makeCmd('ares-device');
         exec(deviceCmd + ` -s ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -118,6 +121,18 @@ describe('Check if there are sessions on the device', function() {
 
             if (stdout.includes("sessionId")) {
                 hasSession = true;
+            }
+            done();
+        });
+    });
+
+    it("Install sample app to device with ares-install", function(done) {
+        const installCmd = common.makeCmd("ares-install");
+        exec(installCmd + ` ${testAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            } else {
+                expect(stdout).toContain("Success", stderr);
             }
             done();
         });
@@ -156,6 +171,78 @@ describe(aresCmd + "-n 2 -s logfile", function() {
             } else {
                 expect(fs.existsSync(savedlogPath)).toBe(true);
                 expect(stdout).toContain("Created");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " -cl", function() {
+    it("Launch sample App", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of pmlogd, skip this test case");
+        }
+        const launchCmd = common.makeCmd("ares-launch");
+        exec(launchCmd + ` ${testAppId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            } else {
+                expect(stdout).toContain(`Launched application ${testAppId}`, error);
+            }
+            setTimeout(function() {
+                done();
+            }, 1000);
+        });
+    });
+
+    it("Print context list", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of journald, skip this test case");
+        }
+        exec(cmd + " -cl", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain(`${testAppId} = `);
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ` -sl ${testAppId} debug`, function() {
+    it("Change specific context log level", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of journald, skip this test case");
+        }
+        exec(cmd + ` -sl ${testAppId} debug`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain(`Setting context level for \'${testAppId}\'`);
+            }
+            done();
+        });
+    });
+
+    it("Print context list", function(done) {
+        if (targetLogDaemon === "journald") {
+            pending("In case of journald, skip this test case");
+        }
+        exec(cmd + " -cl", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                expect(stdout).toContain(`${testAppId} = debug`);
             }
             done();
         });
@@ -357,34 +444,16 @@ describe(aresCmd + " --pid", function() {
 });
 
 describe(aresCmd + " --unit memorymanager", function() {
-    it("Install sample ipk to device with ares-install", function(done) {
-        if (targetLogDaemon === "pmlogd") {
-            pending("In case of pmlogd, skip this test case");
-        }
-        const installCmd = common.makeCmd("ares-install");
-        exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-                if (options.device === "emulator") {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
-                }
-            } else {
-                expect(stdout).toContain("Success", stderr);
-            }
-            done();
-        });
-    });
-
     it("Launch sample App", function(done) {
         if (targetLogDaemon === "pmlogd") {
             pending("In case of pmlogd, skip this test case");
         }
         const launchCmd = common.makeCmd("ares-launch");
-        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+        exec(launchCmd + ` ${testAppId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             } else {
-                expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+                expect(stdout).toContain(`Launched application ${testAppId}`, error);
             }
             setTimeout(function() {
                 done();
@@ -544,5 +613,19 @@ describe(aresCmd + " -r", function() {
             }
             done();
         }, 1000);
+    });
+});
+
+describe('Set default configuration', function() {
+    it("Install sample app to device with ares-install", function(done) {
+        const installCmd = common.makeCmd("ares-install");
+        exec(installCmd + ` -r ${testAppPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            } else {
+                expect(stdout).toContain(`Removed package ${testAppId}`, stderr);
+            }
+            done();
+        });
     });
 });
