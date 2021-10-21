@@ -25,13 +25,13 @@
         "default" : ["system", "session", "resource", "list", "interval", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
-        "resource" : "-r, --resource-monitor @TAB@ Display the device CPU and memory information",
+        "resource" : "-r, --resource-monitor @TAB@ Display the device CPUs and memories information",
         "list" : [
-            "-l, --list @TAB@ Display all running app and service CPU and memory usage",
+            "-l, --list @TAB@ Display CPUs and memories usage of running apps and services",
             "@TAB@ Use it with resource-monitor option"
         ],
         "interval" : [
-            "-t, --time-interval @TAB@ Set the time for the output cycle.(seconds)",
+            "-t, --time-interval @TAB@ Set the time for the output cycle(seconds)",
             "@TAB@ Use it with resource-monitor option"
         ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
@@ -54,13 +54,13 @@
             "# Display session information",
             "ares-device -s -d DEVICE",
             "",
-            "# Display CPU and memory usage with time-interval",
+            "# Display CPUs and memories usage with time interval",
             "ares-device -r -t 2 -d DEVICE",
             "",
-            "# Display CPU and memory usage of all running app and service",
+            "# Display CPUs and memories usage of running app and service",
             "ares-device -r -l -t 2 -d DEVICE",
             "",
-            "# Display CPU and memory usage of specified running app",
+            "# Display CPUs and memories usage of specified running app",
             "ares-device -r com.examples.app -t 2 -d DEVICE",
             "",
             "# Capture the screen of display 1 as screen.png",

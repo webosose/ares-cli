@@ -10,7 +10,10 @@ const exec = require('child_process').exec,
     common = require('./common-spec');
 
 const captureDirPath = path.join(__dirname, "..", "tempFiles", "deviceCapture"),
-    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
+    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png"),
+    logtestAppId = "com.logtest.web.app",
+    logtestAppFileName = "com.logtest.web.app_1.0.0_all.ipk",
+    logtestAppPath = path.join(__dirname, "..", "tempFiles", logtestAppFileName);
 
 const aresCmd = 'ares-device';
 
@@ -105,9 +108,21 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd, function() {
+    const installCmd = common.makeCmd('ares-install');
     it('Install sample ipk to device with ares-install', function(done) {
-        const installCmd = common.makeCmd('ares-install');
         exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("Success", stderr);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    });
+
+    it('Install logtest ipk to device with ares-install', function(done) {
+        exec(installCmd + ` ${logtestAppPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -163,14 +178,27 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
 });
 
 describe(aresCmd, function() {
+    const launchCmd = common.makeCmd('ares-launch');
     it('Launch sample App', function(done) {
-        const launchCmd = common.makeCmd('ares-launch');
         exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("[Info] Set target device : " + options.device);
             expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    });
+
+    it('Launch logtest App', function(done) {
+        exec(launchCmd + ` ${logtestAppId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain(`Launched application ${logtestAppId}`, error);
             setTimeout(function(){
                 done();
             }, 3000);
@@ -211,9 +239,14 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
 
         setTimeout(() => {
             child.kill();
-            const regId = new RegExp(options.pkgId, 'g');
-            const matchedApp = ((stdoutData || '').match(regId) || []).length;
+            let regId = new RegExp(options.pkgId, 'g');
+            let matchedApp = ((stdoutData || '').match(regId) || []).length;
             expect(matchedApp).toBeGreaterThan(3);
+
+            regId = new RegExp(logtestAppId, 'g');
+            matchedApp = ((stdoutData || '').match(regId) || []).length;
+            expect(matchedApp).toBeGreaterThan(3);
+
             done();
         }, 6000);
     });
@@ -247,13 +280,23 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
 });
 
 describe(aresCmd + ' --remove(-r)', function() {
+    const installCmd = common.makeCmd('ares-install');
     it('Remove installed sample app', function(done) {
-        const installCmd = common.makeCmd('ares-install');
         exec(installCmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain(`Removed package ${options.pkgId}`, stderr);
+            done();
+        });
+    });
+
+    it('Remove installed logtest app', function(done) {
+        exec(installCmd + ` -r ${logtestAppId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(`Removed package ${logtestAppId}`, stderr);
             done();
         });
     });

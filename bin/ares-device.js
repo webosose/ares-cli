@@ -145,8 +145,8 @@ function getSessionInfo() {
 
 function getResourceMonitor() {
     options.interval = argv["time-interval"] || null;
-    if(argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
-        if(!argv["time-interval"]) {
+    if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
+        if (!argv["time-interval"]) {
             return finish(errHndl.getErrMsg("INVALID_ARGV"));
         }
         if (options.interval <= 0) {
@@ -162,7 +162,7 @@ function getResourceMonitor() {
         options.id = argv.argv.remain[0];
         deviceLib.processResource(options, finish);
     } else {
-        // Print all CPU and memory usage
+        // Print all CPUs and memories usage
         deviceLib.systemResource(options, finish);
     }
 }
