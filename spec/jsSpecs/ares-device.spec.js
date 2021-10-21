@@ -185,6 +185,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 common.detectNodeMessage(stderr);
             }
             else {
+                console.log(stdout);
                 expect(stdout).toContain("[Info] Set target device : " + options.device);
                 expect(stdout).toContain(options.pkgId, error);
                 expect(stdout).toContain("PID");
@@ -211,8 +212,8 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
 
         setTimeout(() => {
             child.kill();
-            const IdReg = new RegExp(options.pkgId, 'g');
-            const matchedApp = ((stdoutData || '').match(IdReg) || []).length;
+            const idReg = new RegExp(options.pkgId, 'g');
+            const matchedApp = ((stdoutData || '').match(idReg) || []).length;
             expect(matchedApp).toBeGreaterThan(3);
             done();
         }, 6000);
