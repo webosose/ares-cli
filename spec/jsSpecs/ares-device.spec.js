@@ -103,6 +103,7 @@ describe(aresCmd, function() {
         });
     });
 });
+
 describe(aresCmd, function() {
     it('Install sample ipk to device with ares-install', function(done) {
         const installCmd = common.makeCmd('ares-install');
@@ -132,8 +133,8 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
-    it('Print all system resource with --interval', function(done) {
-        const child = exec(cmd + " -r --interval 1");
+    it('Print all system resource repeatedly', function(done) {
+        const child = exec(cmd + " -r -t 1");
         let stdoutData;
         child.stdout.on('data', function (data) {
             stdoutData += data;
@@ -159,21 +160,8 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
             done();
         }, 6000);
     });
-
-    it('Print no running app/service message', function(done) {
-        exec(cmd + " -r --list", function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            else {
-                expect(stdout).toContain("There is no runnig app/service");
-            }
-            done();
-        });
-    });
 });
 
-// Install sample app for resource-monitor option.
 describe(aresCmd, function() {
     it('Launch sample App', function(done) {
         const launchCmd = common.makeCmd('ares-launch');
@@ -191,7 +179,7 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd + ' --resource-monitor(-r)', function() {
-    it('Print running app process resource', function(done) {
+    it('Print running app resource', function(done) {
         exec(cmd + " -r --list", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -207,8 +195,8 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
-    it('Print running app process resource with interval', function(done) {
-        const child = exec(cmd + " -r --list --interval 1");
+    it('Print running app resource repeatedly', function(done) {
+        const child = exec(cmd + " -r --list -t 1");
         let stdoutData;
         child.stdout.on('data', function (data) {
             stdoutData += data;
@@ -230,7 +218,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         }, 6000);
     });
 
-    it('Print an app process with appID', function(done) {
+    it('Print specific app resource', function(done) {
         exec(cmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -244,14 +232,14 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
-    it('Print an app process that is not running', function(done) {
+    it('Print specific app is not running', function(done) {
         exec(cmd + ` -r com.test.app`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             else {
                 expect(stdout).toContain("[Info] Set target device : " + options.device);
-                expect(stdout).toContain("com.test.app is not running");
+                expect(stdout).toContain("<com.test.app> is not running. Please launch the app or service.");
             }
             done();
         });

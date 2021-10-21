@@ -38,7 +38,7 @@ const knownOpts = {
     "resource-monitor": Boolean,
     // resource-monitor parameter
     "list" : Boolean,
-    "interval" : Number,
+    "time-interval" : Number,
     "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
@@ -52,6 +52,8 @@ const shortHands = {
     "i": ["--system-info"],
     "s": ["--session-info"],
     "r": ["--resource-monitor"],
+    "l": ["--list"],
+    "t": ["--time-interval"],
     "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
@@ -142,20 +144,26 @@ function getSessionInfo() {
 }
 
 function getResourceMonitor() {
-    options.interval = argv.interval;
-    if (options.interval <= 0) {
-        finish(errHndl.getErrMsg("INVALID_ARGV"));
+    options.interval = argv["time-interval"] || null;
+    if(argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
+        if(!argv["time-interval"]) {
+            return finish(errHndl.getErrMsg("INVALID_ARGV"));
+        }
+        if (options.interval <= 0) {
+            return finish(errHndl.getErrMsg("INVALID_ARGV"));
+        }
     }
+
     if (argv.list) {
         // Print all running app and service's resource usage
-        deviceLib.resourceProcessList(options, finish);
+        deviceLib.processResource(options, finish);
     } else if (argv.argv.remain.length !== 0) {
-        // Print specified AppID or Service ID in argv
+        // Print specified AppID or ServiceID in argv
         options.id = argv.argv.remain[0];
-        deviceLib.resourceProcessList(options, finish);
+        deviceLib.processResource(options, finish);
     } else {
         // Print all CPU and memory usage
-        deviceLib.resourceSystem(options, finish);
+        deviceLib.systemResource(options, finish);
     }
 }
 
