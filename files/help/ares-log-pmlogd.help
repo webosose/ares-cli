@@ -6,7 +6,6 @@
         "default" : [
             "ares-log [OPTION...]",
             "ares-log [OPTION...] -f, --follow",
-            "ares-log [OPTION...] -r, --reverse",
             "ares-log [OPTION...] -n, --lines <LINE>"
         ]
     },
@@ -35,14 +34,14 @@
         "# Number of pmlog entries to show",
         "ares-log -n 10 -d DEVICE",
         "",
-        "# Show logs reversely and save them to a log file",
-        "ares-log -r -s reverse.log -d DEVICE",
+        "# Follow logs and save them to a log file",
+        "ares-log -f -s follow.log -d DEVICE",
         "",
-        "# Follow logs of a app",
-        "ares-log -f -id com.domain.app -d DEVICE",
+        "# Follow logs of an app",
+        "ares-log -f -id com.examples.app -d DEVICE",
         "",
         "# Follow logs of a service and save them to a log file",
-        "ares-log -f -id com.domain.app.service -s service.log -d DEVICE",
+        "ares-log -f -id com.examples.app.service -s service.log -d DEVICE",
         "",
         "# Show context list on DEVICE",
         "ares-log -cl -d DEVICE",

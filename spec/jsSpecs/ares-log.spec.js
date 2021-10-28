@@ -582,7 +582,7 @@ describe(aresCmd + " negative tc", function() {
                 if (options.device === "emulator") {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 } else {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Please input a app or service ID");
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Please specify a value <id-filter>");
                 }
             } else {
                 expect(stdout.match(pmLogRegExp).length).toBeGreaterThan(3);
