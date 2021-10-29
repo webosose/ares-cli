@@ -118,7 +118,7 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "context-list", "set-level", "id-filter", "save", "level", "device"],
+const pmLogOptions = ["follow", "lines", "context-list", "set-level", "id-filter", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 

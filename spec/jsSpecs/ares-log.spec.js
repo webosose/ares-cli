@@ -666,8 +666,6 @@ describe(aresCmd + " -r", function() {
             } else if (targetLogDaemon === "journald") {
                 expect(result).toContain("-- Journal begins at");
                 expect(result.match(journalLogRegExp).length > 0).toBeTrue();
-            } else if (targetLogDaemon === "pmlogd") {
-                expect(result.match(pmLogRegExp).length > 0).toBeTrue();
             }
             done();
         }, 1000);
