@@ -41,6 +41,7 @@
     "chalk": "1.1.3",
     "chardet": "0.8.0",
     "combined-stream": "1.0.8",
+    "csv-writer": "1.6.0",
     "easy-table": "1.1.1",
     "elfy": "1.0.0",
     "encoding": "0.1.13",

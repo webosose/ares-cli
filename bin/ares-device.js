@@ -39,6 +39,7 @@ const knownOpts = {
     // resource-monitor parameter
     "list" : Boolean,
     "time-interval" : Number,
+    "save" : [String, null],
     "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
@@ -54,6 +55,7 @@ const shortHands = {
     "r": ["--resource-monitor"],
     "l": ["--list"],
     "t": ["--time-interval"],
+    "S" : ["--save"],
     "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
@@ -145,6 +147,8 @@ function getSessionInfo() {
 
 function getResourceMonitor() {
     options.interval = argv["time-interval"] || null;
+    options.outPath = argv["save"] || null;
+    
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
         if (!argv["time-interval"]) {
             // when user does not give the time-interval
