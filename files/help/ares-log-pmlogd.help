@@ -6,7 +6,6 @@
         "default" : [
             "ares-log [OPTION...]",
             "ares-log [OPTION...] -f, --follow",
-            "ares-log [OPTION...] -r, --reverse",
             "ares-log [OPTION...] -n, --lines <LINE>"
         ]
     },
@@ -16,6 +15,7 @@
         "** Attributes **",
         "  LINE           [integer]  Number of lines",
         "  LOG_DAEMON     [string]   Name of log daemon (e.g., pmlogd, journald)",
+        "  ID             [string]   ID of app or service",
         "  SAVED_FILE     [string]   File name or path to save logs",
         "  CONTEXT        [string]   Name of logging context",
         "  CONTEXT_LEVEL  [string]   Priority of specific context logs (e.g., info, notice, warning, err)",
@@ -34,8 +34,14 @@
         "# Number of pmlog entries to show",
         "ares-log -n 10 -d DEVICE",
         "",
-        "# Show logs reversely and save them to a log file",
-        "ares-log -r -s reverse.log -d DEVICE",
+        "# Follow logs and save them to a log file",
+        "ares-log -f -s follow.log -d DEVICE",
+        "",
+        "# Follow logs of an app",
+        "ares-log -f -id com.examples.app -d DEVICE",
+        "",
+        "# Follow logs of a service and save them to a log file",
+        "ares-log -f -id com.examples.app.service -s service.log -d DEVICE",
         "",
         "# Show context list on DEVICE",
         "ares-log -cl -d DEVICE",
@@ -45,12 +51,15 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["current-daemon", "switch-daemon", "save", "context-list", "set-level", "device", "device-list", "help", "version", "verbose",  "level"],
+        "default" : ["current-daemon", "switch-daemon", "id-filter", "save", "context-list", "set-level", "device", "device-list", "help", "version", "verbose",  "level"],
         "current-daemon" : [
             "-cd, --current-daemon @TAB@ \tCheck current log daemon on CLI and target device"
         ],
         "switch-daemon" : [
-            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ \tChange current log daemon to <LOG_DAEMON> on CLI"
+            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ \tChange current log daemon of CLI to LOG_DAEMON"
+        ],
+        "id-filter" : [
+            "-id, --id-filter <ID> @TAB@ \tShow logs from a app or service of ID"
         ],
         "save" : [
             "-s, --save <SAVED_FILE> @TAB@ \tSave logs to SAVED_FILE",
@@ -60,7 +69,7 @@
             "-cl, --context-list @TAB@ \tList the contexts and log level"
         ],
         "set-level" : [
-            "-sl, --set-level <CONTEXT> <CONTEXT_LEVEL> @TAB@ Set the log level of CONTEXT to CONTEXT_LEVEL"
+            "-sl, --set-level <CONTEXT> <CONTEXT_LEVEL> @TAB@Set the log level of CONTEXT to CONTEXT_LEVEL"
         ],
         "device" : [
             "-d, --device <DEVICE> @TAB@ \tSpecify DEVICE to use",

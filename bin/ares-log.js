@@ -61,7 +61,8 @@ const knownOpts = {
     "display": [String, null],
     // context options
     "context-list": Boolean,
-    "set-level": String
+    "set-level": String,
+    "id-filter": String
 };
 
 const shortHands = {
@@ -86,11 +87,12 @@ const shortHands = {
     "s": ["--save"],
     "file": ["--file"],
     "fl": ["--file-list"],
-    "u" : ["--unit"],
-    "ul" : ["--unit-list"],
-    "dp" : ["--display"],
-    "cl" : ["--context-list"],
-    "sl" : ["--set-level"]
+    "u": ["--unit"],
+    "ul": ["--unit-list"],
+    "dp": ["--display"],
+    "cl": ["--context-list"],
+    "sl": ["--set-level"],
+    "id": ["--id-filter"]
 };
 
 const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js'*/);
@@ -116,7 +118,7 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "context-list", "set-level", "save", "level", "device"],
+const pmLogOptions = ["follow", "lines", "context-list", "set-level", "id-filter", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
