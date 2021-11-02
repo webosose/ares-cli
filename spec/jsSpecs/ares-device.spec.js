@@ -434,7 +434,7 @@ describe(aresCmd + ' negative TC', function() {
         });
     });
 
-    it('Capture with invalid destiation Path', function(done) {
+    it('Monitor system resource with invalid destiation Path', function(done) {
         exec(cmd + ` -r -S ${noPermDirPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
