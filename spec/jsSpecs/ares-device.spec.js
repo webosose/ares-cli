@@ -10,7 +10,9 @@ const exec = require('child_process').exec,
     common = require('./common-spec');
 
 const captureDirPath = path.join(__dirname, "..", "tempFiles", "deviceCapture"),
-    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
+    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png"),
+    csvDirPath = path.join(__dirname, "..", "tempFiles", "csvDir"),
+    csvFileReg = new RegExp("[0-9]*.csv");
 
 const aresCmd = 'ares-device';
 
@@ -120,6 +122,15 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd + ' --resource-monitor(-r)', function() {
+    beforeAll(function(done) {
+        common.removeOutDir(csvDirPath);
+        done();
+    });
+    afterAll(function(done) {
+        common.removeOutDir(csvDirPath);
+        done();
+    });
+
     it('Print all system resource', function(done) {
         exec(cmd + " -r", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -130,6 +141,22 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 expect(stdout).toContain("memory");
             }
             done();
+        });
+    });
+
+    it('Save csv file for all system resource', function(done) {
+        exec(cmd + ` -r -S ${csvDirPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("cpu0");
+                expect(stdout).toContain(csvDirPath);
+
+                const matchedFiles = stdout.match(csvFileReg);
+                expect(fs.existsSync(path.join(csvDirPath, matchedFiles[0]))).toBe(true);
+                done();
+            }
         });
     });
 
@@ -179,13 +206,21 @@ describe(aresCmd, function() {
 });
 
 describe(aresCmd + ' --resource-monitor(-r)', function() {
+    beforeAll(function(done) {
+        common.removeOutDir(csvDirPath);
+        done();
+    });
+    afterAll(function(done) {
+        common.removeOutDir(csvDirPath);
+        done();
+    });
+
     it('Print running app resource', function(done) {
         exec(cmd + " -r --list", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             else {
-                console.log(stdout);
                 expect(stdout).toContain("[Info] Set target device : " + options.device);
                 expect(stdout).toContain(options.pkgId, error);
                 expect(stdout).toContain("PID");
@@ -220,7 +255,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 
     it('Print specific app resource', function(done) {
-        exec(cmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -id ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -233,8 +268,25 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
+    it('Save csv file for specific app resource', function(done) {
+        exec(cmd + ` -r -id ${options.pkgId} -S ${csvDirPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain(options.pkgId);
+                expect(stdout).toContain(csvDirPath);
+
+                const matchedFiles = stdout.match(csvFileReg);
+                expect(fs.existsSync(path.join(csvDirPath, matchedFiles[0]))).toBe(true);
+                done();
+            }
+            done();
+        });
+    });
+
     it('Print specific app is not running', function(done) {
-        exec(cmd + ` -r com.test.app`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -id com.test.app`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -370,6 +422,27 @@ describe(aresCmd + ' negative TC', function() {
     afterAll(function(done) {
         common.removeOutDir(noPermDirPath);
         done();
+    });
+
+    it('Monitor system resource with invalid file extensiton', function(done) {
+        exec(cmd + ` -r -S test.abc`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please specify the file extension(.csv)");
+            }
+            done();
+        });
+    });
+
+    it('Capture with invalid destiation Path', function(done) {
+        exec(cmd + ` -r -S ${noPermDirPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied");
+                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
+            }
+            done();
+        });
     });
     
     it('Capture with invalid file format', function(done) {

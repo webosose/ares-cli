@@ -6,16 +6,17 @@
     "synopsis" : {
         "default" : [
             "ares-device",
-            "ares-device [OPTION...]",
-            "ares-device --resource-monitor <APP_ID || SERVICE_ID>"
+            "ares-device [OPTION...]"
         ]
     },
     "description" : {
         "default": [
             "This command displays the device information and supports screen capture.",
             "",
-            "APP_ID is ID of the specific app for display its resource usage.",
-            "SERVICE_ID ID of the specific service for display its resource usage.",
+            "ID is the specific app or service for display its resource usage.",
+            "",
+            "SAVED_FILE is the output directory or file path to save resource usage.",
+            "The file format can be only \"csv\".",
             "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
             "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
@@ -25,16 +26,24 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "resource", "list", "interval", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
+        "default" : ["system", "session", "resource", "list", "id-filter", "interval", "save", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
-        "resource" : "-r, --resource-monitor @TAB@ Display the device CPUs and memories information",
+        "resource" : "-r, --resource-monitor @TAB@ Display the device resource usage",
         "list" : [
-            "-l, --list @TAB@ Display CPUs and memories usage of running apps and services",
+            "-l, --list @TAB@ Display resource usage of running apps and services",
+            "@TAB@ Use it with resource-monitor option"
+        ],
+        "id-filter" : [
+            "-id, --id-filter <ID> @TAB@ Show resource usage of an app or service",
             "@TAB@ Use it with resource-monitor option"
         ],
         "interval" : [
             "-t, --time-interval @TAB@ Set the time for the output cycle(seconds)",
+            "@TAB@ Use it with resource-monitor option"
+        ],
+        "save" : [
+            "-s, --save <SAVED_FILE> @TAB@ Save resorce usage to SAVED_FILE",
             "@TAB@ Use it with resource-monitor option"
         ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
@@ -60,14 +69,17 @@
             "# Display session information",
             "ares-device -s -d DEVICE",
             "",
-            "# Display CPUs and memories usage with time interval",
+            "# Display resource usage with time interval",
             "ares-device -r -t 1 -d DEVICE",
             "",
-            "# Display CPUs and memories usage of running app and service",
+            "# Display resource usage and save them to a csv file",
+            "ares-device -r -S -d DEVICE",
+            "",
+            "# Display resource usage of running app and service",
             "ares-device -r -l -t 3 -d DEVICE",
             "",
-            "# Display CPUs and memories usage of specified running app",
-            "ares-device -r com.examples.app -t 5 -d DEVICE",
+            "# Display resource usage of specified running app",
+            "ares-device -r -id com.examples.app -t 5 -d DEVICE",
             "",
             "# Capture the screen of display 1 as screen.png",
             "ares-device -c screen.png -dp 1 -d DEVICE",

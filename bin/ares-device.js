@@ -38,8 +38,9 @@ const knownOpts = {
     "resource-monitor": Boolean,
     // resource-monitor parameter
     "list" : Boolean,
+    "id-filter" : [String, null],
     "time-interval" : Number,
-    "save" : [String, null],
+    "save" : Boolean,
     "capture-screen" : Boolean,
     "display" : Number,
     "device":   [String, null],
@@ -54,8 +55,9 @@ const shortHands = {
     "s": ["--session-info"],
     "r": ["--resource-monitor"],
     "l": ["--list"],
+    "id":["--id-filter"],
     "t": ["--time-interval"],
-    "S" : ["--save"],
+    "S": ["--save"],
     "c": ["--capture-screen"],
     "dp" : ["--display"],
     "d": ["--device"],
@@ -147,8 +149,9 @@ function getSessionInfo() {
 
 function getResourceMonitor() {
     options.interval = argv["time-interval"] || null;
-    options.outPath = argv["save"] || null;
-    
+    options.save = argv["save"] || null;
+    options.outputPath = argv.argv.remain[0] || null;
+
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
         if (!argv["time-interval"]) {
             // when user does not give the time-interval
@@ -165,12 +168,16 @@ function getResourceMonitor() {
     }
     log.info("getResourceMonitor()", "interval:", options.interval);
 
-    if (argv.list) {
-        // print all running app and service's resource usage
+    if (argv["id-filter"]) {
+        // Handle when another option appears without id-filter value
+        const idReg = /^-/;
+        if (argv["id-filter"] === "true" || argv["id-filter"].match(idReg)) {
+            return finish(errHndl.getErrMsg("EMPTY_VALUE", "id-filter"));
+        }
+        options.id = argv["id-filter"];
         deviceLib.processResource(options, finish);
-    } else if (argv.argv.remain.length !== 0) {
-        // print specified AppID or ServiceID in argv
-        options.id = argv.argv.remain[0];
+    } else if (argv.list) {
+        // print all running app and service's resource usage
         deviceLib.processResource(options, finish);
     } else {
         // print all CPUs and memories usage
