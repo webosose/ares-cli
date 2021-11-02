@@ -10,7 +10,9 @@
         ]
     },
     "description" : [
-        "This command installs or removes packages on the DEVICE."
+        "This command installs or removes packages on the DEVICE.",
+        "",
+        "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         {
@@ -29,7 +31,7 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["device", "device-list", "list", "listfull", "type", "level", "help", "version", "verbose"],
+        "default" : ["device", "device-list", "list", "listfull", "type", "help", "version", "verbose", "level"],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -39,7 +41,8 @@
         "listfull" : "-F, --listfull @TAB@ List the detailed info of the installed apps",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "extraoption" : {
         "cmdOpt":"hidden",
@@ -51,8 +54,7 @@
             "opkg-param" : [
                 "-op, --opkg-param <PARAMS> @TAB@ parameters for opkg tool",
                 "@TAB@ this option is available only for the device allowing root-connection"
-            ],
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
+            ]
         }
     },
     "extraexample" : {

@@ -6,25 +6,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const fs = require('fs'),
-    path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
+    fs = require('fs'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     installLib = require('./../lib/install'),
     commonTools = require('./../lib/base/common-tools'),
-    convertJsonToList = require('./../lib/util/json').convertJsonToList;
-
-const processName = path.basename(process.argv[1]).replace(/.js/, '');
-
+    convertJsonToList = require('./../lib/util/json').convertJsonToList,
+    spinner = require('../lib/util/spinner');
+    
 const version = commonTools.version,
     cliControl = commonTools.cliControl,
     help = commonTools.help,
     setupDevice = commonTools.setupDevice,
     appdata = commonTools.appdata,
     errHndl = commonTools.errMsg;
+    
+const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -65,7 +67,7 @@ const shortHands = {
     "hh": ["--hidden-help"],
     "v": ["--level", "verbose"]
 };
-const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-install.js'*/);
+const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js' */);
 
 log.heading = processName;
 log.level = argv.level || 'warn';
@@ -109,7 +111,7 @@ if (argv.help || argv['hidden-help']) {
 } else if (argv.remove) {
     op = remove;
 } else if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else {
@@ -132,9 +134,13 @@ function showUsage(hiddenFlag) {
     }
 }
 
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
 function install() {
     const pkgPath = argv.install || argv.argv.remain[0];
-    log.info("install():", "pkgPath:", pkgPath);
+    log.info("install()", "pkgPath:", pkgPath);
     if (!pkgPath) {
         return finish(errHndl.getErrMsg("EMPTY_VALUE", "PACKAGE_FILE"));
     } else {
@@ -178,7 +184,7 @@ function listFull() {
 
 function remove() {
     const pkgId = (argv.remove === 'true')? argv.argv.remain[0] : argv.remove;
-    log.info("remove():", "pkgId:", pkgId);
+    log.info("remove()", "pkgId:", pkgId);
     if (!pkgId) {
         return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
@@ -186,6 +192,9 @@ function remove() {
 }
 
 function finish(err, value) {
+    spinner.stop();
+
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -200,7 +209,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

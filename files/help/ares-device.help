@@ -6,24 +6,42 @@
     "synopsis" : {
         "default" : [
             "ares-device",
-            "ares-device [OPTION...]"
+            "ares-device [OPTION...]",
+            "ares-device --resource-monitor <APP_ID || SERVICE_ID>"
         ]
     },
     "description" : {
         "default": [
             "This command displays the device information and supports screen capture.",
             "",
+            "APP_ID is ID of the specific app for display its resource usage.",
+            "SERVICE_ID ID of the specific service for display its resource usage.",
+            "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
-            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default."
+            "The file format can be \"png\", \"jpg\" and \"bmp\". \"png\" is default.",
+            "",
+            "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
         ]
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "capture", "display", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["system", "session", "resource", "list", "interval", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
         "session" : "-s, --session-info @TAB@ Display the device session information",
+        "resource" : "-r, --resource-monitor @TAB@ Display the device CPUs and memories information",
+        "list" : [
+            "-l, --list @TAB@ Display CPUs and memories usage of running apps and services",
+            "@TAB@ Use it with resource-monitor option"
+        ],
+        "interval" : [
+            "-t, --time-interval @TAB@ Set the time for the output cycle(seconds)",
+            "@TAB@ Use it with resource-monitor option"
+        ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
-        "display" : "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID. Use it with capture screen option",
+        "display" : [
+            "-dp,--display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID",
+            "@TAB@ Use it with capture screen option"
+        ],
         "device" : [
             "-d, --device <DEVICE> @TAB@ Specify DEVICE to use",
             "@TAB@ If not specified, set to default device"
@@ -31,15 +49,8 @@
         "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
-    },
-    "extraoption" : {
-        "cmdOpt":"hidden",
-        "default" : {
-            "cmdOpt":"option",
-            "default" : ["level"],
-            "level" : "--level <LEVEL> @TAB@ Set a log LEVEL of 'silly', 'verbose', 'info', 'http', 'warn', 'error'"
-        }
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     },
     "examples" : {
         "default" : [
@@ -48,6 +59,15 @@
             "",
             "# Display session information",
             "ares-device -s -d DEVICE",
+            "",
+            "# Display CPUs and memories usage with time interval",
+            "ares-device -r -t 1 -d DEVICE",
+            "",
+            "# Display CPUs and memories usage of running app and service",
+            "ares-device -r -l -t 3 -d DEVICE",
+            "",
+            "# Display CPUs and memories usage of specified running app",
+            "ares-device -r com.examples.app -t 5 -d DEVICE",
             "",
             "# Capture the screen of display 1 as screen.png",
             "ares-device -c screen.png -dp 1 -d DEVICE",

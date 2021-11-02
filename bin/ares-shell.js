@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     shellLib = require('./../lib/shell'),
     commonTools = require('./../lib/base/common-tools');
 
@@ -60,7 +60,7 @@ const options = {
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.run) {
@@ -84,6 +84,10 @@ function showUsage() {
     help.display(processName, appdata.getConfig(true).profile);
 }
 
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
 function run() {
     if(argv.display !== undefined && isNaN(Number(argv.display))) {
         return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
@@ -99,6 +103,7 @@ function shell() {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -113,7 +118,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

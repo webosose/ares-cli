@@ -6,15 +6,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    nopt = require('nopt'),
-    async = require('async'),
+const async = require('async'),
     inquirer = require('inquirer'),
-    log = require('npmlog');
-
-const readJsonSync = require('./../lib/util/json').readJsonSync,
+    nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     GeneratorLib = require('./../lib/generator'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    readJsonSync = require('./../lib/util/json').readJsonSync;
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
@@ -65,7 +64,7 @@ const shortHands = {
     "v":        ["--level", "verbose"]
 };
 
-const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-install.js'*/);
+const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js' */);
 
 log.heading = processName;
 log.level = argv.level || 'warn';
@@ -291,6 +290,7 @@ function generate(next) {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -305,7 +305,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

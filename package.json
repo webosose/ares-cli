@@ -1,6 +1,6 @@
 {
   "name": "@webosose/ares-cli",
-  "version": "2.1.0-T.3",
+  "version": "2.2.0-T.1",
   "description": "Command Line Interface for development webOS application and service",
   "main": "./bin/ares.js",
   "author": "ye.kim",
@@ -55,6 +55,7 @@
     "mkdirp": "0.5.5",
     "nopt": "2.1.2",
     "npmlog": "4.1.2",
+    "ora": "5.4.0",
     "request": "2.88.2",
     "rimraf": "3.0.2",
     "semver": "7.3.2",

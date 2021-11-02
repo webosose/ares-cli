@@ -1,3 +1,20 @@
+## 2.2.0 (June 21, 2021)
+### ares-log
+* Added as a new command for showing or saving logs of webOS apps and services.
+
+### ares-setup-device
+* Updated the naming rule for the DEVICE_NAME parameter.
+
+### ares-install
+* Enhanced the readability of the results of the --listfull option.
+
+### Common
+* Categorized error messages and added user tips according to each error message.
+
+### Meta files
+* Updated the README file.
+
+
 ## 2.1.0 (April 2, 2021)
 ### ares-device
 * Supports screen capture using the `--capture-screen` option.
@@ -9,6 +26,7 @@
 ### ares-shell
 * Fixed an issue that environment variables using the `ares-shell -r` command were different from environment variables of the target device.
 
+
 ## 2.0.3 (January 22, 2021)
 ### ares
 * Updated help message.
@@ -16,8 +34,10 @@
 ### Meta files
 * Updated the README file.
 
+
 ## 2.0.2 (December 29, 2020)
 * Supports Node v14.15.1.
+
 
 ## 2.0.0 (December 11, 2020)
 * Initial github release.

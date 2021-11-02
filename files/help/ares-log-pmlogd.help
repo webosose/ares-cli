@@ -1,0 +1,84 @@
+{
+    "display" : ["name", "synopsis", "options", "description", "examples"],
+    "notab":["examples"],
+    "name" : "ares-log(pmlogd) - Show or save logs of webOS apps and service",
+    "synopsis" : {
+        "default" : [
+            "ares-log [OPTION...]",
+            "ares-log [OPTION...] -f, --follow",
+            "ares-log [OPTION...] -n, --lines <LINE>"
+        ]
+    },
+    "description" : [
+        "This command shows or saves logs of webOS apps and services using pmlogd.",
+        "",
+        "** Attributes **",
+        "  LINE           [integer]  Number of lines",
+        "  LOG_DAEMON     [string]   Name of log daemon (e.g., pmlogd, journald)",
+        "  ID             [string]   ID of app or service",
+        "  SAVED_FILE     [string]   File name or path to save logs",
+        "  CONTEXT        [string]   Name of logging context",
+        "  CONTEXT_LEVEL  [string]   Priority of specific context logs (e.g., info, notice, warning, err)",
+        "  LEVEL          [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
+    ],
+    "examples" : [
+        "# Check the current log daemon",
+        "ares-log -cd -d DEVICE",
+        "",
+        "# Change the current log daemon to journald",
+        "ares-log -sd journald -d DEVICE",
+        "",
+        "# Follow the pmlog",
+        "ares-log -f -d DEVICE",
+        "",
+        "# Number of pmlog entries to show",
+        "ares-log -n 10 -d DEVICE",
+        "",
+        "# Follow logs and save them to a log file",
+        "ares-log -f -s follow.log -d DEVICE",
+        "",
+        "# Follow logs of an app",
+        "ares-log -f -id com.examples.app -d DEVICE",
+        "",
+        "# Follow logs of a service and save them to a log file",
+        "ares-log -f -id com.examples.app.service -s service.log -d DEVICE",
+        "",
+        "# Show context list on DEVICE",
+        "ares-log -cl -d DEVICE",
+        "",
+        "# Set the log level for a specific context to debug",
+        "ares-log -sl WAM debug -d DEVICE"
+    ],
+    "options" : {
+        "cmdOpt":"option",
+        "default" : ["current-daemon", "switch-daemon", "id-filter", "save", "context-list", "set-level", "device", "device-list", "help", "version", "verbose",  "level"],
+        "current-daemon" : [
+            "-cd, --current-daemon @TAB@ \tCheck current log daemon on CLI and target device"
+        ],
+        "switch-daemon" : [
+            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ \tChange current log daemon of CLI to LOG_DAEMON"
+        ],
+        "id-filter" : [
+            "-id, --id-filter <ID> @TAB@ \tShow logs from a app or service of ID"
+        ],
+        "save" : [
+            "-s, --save <SAVED_FILE> @TAB@ \tSave logs to SAVED_FILE",
+            "@TAB@ \tMust use with the options outputting logs"
+        ],
+        "context-list" : [
+            "-cl, --context-list @TAB@ \tList the contexts and log level"
+        ],
+        "set-level" : [
+            "-sl, --set-level <CONTEXT> <CONTEXT_LEVEL> @TAB@Set the log level of CONTEXT to CONTEXT_LEVEL"
+        ],
+        "device" : [
+            "-d, --device <DEVICE> @TAB@ \tSpecify DEVICE to use",
+            "@TAB@ \tIf not specified, set to default device"
+        ],
+        "device-list" : "-D, --device-list @TAB@ \tList the available DEVICEs",
+        "help" : "-h, --help @TAB@ \tDisplay this help",
+        "version" : "-V, --version @TAB@ \tDisplay version info",
+        "verbose" : "-v @TAB@ \tDisplay this verbose log",
+        "level" : "--level <LEVEL> @TAB@ \tSet log LEVEL and display log as set LEVEL"
+    }
+}

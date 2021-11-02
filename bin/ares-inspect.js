@@ -6,12 +6,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    async = require('async'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     inspectLib = require('./../lib/inspect'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    spinner = require('../lib/util/spinner');
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
@@ -23,6 +24,7 @@ const cliControl = commonTools.cliControl,
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -99,7 +101,7 @@ if (argv.help || argv['hidden-help']) {
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else {
     op = inspect;
 }
@@ -112,6 +114,10 @@ if (op) {
     });
 }
 
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
 function showUsage(hiddenFlag) {
     if (hiddenFlag) {
         help.display(processName, appdata.getConfig(true).profile, hiddenFlag);
@@ -121,7 +127,7 @@ function showUsage(hiddenFlag) {
 }
 
 function inspect(){
-    log.info("inspect():", "AppId:", options.appId, "ServiceId:", options.serviceId);
+    log.info("inspect()", "AppId:", options.appId, ", ServiceId:", options.serviceId);
 
     if (!options.appId && !options.serviceId){
         showUsage();
@@ -143,6 +149,9 @@ function inspect(){
 }
 
 function finish(err, value) {
+    spinner.stop();
+
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -157,7 +166,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

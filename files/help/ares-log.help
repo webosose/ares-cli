@@ -1,7 +1,7 @@
 {
     "display" : ["name", "synopsis", "options", "description", "examples"],
     "notab":["examples"],
-    "name" : "ares-log - Show or save logs of webOS apps and services",
+    "name" : "ares-log(journald) - Show or save logs of webOS apps and services",
     "synopsis" : {
         "default" : [
             "ares-log [OPTION...]",
@@ -33,11 +33,18 @@
         "  DATE         [string]   Date format (e.g., YYYY-MM-DD hh:mm:ss)",
         "  UNIT         [string]   One of the unit names from --unit-list",
         "  JOURNAL_FILE [string]   One of the file names from --file-list",
+        "  LOG_DAEMON   [string]   Name of log daemon (e.g., journald, pmlogd)",
         "  OUTPUT_MODE  [string]   Output format (e.g., json, json-pretty, cat)",
         "  SAVED_FILE   [string]   File name or path to save logs",
-        ""
+        "  LEVEL        [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
+        "# Check the current log daemon",
+        "ares-log -cd -d DEVICE",
+        "",
+        "# Change the current log daemon to pmlogd",
+        "ares-log -sd pmlogd -d DEVICE",
+        "",
         "# Follow the journal",
         "ares-log -f -d DEVICE",
         "",
@@ -45,7 +52,7 @@
         "ares-log -n 10 -d DEVICE",
         "",
         "# Show logs between the two DATEs",
-        "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00",
+        "ares-log -S 2021-03-18 21:38:00 --until 2021-03-18 21:39:00 -d DEVICE",
         "",
         "# Show a list of the stored journal files",
         "ares-log -fl -d DEVICE",
@@ -62,14 +69,20 @@
     ],
     "options" : {
         "cmdOpt":"option",
-        "default" : ["output","save", "display", "level", "device", "device-list", "help", "version", "verbose"],
+        "default" : ["current-daemon", "switch-daemon", "output", "save", "display", "device", "device-list", "help", "version", "verbose",  "level"],
+        "current-daemon" : [
+            "-cd, --current-daemon @TAB@ Check current log daemon on CLI and target device"
+        ],
+        "switch-daemon" : [
+            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ Change current log daemon of CLI to LOG_DAEMON"
+        ],
         "output" : [
-            "-o, --output <OUTPUT_MODE>@TAB@ Change logs format to OUTPUT_MODE",
-            "@TAB@ Must use with the option outputting logs"
+            "-o, --output <OUTPUT_MODE> @TAB@ Change logs format to OUTPUT_MODE",
+            "@TAB@ Must use with the options outputting logs"
         ],
         "save" : [
-            "-s, --save <SAVED_FILE>@TAB@ Save logs to SAVED_FILE",
-            "@TAB@ Must use with the option outputting logs"
+            "-s, --save <SAVED_FILE> @TAB@ Save logs to SAVED_FILE",
+            "@TAB@ Must use with the options outputting logs"
         ],
         "display" : [
             "-dp, --display <DISPLAY_ID> @TAB@ Specify DISPLAY_ID to use",
@@ -82,6 +95,7 @@
         "device-list" : "-D, --device-list @TAB@ List the available DEVICEs",
         "help" : "-h, --help @TAB@ Display this help",
         "version" : "-V, --version @TAB@ Display version info",
-        "verbose" : "-v @TAB@ Display this verbose log"
+        "verbose" : "-v @TAB@ Display this verbose log",
+        "level" : "--level <LEVEL> @TAB@ Set log LEVEL and display log as set LEVEL"
     }
 }

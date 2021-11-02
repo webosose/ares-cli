@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
-    async = require('async'),
+    log = require('npmlog'),
+    path = require('path'),
     logLib = require('./../lib/log'),
     commonTools = require('./../lib/base/common-tools');
 
@@ -20,17 +20,13 @@ const version = commonTools.version,
     setupDevice = commonTools.setupDevice,
     errHndl = commonTools.errMsg;
 
-const processName = path.basename(process.argv[1]).replace(/.js/, '');
+let processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function (err) {
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
 });
-
-if (process.argv.length === 2) {
-    process.argv.splice(2, 0, '--help');
-}
 
 const knownOpts = {
     "help":     Boolean,
@@ -62,7 +58,11 @@ const knownOpts = {
     // unit options
     "unit":     String,
     "unit-list": Boolean,
-    "display": [String, null]
+    "display": [String, null],
+    // context options
+    "context-list": Boolean,
+    "set-level": String,
+    "id-filter": String
 };
 
 const shortHands = {
@@ -87,9 +87,12 @@ const shortHands = {
     "s": ["--save"],
     "file": ["--file"],
     "fl": ["--file-list"],
-    "u" : ["--unit"],
-    "ul" : ["--unit-list"],
-    "dp" : ["--display"]
+    "u": ["--unit"],
+    "ul": ["--unit-list"],
+    "dp": ["--display"],
+    "cl": ["--context-list"],
+    "sl": ["--set-level"],
+    "id": ["--id-filter"]
 };
 
 const argv = nopt(knownOpts, shortHands, process.argv, 2 /* drop 'node' & 'ares-*.js'*/);
@@ -108,12 +111,6 @@ log.verbose("argv", argv);
  * (If any other are remained, it's mean another parameters ares input),
  * each command of webOS CLI print help message with log message.
  */
-if (argv.level) {
-    delete argv.level;
-    if (argv.argv.remain.length === 0 && (Object.keys(argv)).length === 1) {
-        argv.help = true;
-    }
-}
 
 const options = {
     device: argv.device,
@@ -121,17 +118,21 @@ const options = {
     argv: argv
 };
 
-const pmLogOptions = ["follow", "reverse", "lines", "priority", "save", "display", "level", "device"],
+const pmLogOptions = ["follow", "lines", "context-list", "set-level", "id-filter", "save", "level", "device"],
     journalLogOptions = ["follow", "reverse", "lines", "since", "until", "pid", "dmesg", "boot", "output", "file",
                         "priority", "save", "display", "level", "device", "file", "file-list", "unit", "unit-list"];
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
-    help.display(processName, appdata.getConfig(true).profile);
+    const currentDaemon = appdata.getConfig().logDaemon;
+    if (currentDaemon === "pmlogd") {
+        processName += "-pmlogd";
+    }
+    help.display(processName, appdata.getConfig().profile);
     cliControl.end();
 } else if (argv['current-daemon']) {
     op = checkCurrentDaemon;
@@ -141,6 +142,8 @@ if (argv['device-list']) {
     op = showUnitList;
 } else if (argv['file-list'] || argv.file) {
     op = readMode;
+} else if (argv['context-list'] || argv['set-level']) {
+    op = contextMode;
 } else {
     op = showLog;
 }
@@ -155,56 +158,67 @@ if (op) {
     });
 }
 
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
 function showLog() {
-    log.info("ares-log#printLog");
+    log.info("showLog()");
 
     checkOption();
     logLib.show(options, finish);
 }
 
 function readMode() {
-    log.info("ares-log#readMode");
+    log.info("readMode()");
 
     checkOption();
     logLib.readMode(options, finish);
 }
 
 function showUnitList() {
-    log.info("ares-log#showUnitList");
+    log.info("showUnitList()");
 
     checkOption();
     logLib.printUnitList(options, finish);
 }
 
-function checkCurrentDaemon() {
-    log.info("ares-log#checkCurrentDaemon");
+function contextMode() {
+    log.info("contextMode()");
 
-    options.currentDaemon = appdata.getConfig(true).logDaemon;
-    return finish(null, {msg : "Current log daemon is " + options.currentDaemon});
+    checkOption();
+    logLib.contextMode(options, finish);
+}
+
+function checkCurrentDaemon() {
+    log.info("checkCurrentDaemon()");
+
+    options.currentDaemon = appdata.getConfig().logDaemon;
+    logLib.checkLogDaemon(options, finish);
 }
 
 function switchDaemon() {
-    log.info("ares-log#switchDaemon");
+    log.info("switchDaemon()");
 
-    if (argv['switch-daemon'] === "true") {
-        return finish(errHndl.getErrMsg("NOT_EXIST_DAEMONNAME"));
+    if (argv['switch-daemon'] !== "journald" && argv['switch-daemon'] !== "pmlogd") {
+        return finish(errHndl.getErrMsg("NOT_EXIST_LOGDAEMON"));
     }
-    
-    // to-do: Input only in case of pmlogd, journald, and other error processing
-    // to-do: Write to the changed daemon in the config file
 
-    return finish(null, {msg : "Switched log daemon to " + argv['switch-daemon']});
+    const configData = appdata.getConfig();
+    configData.logDaemon = argv['switch-daemon'];
+    appdata.setConfig(configData);
+    options.currentDaemon = configData.logDaemon;
+
+    logLib.checkLogDaemon(options, finish);
 }
 
 function checkOption() {
-    log.info("ares-log#checkOption");
-
     options.currentDaemon = appdata.getConfig(true).logDaemon;
     options.currentOption = Object.keys(argv);
     options.currentOption.splice(-1, 1);
 
     if (options.currentDaemon === "journald") {
-        log.info("journald options");
+        log.info("checkOption()", "journald options");
 
         options.currentOption.forEach(function(item){
             if (!journalLogOptions.includes(item)) {
@@ -212,7 +226,7 @@ function checkOption() {
             }
         });
     } else if (options.currentDaemon === "pmlogd") {
-        log.info("pmlogd options");
+        log.info("checkOption()", "pmlogd options");
 
         options.currentOption.forEach(function(item){
             if(!pmLogOptions.includes(item)) {
@@ -223,6 +237,7 @@ function checkOption() {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -237,7 +252,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

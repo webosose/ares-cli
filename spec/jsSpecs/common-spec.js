@@ -29,31 +29,39 @@ if (typeof module !== 'undefined' && module.exports) {
 const knownOpts = {
     "device":  String,
     "ip":  String,
-    "port": String
+    "port": String,
+    "timeInterval": Number
 };
 const shortHands = {
     "d": ["--device"],
     "ip": ["--ip"],
-    "port": ["--port"]
+    "port": ["--port"],
+    "ti": ["--timeInterval"]
 };
 
 commonSpec.getOptions = function() {
     return new Promise(function(resolve, reject){
         const argv = nopt(knownOpts, shortHands, process.argv, 2);
 
-        if(argv.device)
+        if (argv.device) {
             options.device = argv.device;
-        if(argv.ip)
+        }
+        if (argv.ip) {
             options.ip = argv.ip;
-        if(options.device !== "emulator")
+        }
+        if (options.device !== "emulator") {
             options.port = argv.port ? argv.port : 22;
+        }
+        if (argv.timeInterval) {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = argv.timeInterval;
+        }
 
-        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}`);
+        console.info(`device : ${options.device}, ip : ${options.ip}, port : ${options.port}, timeInterval : ${jasmine.DEFAULT_TIMEOUT_INTERVAL}`);
 
         // set profile
         const cmd = commonSpec.makeCmd('ares-config');
         exec(cmd, function (error, stdout) {
-            if(error){
+            if (error) {
                 console.error("set config error " +  error);
                 reject(stdout);
             }
@@ -79,7 +87,7 @@ commonSpec.resetDeviceList = function() {
     return new Promise(function(resolve, reject) {
         const cmd = commonSpec.makeCmd('ares-setup-device');
         exec(cmd + ' -R', function (error, stdout, stderr) {
-            if(!stderr){
+            if (!stderr) {
                 resolve(true);
             } else {
                 reject(error);
@@ -93,7 +101,7 @@ commonSpec.addDeviceInfo = function() {
         const cmd = commonSpec.makeCmd('ares-setup-device');
         exec(cmd + ` -a ${options.device} -i port=${options.port} -i username=root -i host=${options.ip} -i default=true`,
         function (error, stdout, stderr) {
-            if(stderr) {
+            if (stderr) {
                 reject(stderr);
             } else {
                 resolve(stdout);
@@ -106,9 +114,20 @@ commonSpec.makeCmd = function(cmd) {
     return `node ${path.join('bin', cmd + '.js')}`;
 };
 
+commonSpec.createOutDir = function(filePath, mode) {
+    if (!fs.existsSync(filePath)) {
+        shelljs.mkdir(filePath);
+    }
+
+    if (mode) {
+        fs.chmodSync(filePath, mode);
+    }
+};
+
 commonSpec.removeOutDir = function(filePath) {
-    if(fs.existsSync(filePath))
+    if (fs.existsSync(filePath)) {
         shelljs.rm('-rf', filePath);
+    }
 };
 
 commonSpec.detectNodeMessage = function(stderr) {

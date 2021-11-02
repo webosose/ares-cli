@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require('path'),
-    log = require('npmlog'),
+const async = require('async'),
     nopt = require('nopt'),
-    async = require('async'),
+    log = require('npmlog'),
+    path = require('path'),
     commonTools = require('./../lib/base/common-tools');
 
 const version = commonTools.version,
@@ -113,7 +113,7 @@ if (op) {
 }
 
 function config() {
-    log.verbose("profile()", "options:", options);
+    log.info("config()", "options:", options);
 
     if (!Object.prototype.hasOwnProperty.call(configFiles, options.profile)) {
         return finish(errHndl.getErrMsg("INVALID_VALUE", "profile", options.profile));
@@ -165,6 +165,7 @@ function curConfig(next) {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -179,7 +180,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

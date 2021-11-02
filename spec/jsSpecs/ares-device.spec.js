@@ -104,6 +104,162 @@ describe(aresCmd, function() {
     });
 });
 
+describe(aresCmd, function() {
+    const installCmd = common.makeCmd('ares-install');
+    it('Install sample ipk to device with ares-install', function(done) {
+        exec(installCmd + ` ${options.ipkPath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("Success", stderr);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    });
+});
+
+describe(aresCmd + ' --resource-monitor(-r)', function() {
+    it('Print all system resource', function(done) {
+        exec(cmd + " -r", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("cpu0");
+                expect(stdout).toContain("memory");
+            }
+            done();
+        });
+    });
+
+    it('Print all system resource repeatedly', function(done) {
+        const child = exec(cmd + " -r -t 1");
+        let stdoutData;
+        child.stdout.on('data', function (data) {
+            stdoutData += data;
+        });
+
+        child.stderr.on('data', function (data) {
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            expect(data).toBeNull();
+        });
+
+        setTimeout(() => {
+            child.kill();
+            // Check the menu item count in interval result
+            const regCPU = /cpu0/g,
+                regMemory= /memory/g,
+                matchedCPU = ((stdoutData || '').match(regCPU) || []).length,
+                matchedMemory = ((stdoutData || '').match(regMemory) || []).length;
+
+            expect(matchedCPU).toBeGreaterThan(3);
+            expect(matchedMemory).toBeGreaterThan(3);
+            done();
+        }, 6000);
+    });
+});
+
+describe(aresCmd, function() {
+    const launchCmd = common.makeCmd('ares-launch');
+    it('Launch sample App', function(done) {
+        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    });
+});
+
+describe(aresCmd + ' --resource-monitor(-r)', function() {
+    it('Print running app resource', function(done) {
+        exec(cmd + " -r --list", function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                console.log(stdout);
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain(options.pkgId, error);
+                expect(stdout).toContain("PID");
+                expect(stdout).toContain("CPU");
+                expect(stdout).toContain("MEMORY");
+            }
+            done();
+        });
+    });
+
+    it('Print running app resource repeatedly', function(done) {
+        const child = exec(cmd + " -r --list -t 1");
+        let stdoutData;
+        child.stdout.on('data', function (data) {
+            stdoutData += data;
+        });
+
+        child.stderr.on('data', function (data) {
+            if (data && data.length > 0) {
+                common.detectNodeMessage(data);
+            }
+            expect(data).toBeNull();
+        });
+
+        setTimeout(() => {
+            child.kill();
+            const idReg = new RegExp(options.pkgId, 'g');
+            const matchedApp = ((stdoutData || '').match(idReg) || []).length;
+            expect(matchedApp).toBeGreaterThan(3);
+            done();
+        }, 6000);
+    });
+
+    it('Print specific app resource', function(done) {
+        exec(cmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain(options.pkgId);
+                expect(stdout).toContain("PID");
+            }
+            done();
+        });
+    });
+
+    it('Print specific app is not running', function(done) {
+        exec(cmd + ` -r com.test.app`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("[Info] Set target device : " + options.device);
+                expect(stdout).toContain("<com.test.app> is not running. Please launch the app or service.");
+            }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + ' --remove(-r)', function() {
+    const installCmd = common.makeCmd('ares-install');
+    it('Remove installed sample app', function(done) {
+        exec(installCmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain(`Removed package ${options.pkgId}`, stderr);
+            done();
+        });
+    });
+});
+
 describe(aresCmd + ' --capture-screen(-c)', function() {
     let generatedFile = "";
 
@@ -143,7 +299,7 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.png");
             expect(stdout).toContain(path.resolve('.'));
@@ -180,7 +336,6 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.bmp");
             expect(stdout).toContain(captureDirPath);
@@ -195,7 +350,6 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).not.toContain(options.device);
             expect(stdout).not.toContain("display0");
             expect(stdout).toContain("screen.jpg");
             expect(stdout).toContain(captureDirPath);
@@ -206,6 +360,18 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 });
 
 describe(aresCmd + ' negative TC', function() {
+    const noPermDirPath = path.join(__dirname, "..", "tempFiles", "noPermDir");
+
+    beforeAll(function(done) { 
+        common.createOutDir(noPermDirPath, '0577');
+        done();
+    });
+
+    afterAll(function(done) {
+        common.removeOutDir(noPermDirPath);
+        done();
+    });
+    
     it('Capture with invalid file format', function(done) {
         exec(cmd + ` -c "test.abc"`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -217,11 +383,11 @@ describe(aresCmd + ' negative TC', function() {
     });
 
     it('Capture with invalid destiation Path', function(done) {
-        exec(cmd + ` -c /rootDir`, function (error, stdout, stderr) {
+        exec(cmd + ` -c ${noPermDirPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied, mkdir '/rootDir'");
-                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission </rootDir>");
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied");
+                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
             }
             done();
         });

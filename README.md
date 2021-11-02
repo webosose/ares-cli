@@ -30,12 +30,13 @@ The list of ares-cli commands is as follows:
 - `ares-setup-device`: Manages the target devices.
 - `ares-install`: Installs the app or service on the target device.
 - `ares-launch`: Launches or terminates the app.
-- `ares-inspect`: Enables Web Inspector or Node’s Inspector for debugging web app or JS service.
+- `ares-inspect`: Enables Web Inspector or Node's Inspector for debugging web app or JS service.
 - `ares-server`: Runs the Web server for testing local app file.
 - `ares-shell`: Executes shell commands in the target device.
 - `ares-push`: Pushes file(s) from a host machine to a target device.
 - `ares-pull`: Pulls file(s) from a target device to a host machine.
 - `ares-device`: Displays the device information.
+- `ares-log`: Shows or saves logs of webOS apps and services.
 
 ## Documentations
 

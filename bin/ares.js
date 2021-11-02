@@ -6,13 +6,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const nopt = require('nopt'),
-    async = require('async'),
-    path = require('path'),
+const async = require('async'),
+    Table = require('easy-table'),
     fs = require('fs'),
+    nopt = require('nopt'),
     log = require('npmlog'),
-    commonTools = require('./../lib/base/common-tools'),
-    Table = require('easy-table');
+    path = require('path'),
+    commonTools = require('./../lib/base/common-tools');
 
 const cliControl = commonTools.cliControl,
     version = commonTools.version,
@@ -89,6 +89,7 @@ if (op) {
 }
 
 function commandList (next) {
+    log.info("commandList()");
     let commandsList;
     const table = new Table();
     const profile = appdata.getConfig(true).profile;
@@ -112,6 +113,7 @@ function commandList (next) {
 }
 
 function display (next) {
+    log.info("display()");
     let commandsList;
     let found = false;
     try{
@@ -139,6 +141,7 @@ function showUsage () {
 }
 
 function finish(err, value) {
+    log.info("finish()");
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -153,7 +156,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }

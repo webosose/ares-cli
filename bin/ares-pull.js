@@ -6,11 +6,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path    = require('path'),
-    log     = require('npmlog'),
-    nopt    = require('nopt'),
+const nopt = require('nopt'),
+    log = require('npmlog'),
+    path = require('path'),
     pullLib = require('./../lib/pull'),
-    commonTools = require('./../lib/base/common-tools');
+    commonTools = require('./../lib/base/common-tools'),
+    spinner = require('./../lib/util/spinner');
 
 const version = commonTools.version,
     cliControl = commonTools.cliControl,
@@ -21,6 +22,7 @@ const version = commonTools.version,
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
 process.on('uncaughtException', function(err) {
+    spinner.stop();
     log.error('uncaughtException', err.toString());
     log.verbose('uncaughtException', err.stack);
     cliControl.end(-1);
@@ -81,7 +83,7 @@ const options = {
 
 let op;
 if (argv['device-list']) {
-    setupDevice.showDeviceListAndExit();
+    op = deviceList;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
@@ -101,6 +103,10 @@ function showUsage() {
     help.display(processName, appdata.getConfig(true).profile);
 }
 
+function deviceList() {
+    setupDevice.showDeviceList(finish);
+}
+
 function pull() {
     if(!options.destinationPath) {
         options.destinationPath = '.';
@@ -114,6 +120,8 @@ function pull() {
 }
 
 function finish(err, value) {
+    log.info("finish()");
+    spinner.stop();
     if (err) {
         // handle err from getErrMsg()
         if (Array.isArray(err) && err.length > 0) {
@@ -128,7 +136,7 @@ function finish(err, value) {
         }
         cliControl.end(-1);
     } else {
-        log.info('finish():', value);
+        log.verbose("finish()", "value:", value);
         if (value && value.msg) {
             console.log(value.msg);
         }
