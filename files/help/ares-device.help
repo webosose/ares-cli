@@ -15,7 +15,7 @@
             "",
             "ID is the specific app or service for display its resource usage.",
             "",
-            "SAVED_FILE is the output directory or file path to save resource usage.",
+            "FILE_PATH is the output directory or file path to save resource usage.",
             "The file format can be only \"csv\".",
             "",
             "OUTPUT_PATH is the output directory or file path of capture file.",
@@ -43,7 +43,7 @@
             "@TAB@ Use it with resource-monitor option"
         ],
         "save" : [
-            "-s, --save <SAVED_FILE> @TAB@ Save resorce usage to SAVED_FILE",
+            "-S, --save <FILE_PATH> @TAB@ Save resorce usage to FILE_PATH",
             "@TAB@ Use it with resource-monitor option"
         ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
