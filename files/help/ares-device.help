@@ -26,9 +26,9 @@
     },
     "options" : {
         "cmdOpt":"option",
-        "default" : ["system", "session", "resource", "list", "id-filter", "interval", "save", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
+        "default" : ["system", "resource", "list", "id-filter", "interval", "save", "capture", "display", "device", "device-list", "help", "version", "verbose", "level"],
         "system" : "-i, --system-info @TAB@ Display the device system information",
-        "session" : "-s, --session-info @TAB@ Display the device session information",
+        "session" : "-sn, --session-info @TAB@ Display the device session information",
         "resource" : "-r, --resource-monitor @TAB@ Display the device resource usage",
         "list" : [
             "-l, --list @TAB@ Display resource usage of running apps and services",
@@ -43,7 +43,7 @@
             "@TAB@ Use it with resource-monitor option"
         ],
         "save" : [
-            "-S, --save <FILE_PATH> @TAB@ Save resorce usage to FILE_PATH",
+            "-s, --save <FILE_PATH> @TAB@ Save resorce usage to FILE_PATH",
             "@TAB@ Use it with resource-monitor option"
         ],
         "capture" : "-c, --capture-screen <OUTPUT_PATH> @TAB@ Capture screen and save the file to the host machine",
@@ -66,14 +66,11 @@
             "# Display system information",
             "ares-device -i -d DEVICE",
             "",
-            "# Display session information",
-            "ares-device -s -d DEVICE",
-            "",
             "# Display resource usage with time interval",
             "ares-device -r -t 1 -d DEVICE",
             "",
             "# Display resource usage and save them to a csv file",
-            "ares-device -r -S -d DEVICE",
+            "ares-device -r -s -d DEVICE",
             "",
             "# Display resource usage of running app and service",
             "ares-device -r -l -t 3 -d DEVICE",

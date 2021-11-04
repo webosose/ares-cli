@@ -11,7 +11,7 @@ const exec = require('child_process').exec,
 
 const dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png"),
     csvFileReg = new RegExp("[0-9]*.csv"),
-    csvFilePath = path.join(__dirname, "..", "tempFiles", "csvDir.csv");
+    csvFilePath = path.join(__dirname, "..", "tempFiles", "resource.csv");
 
 const aresCmd = 'ares-device';
 
@@ -88,7 +88,7 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Retrieve session information', function(done) {
         const keys = ["sessionId", "displayId"];
-        exec(cmd + ` -s ${options.device}`, function (error, stdout, stderr) {
+        exec(cmd + ` -sn ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
@@ -144,13 +144,12 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 
     it('Save specific csv file for all system resource', function(done) {
-        exec(cmd + ` -r -S ${csvFilePath}`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -s ${csvFilePath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             else {
                 expect(stdout).toContain("cpu0");
-                expect(stdout).toContain(csvFilePath);
                 expect(fs.existsSync(csvFilePath)).toBe(true);
                 done();
             }
@@ -158,7 +157,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 
     it('Save generated csv file name for all system resource', function(done) {
-        exec(cmd + ` -r -S`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -s`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -282,13 +281,12 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 
     it('Save csv file for specific app resource', function(done) {
-        exec(cmd + ` -r -id ${options.pkgId} -S ${csvFilePath}`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -id ${options.pkgId} -s ${csvFilePath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             else {
                 expect(stdout).toContain(options.pkgId);
-                expect(stdout).toContain(csvFilePath);
                 expect(fs.existsSync(csvFilePath)).toBe(true);
                 done();
             }
@@ -372,7 +370,7 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
 
 describe(aresCmd + ' negative TC', function() {
     it('Monitor system resource with invalid file extensiton', function(done) {
-        exec(cmd + ` -r -S test.abc`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -s test.abc`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [Tips]: Please specify the file extension(.csv)");
@@ -382,7 +380,7 @@ describe(aresCmd + ' negative TC', function() {
     });
 
     it('Monitor system resource with invalid destiation Path', function(done) {
-        exec(cmd + ` -r -S invalid/system.csv`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -s invalid/system.csv`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [syscall failure]: ENOENT: no such file or directory");

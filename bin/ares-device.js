@@ -52,14 +52,14 @@ const knownOpts = {
 
 const shortHands = {
     "i": ["--system-info"],
-    "s": ["--session-info"],
+    "sn": ["--session-info"],
     "r": ["--resource-monitor"],
     "l": ["--list"],
     "id":["--id-filter"],
     "t": ["--time-interval"],
-    "S": ["--save"],
+    "s": ["--save"],
     "c": ["--capture-screen"],
-    "dp" : ["--display"],
+    "dp": ["--display"],
     "d": ["--device"],
     "D": ["--device-list"],
     "V": ["--version"],
