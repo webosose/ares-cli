@@ -23,8 +23,14 @@ beforeAll(function (done) {
     common.getOptions()
     .then(function(result){
         options = result;
+        common.removeOutDir(csvFilePath);
         done();
     });
+});
+
+afterAll(function(done) {
+    common.removeOutDir(csvFilePath);
+    done();
 });
 
 describe(aresCmd + ' -v', function() {
@@ -88,7 +94,7 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Retrieve session information', function(done) {
         const keys = ["sessionId", "displayId"];
-        exec(cmd + ` -sn ${options.device}`, function (error, stdout, stderr) {
+        exec(cmd + ` -se ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
@@ -120,11 +126,23 @@ describe(aresCmd, function() {
     });
 });
 
-describe(aresCmd + ' --resource-monitor(-r)', function() {
-    beforeAll(function(done) {
-        common.removeOutDir(csvFilePath);
-        done();
+describe(aresCmd, function() {
+    const launchCmd = common.makeCmd('ares-launch');
+    it('Launch sample App', function(done) {
+        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
     });
+});
+
+describe(aresCmd + ' --resource-monitor(-r)', function() {
     afterAll(function(done) {
         common.removeOutDir(csvFilePath);
         done();
@@ -201,32 +219,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 });
 
-describe(aresCmd, function() {
-    const launchCmd = common.makeCmd('ares-launch');
-    it('Launch sample App', function(done) {
-        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).toContain("[Info] Set target device : " + options.device);
-            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
-            setTimeout(function(){
-                done();
-            }, 3000);
-        });
-    });
-});
-
 describe(aresCmd + ' --resource-monitor(-r)', function() {
-    beforeAll(function(done) {
-        common.removeOutDir(csvFilePath);
-        done();
-    });
-    afterAll(function(done) {
-        common.removeOutDir(csvFilePath);
-        done();
-    });
-
     it('Print running app resource', function(done) {
         exec(cmd + " -r --list", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -373,7 +366,7 @@ describe(aresCmd + ' negative TC', function() {
         exec(cmd + ` -r -s test.abc`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [Tips]: Please specify the file extension(.csv)");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please change the file extension to .csv");
             }
             done();
         });

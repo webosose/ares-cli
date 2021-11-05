@@ -52,7 +52,7 @@ const knownOpts = {
 
 const shortHands = {
     "i": ["--system-info"],
-    "sn": ["--session-info"],
+    "se": ["--session-info"],
     "r": ["--resource-monitor"],
     "l": ["--list"],
     "id":["--id-filter"],
@@ -155,11 +155,9 @@ function getResourceMonitor() {
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
         if (!argv["time-interval"]) {
             // when user does not give the time-interval
-            // for example : ares-device -r -t -d target
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         } else if (argv.argv.original.indexOf(options.interval.toString()) === -1) {
             // nopt set default value "1" when user puts only "-t" option without value
-            // for example : ares-device -r t
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         }
         if (options.interval <= 0) {
@@ -177,10 +175,8 @@ function getResourceMonitor() {
         options.id = argv["id-filter"];
         deviceLib.processResource(options, finish);
     } else if (argv.list) {
-        // print all running app and service's resource usage
         deviceLib.processResource(options, finish);
     } else {
-        // print all CPUs and memories usage
         deviceLib.systemResource(options, finish);
     }
 }
