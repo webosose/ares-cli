@@ -1,6 +1,6 @@
 {
   "name": "@webosose/ares-cli",
-  "version": "2.2.0-T.1",
+  "version": "2.2.0-T.2",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -707,6 +707,11 @@
           "dev": true
         }
       }
+    },
+    "csv-writer": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/csv-writer/-/csv-writer-1.6.0.tgz",
+      "integrity": "sha512-NOx7YDFWEsM/fTRAJjRpPp8t+MKRVvniAg9wQlUKx20MFrPs73WLJhFf5iteqrxNYnsy924K3Iroh3yNHeYd2g=="
     },
     "dashdash": {
       "version": "1.14.1",

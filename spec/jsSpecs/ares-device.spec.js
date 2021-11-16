@@ -9,8 +9,9 @@ const exec = require('child_process').exec,
     fs = require('fs'),
     common = require('./common-spec');
 
-const captureDirPath = path.join(__dirname, "..", "tempFiles", "deviceCapture"),
-    dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png");
+const dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png"),
+    csvFileReg = new RegExp("[0-9]*.csv"),
+    csvFilePath = path.join(__dirname, "..", "tempFiles", "resource.csv");
 
 const aresCmd = 'ares-device';
 
@@ -22,8 +23,14 @@ beforeAll(function (done) {
     common.getOptions()
     .then(function(result){
         options = result;
+        common.removeOutDir(csvFilePath);
         done();
     });
+});
+
+afterAll(function(done) {
+    common.removeOutDir(csvFilePath);
+    done();
 });
 
 describe(aresCmd + ' -v', function() {
@@ -87,7 +94,7 @@ describe(aresCmd, function() {
 describe(aresCmd, function() {
     it('Retrieve session information', function(done) {
         const keys = ["sessionId", "displayId"];
-        exec(cmd + ` -s ${options.device}`, function (error, stdout, stderr) {
+        exec(cmd + ` -se ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain("ares-device ERR! [com.webos.service.sessionmanager failure]: " +
@@ -119,7 +126,28 @@ describe(aresCmd, function() {
     });
 });
 
+describe(aresCmd, function() {
+    const launchCmd = common.makeCmd('ares-launch');
+    it('Launch sample App', function(done) {
+        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("[Info] Set target device : " + options.device);
+            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    });
+});
+
 describe(aresCmd + ' --resource-monitor(-r)', function() {
+    afterAll(function(done) {
+        common.removeOutDir(csvFilePath);
+        done();
+    });
+
     it('Print all system resource', function(done) {
         exec(cmd + " -r", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -129,6 +157,35 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 expect(stdout).toContain("cpu0");
                 expect(stdout).toContain("memory");
             }
+            done();
+        });
+    });
+
+    it('Save specific csv file for all system resource', function(done) {
+        exec(cmd + ` -r -s ${csvFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain("cpu0");
+                expect(fs.existsSync(csvFilePath)).toBe(true);
+                done();
+            }
+        });
+    });
+
+    it('Save generated csv file name for all system resource', function(done) {
+        exec(cmd + ` -r -s`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("cpu0");
+
+            const matchedFiles = stdout.match(csvFileReg),
+                generatedFile = path.join(path.resolve('.'), matchedFiles[0]);
+
+            expect(fs.existsSync(generatedFile)).toBe(true);
+            common.removeOutDir(generatedFile);
             done();
         });
     });
@@ -162,22 +219,6 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 });
 
-describe(aresCmd, function() {
-    const launchCmd = common.makeCmd('ares-launch');
-    it('Launch sample App', function(done) {
-        exec(launchCmd + ` ${options.pkgId}`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).toContain("[Info] Set target device : " + options.device);
-            expect(stdout).toContain(`Launched application ${options.pkgId}`, error);
-            setTimeout(function(){
-                done();
-            }, 3000);
-        });
-    });
-});
-
 describe(aresCmd + ' --resource-monitor(-r)', function() {
     it('Print running app resource', function(done) {
         exec(cmd + " -r --list", function (error, stdout, stderr) {
@@ -185,7 +226,6 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 common.detectNodeMessage(stderr);
             }
             else {
-                console.log(stdout);
                 expect(stdout).toContain("[Info] Set target device : " + options.device);
                 expect(stdout).toContain(options.pkgId, error);
                 expect(stdout).toContain("PID");
@@ -220,7 +260,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
     });
 
     it('Print specific app resource', function(done) {
-        exec(cmd + ` -r ${options.pkgId}`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -id ${options.pkgId}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -233,8 +273,22 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
+    it('Save csv file for specific app resource', function(done) {
+        exec(cmd + ` -r -id ${options.pkgId} -s ${csvFilePath}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            else {
+                expect(stdout).toContain(options.pkgId);
+                expect(fs.existsSync(csvFilePath)).toBe(true);
+                done();
+            }
+            done();
+        });
+    });
+
     it('Print specific app is not running', function(done) {
-        exec(cmd + ` -r com.test.app`, function (error, stdout, stderr) {
+        exec(cmd + ` -r -id com.test.app`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
@@ -262,15 +316,12 @@ describe(aresCmd + ' --remove(-r)', function() {
 
 describe(aresCmd + ' --capture-screen(-c)', function() {
     let generatedFile = "";
-
     beforeEach(function(done) {
         generatedFile = "";
-        common.removeOutDir(captureDirPath);
         done();
     });
     afterEach(function(done) {
         common.removeOutDir(generatedFile);
-        common.removeOutDir(captureDirPath);
         done();
     });
 
@@ -288,88 +339,48 @@ describe(aresCmd + ' --capture-screen(-c)', function() {
             const matchedFiles = stdout.match(dateFileReg);
 
             generatedFile = path.join(path.resolve('.'), matchedFiles[0]);
-            console.log("capture file name : " + matchedFiles[0]);
             expect(fs.existsSync(generatedFile)).toBe(true);
             done();
         });
     });
 
     it('Capture with filename', function(done) {
-        exec(cmd + ` -c screen.png`, function (error, stdout, stderr) {
+        exec(cmd + ` -c screen.jpg`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
             expect(stdout).toContain("[Info] Set target device : " + options.device);
             expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("screen.png");
+            expect(stdout).toContain("screen.jpg");
             expect(stdout).toContain(path.resolve('.'));
 
-            generatedFile = path.join(path.resolve('.'), "screen.png");
+            generatedFile = path.join(path.resolve('.'), "screen.jpg");
             expect(fs.existsSync(generatedFile)).toBe(true);
-            done();
-        });
-    });
-
-    it('Capture with directory Path & display option', function(done) {
-        exec(cmd + ` -c ${captureDirPath} --display 1`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).toContain(options.device);
-            expect(stdout).toContain(new Date().getFullYear());
-            expect(stdout).toContain("display1");
-            expect(stdout).toContain(".png");
-            expect(stdout).toContain(captureDirPath);
-            expect(fs.existsSync(captureDirPath)).toBe(true);
-
-            const matchedFiles = stdout.match(dateFileReg);
-
-            console.log("capture file name : " + matchedFiles[0]);
-            expect(fs.existsSync(path.join(captureDirPath, matchedFiles[0]))).toBe(true);
-            done();
-        });
-    });
-
-    it('Capture with directory & file path(bmp)', function(done) {
-        const captureFilePath = path.join(captureDirPath, "screen.bmp");
-        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("screen.bmp");
-            expect(stdout).toContain(captureDirPath);
-            expect(fs.existsSync(captureDirPath)).toBe(true);
-            done();
-        });
-    });
-
-    it('Capture with directory & file path(jpg)', function(done) {
-        const captureFilePath = path.join(captureDirPath, "screen.jpg");
-        exec(cmd + ` -c ${captureFilePath}`, function (error, stdout, stderr) {
-            if (stderr && stderr.length > 0) {
-                common.detectNodeMessage(stderr);
-            }
-            expect(stdout).not.toContain("display0");
-            expect(stdout).toContain("screen.jpg");
-            expect(stdout).toContain(captureDirPath);
-            expect(fs.existsSync(captureDirPath)).toBe(true);
             done();
         });
     });
 });
 
 describe(aresCmd + ' negative TC', function() {
-    const noPermDirPath = path.join(__dirname, "..", "tempFiles", "noPermDir");
-
-    beforeAll(function(done) { 
-        common.createOutDir(noPermDirPath, '0577');
-        done();
+    it('Monitor system resource with invalid file extensiton', function(done) {
+        exec(cmd + ` -r -s test.abc`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please change the file extension to .csv");
+            }
+            done();
+        });
     });
 
-    afterAll(function(done) {
-        common.removeOutDir(noPermDirPath);
-        done();
+    it('Monitor system resource with invalid destiation Path', function(done) {
+        exec(cmd + ` -r -s invalid/system.csv`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: ENOENT: no such file or directory");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please check if the path is valid");
+            }
+            done();
+        });
     });
     
     it('Capture with invalid file format', function(done) {
@@ -383,11 +394,11 @@ describe(aresCmd + ' negative TC', function() {
     });
 
     it('Capture with invalid destiation Path', function(done) {
-        exec(cmd + ` -c ${noPermDirPath}`, function (error, stdout, stderr) {
+        exec(cmd + ` -c invalid/screen.png`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain("ares-device ERR! [syscall failure]: EACCES: permission denied");
-                expect(stderr).toContain("ares-device ERR! [Tips]: No permission to execute. Please check the directory permission");
+                expect(stderr).toContain("ares-device ERR! [syscall failure]: ENOENT: no such file or directory");
+                expect(stderr).toContain("ares-device ERR! [Tips]: Please check if the path is valid");
             }
             done();
         });
