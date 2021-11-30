@@ -81,17 +81,17 @@ describe(aresCmd + " --device-list(-D)", function() {
 });
 
 describe(aresCmd + " -cd", function() {
-    it("Print current log daemon", function(done) {
+    it("Print current logging daemon", function(done) {
         exec(cmd + " -cd", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`CLI's current log daemon :`);
+            expect(stdout).toContain(`CLI's current logging daemon :`);
 
             const splitedStr = stdout.split(":");
             targetLogDaemon = splitedStr[splitedStr.length - 1].trim();
 
-            if (!stdout.includes("The target's current log daemon")) {
+            if (!stdout.includes("The target's current logging daemon")) {
                 targetLogDaemon = targetLogDaemon === "journald" ? "pmlogd" : "journald";
             }
             done();
@@ -100,12 +100,12 @@ describe(aresCmd + " -cd", function() {
 });
 
 describe(aresCmd + " -sd", function() {
-    it("Print switch log daemon", function(done) {
+    it("Print switch logging daemon", function(done) {
         exec(cmd + ` -sd ${targetLogDaemon}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stdout).toContain(`CLI's current log daemon : ${targetLogDaemon}`);
+            expect(stdout).toContain(`CLI's current logging daemon : ${targetLogDaemon}`);
             done();
         });
     });
@@ -566,7 +566,7 @@ describe(aresCmd + " negative tc", function() {
         exec(cmd + " -aaa", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
-                expect(stderr).toContain(`ares-log ERR! [Tips]: The ${targetLogDaemon} does not support the option <aaa>`);
+                expect(stderr).toContain(`ares-log ERR! [Tips]: ${targetLogDaemon} does not support the option <aaa>`);
             }
             done();
         });
@@ -601,8 +601,8 @@ describe(aresCmd + " negative tc", function() {
                 if (options.device === "emulator") {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 } else {
-                    expect(stderr).toContain("ares-log ERR! [Tips]: There is no logs from the ID");
-                    expect(stderr).toContain("ares-log ERR! [Tips]: Please check the options conbination or the ID");
+                    expect(stderr).toContain("ares-log ERR! [Tips]: There are no logs from the ID");
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Please check if the combination of options or the ID are valid");
                 }
             } else {
                 expect(stdout.match(pmLogRegExp).length).toBeGreaterThan(3);
