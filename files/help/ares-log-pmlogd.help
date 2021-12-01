@@ -13,13 +13,13 @@
         "This command shows or saves logs of webOS apps and services using pmlogd.",
         "",
         "** Attributes **",
-        "  LINE           [integer]  Number of lines to show",
-        "  LOGGING_DAEMON [string]   Name of logging daemon (e.g., pmlogd, journald)",
-        "  ID             [string]   ID of app or service",
-        "  SAVED_FILE     [string]   File name or path to save logs",
-        "  CONTEXT        [string]   Name of context",
-        "  CONTEXT_LEVEL  [string]   Priority of specific context logs (e.g., info, notice, warning, err)",
-        "  LEVEL          [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
+        "LINE           [integer]  Number of lines to show",
+        "LOGGING_DAEMON [string]   Name of logging daemon (e.g., pmlogd, journald)",
+        "ID             [string]   ID of app or service",
+        "SAVED_FILE     [string]   File name or path to save logs",
+        "CONTEXT        [string]   Name of context",
+        "CONTEXT_LEVEL  [string]   Priority of specific context logs (e.g., info, notice, warning, err)",
+        "LEVEL          [string]   Priority of CLI logs (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [
         "# Check the current logging daemon",
