@@ -35,6 +35,7 @@
     "win32"
   ],
   "dependencies": {
+    "ar-async": "^0.1.4",
     "async": "0.2.10",
     "bluebird": "3.7.2",
     "body-parser": "1.19.0",
@@ -42,6 +43,7 @@
     "chardet": "0.8.0",
     "combined-stream": "1.0.8",
     "csv-writer": "1.6.0",
+    "decompress": "^4.2.1",
     "easy-table": "1.1.1",
     "elfy": "1.0.0",
     "encoding": "0.1.13",

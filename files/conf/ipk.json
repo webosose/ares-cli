@@ -1,0 +1,37 @@
+{
+    "tmpPath": "/tmp/webOSPackage/",
+    "ipkMetaFiles": ["control.tar.gz", "data.tar.gz"],
+    "webOSMetaFiles": ["control", "package", "app", "service", "luna-service2", "native_service"],
+    "webOSMetaFileRootPath": "usr/",
+    "control": {
+        "heading": "< Package Information >",
+        "path": ".",
+        "fileName": "control",
+        "info": ["Package", "Version", "Architecture", "Installed-Size"]
+    },
+    "package": {
+        "path": "usr/palm/packages",
+        "fileName": ["packageinfo.json"],
+        "info": ["app", "services"]
+    },
+    "app": {
+        "heading": "< Application Information >",
+        "path": "usr/palm/applications",
+        "fileName": ["appinfo.json"],
+        "info": ["id", "version", "type", "main"]
+    },
+    "service": {
+        "heading": "< Service Information >",
+        "path": "usr/palm/services",
+        "fileName": ["services.json", "package.json"],
+        "info": ["id", "version", "main", "services"]
+    },
+    "luna-service2": {
+        "path": "usr/share/luna-service2",
+        "dirs": ["api-permissions.d", "client-permissions.d", "manifests.d", "roles.d", "services.d"]
+    },
+    "native_service": {
+        "heading": "< Service Information >",
+        "path": "usr/sbin"
+    }
+}
