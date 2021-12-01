@@ -14,7 +14,7 @@
         "",
         "** Attributes **",
         "  LINE           [integer]  Number of lines to show",
-        "  LOG_DAEMON     [string]   Name of logging daemon (e.g., pmlogd, journald)",
+        "  LOGGING_DAEMON [string]   Name of logging daemon (e.g., pmlogd, journald)",
         "  ID             [string]   ID of app or service",
         "  SAVED_FILE     [string]   File name or path to save logs",
         "  CONTEXT        [string]   Name of context",
@@ -56,7 +56,7 @@
             "-cd, --current-daemon @TAB@ \tCheck the current logging daemon of CLI and the target device"
         ],
         "switch-daemon" : [
-            "-sd, --switch-daemon <LOG_DAEMON> @TAB@ \tChange the current logging daemon of CLI to LOG_DAEMON"
+            "-sd, --switch-daemon <LOGGING_DAEMON> @TAB@ \tChange the current logging daemon of CLI to LOGGING_DAEMON"
         ],
         "id-filter" : [
             "-id, --id-filter <ID> @TAB@ \tShow logs of the ID"
