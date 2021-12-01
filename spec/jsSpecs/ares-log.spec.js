@@ -13,7 +13,8 @@ const exec = require('child_process').exec,
 
 const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
-    journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g,
+    // journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[\d+]:/g,
+    journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w\d\-]+ [\w\d\.\-]+\[\d+]:/g,
     pmLogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g,
     testAppId = "com.logtest.web.app",
     testAppFileName = "com.logtest.web.app_1.0.0_all.ipk",
@@ -427,7 +428,8 @@ describe(aresCmd + " --pid", function() {
         if (targetLogDaemon === "pmlogd") {
             pending("In case of pmlogd, skip this test case");
         }
-        const pidExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[(\d+)]:/;
+        // const pidExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ [\w|\d|\.|\-]+\[(\d+)]:/;
+        const pidExp = /\w+ \d+ \d\d:\d\d:\d\d [\w\d\-]+ [\w\d\.\-]+\[(\d+)]:/;
             exec(cmd + " -n 1", function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -491,7 +493,8 @@ describe(aresCmd + " --unit memorymanager", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ memorymanager/g;
+                // const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ memorymanager/g;
+                const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w\d\-]+ memorymanager/g;
                 expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(unitExp).length > 0).toBeTrue();
             }

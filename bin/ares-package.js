@@ -54,7 +54,9 @@ function PalmPackage() {
         "force": Boolean,
         "pkgid": String,
         "pkgversion": String,
-        "pkginfofile":String
+        "pkginfofile": String,
+        "info": String,
+        "info-detail": String
     };
 
     const shortHands = {
@@ -73,6 +75,8 @@ function PalmPackage() {
         "pi":       "--pkgid",
         "pv":       "--pkgversion",
         "pf":       "--pkginfofile",
+        "i":        "--info",
+        "id":       "--info-detail",
         "v":        ["--level", "verbose"]
     };
 
@@ -218,6 +222,22 @@ PalmPackage.prototype = {
         if (Object.hasOwnProperty.call(this.argv, 'pkginfofile')) {
             this.options.pkginfofile = this.argv.pkginfofile;
         }
+
+        if (Object.hasOwnProperty.call(this.argv, 'info-detail')) {
+            if (this.argv['info-detail'] === 'true') {
+                this.finish(errHndl.getErrMsg("EMPTY_VALUE", 'info-detail'));
+                cliControl.end(-1);
+            }
+            this.options.infodetail = this.argv['info-detail'];
+        }
+
+        if (Object.hasOwnProperty.call(this.argv, 'info')) {
+            if (this.argv.info === 'true') {
+                this.finish(errHndl.getErrMsg("EMPTY_VALUE", 'info'));
+                cliControl.end(-1);
+            }
+            this.options.info = this.argv.info;
+        }
     },
     
     setOutputDir: function(next) {
@@ -279,24 +299,29 @@ PalmPackage.prototype = {
 
     packageProject: function() {
         async.series([
-                version.checkNodeVersion,
-                this.setOutputDir.bind(this),
-                this.checkInputDir.bind(this),
-                this.packageApp.bind(this)
-            ],
-            this.finish.bind(this));
+            version.checkNodeVersion,
+            this.setOutputDir.bind(this),
+            this.checkInputDir.bind(this),
+            this.packageApp.bind(this)
+        ], this.finish.bind(this));
     },
 
     checkApplication: function() {
         async.series([
-                version.checkNodeVersion,
-                this.checkInputDir.bind(this)
-            ], function(err) {
-                if (err) {
-                    return this.finish(err);
-                }
-                return this.finish(null, {msg : "no problems detected"});
-            }.bind(this));
+            version.checkNodeVersion,
+            this.checkInputDir.bind(this)
+        ], function(err) {
+            if (err) {
+                return this.finish(err);
+            }
+            return this.finish(null, {msg : "no problems detected"});
+        }.bind(this));
+    },
+
+    showPkgInfo: function() {
+        log.info("showPkgInfo()");
+        const packager = new packageLib.Packager(this.options);
+        packager.analyzeIPK(this.options, this.finish);
     },
 
     finish: function(err, value) {
@@ -333,6 +358,8 @@ PalmPackage.prototype = {
             this.checkApplication();
         } else if (this.argv.version) {
             version.showVersionAndExit();
+        } else if (this.argv.info || this.argv['info-detail']) {
+            this.showPkgInfo();
         } else {
             this.packageProject();
         }

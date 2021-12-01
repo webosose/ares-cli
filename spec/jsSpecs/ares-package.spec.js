@@ -20,7 +20,8 @@ const tempDirPath = path.join(__dirname, "..", "tempFiles"),
     svcPkgPath = path.join(outputPath, "com.webos.sample_1.0.0_all.ipk"),
     appinfoPath = path.join(sampleAppPath, "appinfo.json"),
     signKeyPath = path.join(tempDirPath, "sign/signPriv.key"),
-    crtPath = path.join(tempDirPath,"sign/sign.crt");
+    crtPath = path.join(tempDirPath,"sign/sign.crt"),
+    ipkBasePath = path.join(tempDirPath, "ipks");
 
 const aresCmd = 'ares-package',
     sampleServicePaths = [];
@@ -613,6 +614,86 @@ describe(aresCmd + ' negative TC for services packaging', function() {
                 stderr.trim().replace(/\s+['\n']/g, '\n');
                 expect(stderr).toContain("ares-package ERR! [Tips]: Please input required field <id>", error);
             }
+            done();
+        });
+    });
+});
+
+describe(aresCmd + " info/info-detail options", function() {
+    it('Info of web app and service package', function(done) {
+        const webIpk= path.join(ipkBasePath, "com.web.app_1.0.0_all.ipk");
+
+        exec(cmd + ` -i ${webIpk}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("< Package Information >");
+            expect(stdout).toContain("< Application Information >");
+            expect(stdout).toContain("< Service Information >");
+            done();
+        });
+    });
+
+    it('Info of external native app and service package', function(done) {
+        const externalAppIpk= path.join(ipkBasePath, "com.sample.echo_0.0.1_all.ipk");
+
+        exec(cmd + ` -i ${externalAppIpk}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("< Package Information >");
+            expect(stdout).toContain("< Application Information >");
+            expect(stdout).toContain("< Service Information >");
+            done();
+        });
+    });
+
+    it('Info of  built-in native service pacakge', function(done) {
+        const builtInSvcIpk= path.join(ipkBasePath, "com.example.service.native_0.0.1-r0.local0_raspberrypi4_64.ipk");
+
+        exec(cmd + ` -i ${builtInSvcIpk}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("< Package Information >");
+            expect(stdout).not.toContain("< Application Information >");
+            expect(stdout).toContain("< Service Information >");
+            done();
+        });
+    });
+
+    it('Detail info of built-in native service pacakge', function(done) {
+        const builtInSvcIpk= path.join(ipkBasePath, "com.example.service.native_0.0.1-r0.local0_raspberrypi4_64.ipk");
+
+        exec(cmd + ` -id ${builtInSvcIpk}`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stdout).toContain("api-permissions.d/com.example.service.native.api.json");
+            expect(stdout).toContain("client-permissions.d/com.example.service.native.perm.json");
+            expect(stdout).toContain("manifests.d/com.example.service.native.manifest.json");
+            expect(stdout).toContain("roles.d/com.example.service.native.role.json");
+            expect(stdout).toContain("services.d/com.example.service.native.service");
+            done();
+        });
+    });
+
+    it('nagetive TC for not exist file', function(done) {
+        exec(cmd + ` -i aaa`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stderr).toContain("ares-package ERR! [Tips]: The specified path does not exist <aaa>");
+            done();
+        });
+    });
+
+    it('nagetive TC for not exist parameter', function(done) {
+        exec(cmd + ` -i`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stderr).toContain("ares-package ERR! [Tips]: Please specify a value <info>");
             done();
         });
     });
