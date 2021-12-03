@@ -78,7 +78,7 @@ describe(aresCmd, function() {
     it('Retrieve device information', function(done) {
         const keys = ["webos_build_id","webos_imagename","webos_name","webos_release",
                     "webos_manufacturing_version", "core_os_kernel_version", "device_name",
-                    "device_id", "chromium_version", "qt_version"];
+                    "device_id", "chromium_version", "qt_version", "nodejs_versions"];
         exec(cmd + ` -i ${options.device}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
