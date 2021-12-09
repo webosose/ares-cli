@@ -76,7 +76,7 @@ function PalmPackage() {
         "pv":       "--pkgversion",
         "pf":       "--pkginfofile",
         "i":        "--info",
-        "id":       "--info-detail",
+        "I":       "--info-detail",
         "v":        ["--level", "verbose"]
     };
 

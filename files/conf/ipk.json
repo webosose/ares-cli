@@ -24,6 +24,7 @@
         "heading": "< Service Information >",
         "path": "usr/palm/services",
         "fileName": ["services.json", "package.json"],
-        "info": ["id", "version", "main", "services"]
+        "info": ["id", "version", "main", "services"],
+        "services": "name"
     }
 }

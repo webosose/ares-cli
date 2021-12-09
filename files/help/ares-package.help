@@ -5,9 +5,9 @@
     "name" : "ares-package - Create a package containing a webOS app or service",
     "synopsis" : {
         "default" : [
-            "ares-package [OPTION...] APP_DIR [SERVICE_DIR [...]]",
-            "ares-package --info(-i) IPK_PACKAGE",
-            "ares-package --info-detail(-id) IPK_PACKAGE"
+            "ares-package [OPTION...] <APP_DIR> [<SERVICE_DIR> [...]]",
+            "ares-package --info(-i) <PACKAGE_FILE>",
+            "ares-package --info-detail(-I) <PACKAGE_FILE>"
         ]
     },
     "description" : [
@@ -21,7 +21,7 @@
             "",
             "APP_DIR or OUTPUT_DIR can be a relative or absolute path.",
             "",
-            "IPK_PACKAGE is a webOS package with .ipk extension",
+            "PACKAGE_FILE is a webOS package with .ipk extension.",
             "",
             "LEVEL is priority of logs (e.g., silly, verbose, info, warn, error)"
           ]
@@ -34,13 +34,13 @@
                 "ares-package -e \"*.txt\" -e \"test\"",
                 "",
                 "# Create a package for the webOS app with multiple webOS services",
-                "ares-package APP_DIR SVC1_DIR SVC2_DIR",
+                "ares-package ~/projects/app ~/projects/service ~/projects/service2",
                 "",
                 "# Analyze a package",
-                "ares-package -i IPK_PACKAGE",
+                "ares-package -i ~/projects/packages/com.examples.app_1.0_all.ipk",
                 "",
                 "# Analyze detail a package",
-                "ares-package -id IPK_PACKAGE"
+                "ares-package -I ~/projects/packages/com.examples.app_1.0_all.ipk"
             ]
         }
     ],

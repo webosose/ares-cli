@@ -623,7 +623,7 @@ describe(aresCmd + " info/info-detail options", function() {
     it('Info of web app and service package', function(done) {
         const webIpk= path.join(ipkBasePath, "com.web.app_1.0.0_all.ipk");
 
-        exec(cmd + ` -id ${webIpk}`, function (error, stdout, stderr) {
+        exec(cmd + ` -I ${webIpk}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
