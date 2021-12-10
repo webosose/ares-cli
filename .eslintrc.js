@@ -45,5 +45,8 @@ module.exports = {
         'pending' :false,
         'jasmine' : false,
         'fail' : false
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017
     }
 };
