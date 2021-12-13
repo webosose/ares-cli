@@ -1,0 +1,30 @@
+{
+    "tmpPath": "webOSPackage-",
+    "ipkMetaFiles": ["control.tar.gz", "data.tar.gz"],
+    "webOSMetaFiles": ["control", "package", "app", "service"],
+    "webOSMetaFileRootPath": "usr/",
+    "control": {
+        "heading": "< Package Information >",
+        "path": ".",
+        "fileName": "control",
+        "info": ["Package", "Version", "Architecture", "Installed-Size"]
+    },
+    "package": {
+        "path": "usr/palm/packages",
+        "fileName": ["packageinfo.json"],
+        "info": ["app", "services"]
+    },
+    "app": {
+        "heading": "< Application Information >",
+        "path": "usr/palm/applications",
+        "fileName": ["appinfo.json"],
+        "info": ["id", "version", "type", "main"]
+    },
+    "service": {
+        "heading": "< Service Information >",
+        "path": "usr/palm/services",
+        "fileName": ["services.json", "package.json"],
+        "info": ["id", "version", "main", "services"],
+        "services": "name"
+    }
+}

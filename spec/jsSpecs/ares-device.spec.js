@@ -190,7 +190,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
-    it('Print all system resource repeatedly', function(done) {
+    it('Print all system resource periodically', function(done) {
         const child = exec(cmd + " -r -t 1");
         let stdoutData;
         child.stdout.on('data', function (data) {
@@ -215,7 +215,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
             expect(matchedCPU).toBeGreaterThan(3);
             expect(matchedMemory).toBeGreaterThan(3);
             done();
-        }, 6000);
+        }, 8000);
     });
 });
 
@@ -236,7 +236,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
         });
     });
 
-    it('Print running app resource repeatedly', function(done) {
+    it('Print running app resource periodically', function(done) {
         const child = exec(cmd + " -r --list -t 1");
         let stdoutData;
         child.stdout.on('data', function (data) {
@@ -256,7 +256,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
             const matchedApp = ((stdoutData || '').match(idReg) || []).length;
             expect(matchedApp).toBeGreaterThan(3);
             done();
-        }, 6000);
+        }, 8000);
     });
 
     it('Print specific app resource', function(done) {
