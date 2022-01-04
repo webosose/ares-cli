@@ -224,18 +224,10 @@ PalmPackage.prototype = {
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'info-detail')) {
-            if (this.argv['info-detail'] === 'true') {
-                this.finish(errHndl.getErrMsg("EMPTY_VALUE", 'info-detail'));
-                cliControl.end(-1);
-            }
             this.options.infodetail = this.argv['info-detail'];
         }
 
         if (Object.hasOwnProperty.call(this.argv, 'info')) {
-            if (this.argv.info === 'true') {
-                this.finish(errHndl.getErrMsg("EMPTY_VALUE", 'info'));
-                cliControl.end(-1);
-            }
             this.options.info = this.argv.info;
         }
     },
