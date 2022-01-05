@@ -649,12 +649,22 @@ describe(aresCmd + " info/info-detail options", function() {
         });
     });
 
-    it('nagetive TC for not exist file', function(done) {
+    it('nagetive TC for not support file extension', function(done) {
         exec(cmd + ` -i aaa`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stderr).toContain("ares-package ERR! [Tips]: The specified path does not exist <aaa>");
+            expect(stderr).toContain("ares-package ERR! [Tips]: Only .ipk file is supported. Please check the file extension <aaa>");
+            done();
+        });
+    });
+
+    it('nagetive TC for not exist ipk file', function(done) {
+        exec(cmd + ` -i aaa.ipk`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+            }
+            expect(stderr).toContain("ares-package ERR! [Tips]: The specified path does not exist <aaa.ipk>");
             done();
         });
     });
