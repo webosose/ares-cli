@@ -654,7 +654,7 @@ describe(aresCmd + " info/info-detail options", function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
-            expect(stderr).toContain("ares-package ERR! [Tips]: Support only .ipk file. Please check the file extension <aaa>");
+            expect(stderr).toContain("ares-package ERR! [Tips]: Only .ipk file is supported. Please check the file extension <aaa>");
             done();
         });
     });

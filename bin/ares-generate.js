@@ -112,7 +112,7 @@ if (argv.help) {
 } else if (argv.list) {
     op = list;
 } else {
-        op = generate;
+    op = generate;
 }
 
 if (op) {
