@@ -194,7 +194,6 @@ describe(aresCmd + "save option cases", function() {
     });
 });
 
-
 describe(aresCmd + " -cl", function() {
     it("Launch sample App", function(done) {
         if (targetLogDaemon === "journald") {
