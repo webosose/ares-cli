@@ -9,8 +9,8 @@ const exec = require('child_process').exec,
     fs = require('fs'),
     common = require('./common-spec');
 
-const dateFileReg = new RegExp("[A-Za-z0-9]*_display[0-9]_[0-9]*.png"),
-    csvFileReg = new RegExp("[0-9]*.csv"),
+const dateFileReg = new RegExp("[A-Za-z0-9]+_display[0-9]_[0-9]+_[0-9]+.png"),
+    csvFileReg = new RegExp("[0-9]+_[0-9]+.csv"),
     csvFilePath = path.join(__dirname, "..", "tempFiles", "resource.csv");
 
 const aresCmd = 'ares-device';
@@ -167,6 +167,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 common.detectNodeMessage(stderr);
             }
             else {
+                expect(stdout).toContain("Create");
                 expect(stdout).toContain("cpu0");
                 expect(fs.existsSync(csvFilePath)).toBe(true);
                 done();
@@ -179,6 +180,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
             }
+            expect(stdout).toContain("Create");
             expect(stdout).toContain("cpu0");
 
             const matchedFiles = stdout.match(csvFileReg),
@@ -279,6 +281,7 @@ describe(aresCmd + ' --resource-monitor(-r)', function() {
                 common.detectNodeMessage(stderr);
             }
             else {
+                expect(stdout).toContain("Create");
                 expect(stdout).toContain(options.pkgId);
                 expect(fs.existsSync(csvFilePath)).toBe(true);
                 done();
