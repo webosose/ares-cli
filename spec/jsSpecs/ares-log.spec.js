@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 LG Electronics Inc.
+ * Copyright (c) 2021-2022 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -15,6 +15,7 @@ const aresCmd = 'ares-log',
     savedlogPath = path.join(__dirname, "..", "tempFiles", "savedlog.log"),
     journalLogRegExp = /\w+ \d+ \d\d:\d\d:\d\d [\w\d\-]+ [\w\d\.\-]+\[\d+]:/g,
     pmLogRegExp = /\d*-\d*-\d*T\d*:\d*:\d*.\d*Z \[\d*.\d*\] \w*.\w* \w*/g,
+    savedFileExp = /\d+_\d+.log/g,
     testAppId = "com.logtest.web.app",
     testAppFileName = "com.logtest.web.app_1.0.0_all.ipk",
     testAppPath = path.join(__dirname, "..", "tempFiles", testAppFileName);
@@ -160,8 +161,8 @@ describe(aresCmd + " -n 2", function() {
     });
 });
 
-describe(aresCmd + "-n 2 -s logfile", function() {
-    it("Save log to file", function(done) {
+describe(aresCmd + "save option cases", function() {
+    it("Save log to specific name file", function(done) {
         exec(cmd + ` -n 2 -s ${savedlogPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
@@ -170,6 +171,22 @@ describe(aresCmd + "-n 2 -s logfile", function() {
                 }
             } else {
                 expect(fs.existsSync(savedlogPath)).toBe(true);
+                expect(stdout).toContain("Created");
+            }
+            done();
+        });
+    });
+
+    it("Save log to default file name format", function(done) {
+        exec(cmd + ` -n 2 -s`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                if (options.device === "emulator") {
+                    expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
+                }
+            } else {
+                const generatedFile = path.join(path.resolve('.'), stdout.match(savedFileExp)[0]);
+                expect(fs.existsSync(generatedFile)).toBe(true);
                 expect(stdout).toContain("Created");
             }
             done();
@@ -567,6 +584,17 @@ describe(aresCmd + " negative tc", function() {
             if (stderr && stderr.length > 0) {
                 common.detectNodeMessage(stderr);
                 expect(stderr).toContain(`ares-log ERR! [Tips]: ${targetLogDaemon} does not support the option <aaa>`);
+            }
+            done();
+        });
+    });
+
+    it("Invalid save path", function(done) {
+        exec(cmd + ` -n 2 -s invalid/aaa.log`, function (error, stdout, stderr) {
+            if (stderr && stderr.length > 0) {
+                common.detectNodeMessage(stderr);
+                expect(stderr).toContain("ares-log ERR! [syscall failure]: ENOENT: no such file or directory");
+                expect(stderr).toContain("ares-log ERR! [Tips]: Please check if the path is valid");
             }
             done();
         });
