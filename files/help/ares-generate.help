@@ -47,7 +47,7 @@
             "-p, --property <PROPERTY> @TAB@ Set the properties of appinfo.json, services.json or packageinfo.json"
         ],
         "servicename" : [
-            "-s, --servicename <SERVICE_NAME> @TAB@ Set the servicename for webOS service."
+            "-s, --servicename <SERVICE_NAME> @TAB@ Set the servicename for webOS service"
         ],
         "overwrite" : "-f, --overwrite @TAB@ Overwrite existing files",
         "help" : "-h, --help @TAB@ Display this help",

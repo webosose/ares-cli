@@ -188,6 +188,7 @@ describe(aresCmd + "save option cases", function() {
                 const generatedFile = path.join(path.resolve('.'), stdout.match(savedFileExp)[0]);
                 expect(fs.existsSync(generatedFile)).toBe(true);
                 expect(stdout).toContain("Created");
+                common.removeOutDir(generatedFile);
             }
             done();
         });
