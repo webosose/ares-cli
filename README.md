@@ -12,7 +12,7 @@ To install ares-cli, use `npm`. It is recommended to install ares-cli globally. 
 $ npm install -g @webosose/ares-cli
 ```
 
-> Note: Node 8.12.0 to 14.15.1 are recommended.
+> Note: Node version 10.24.1 to 14.15.1 are recommended.
 
 ## Compatibility
 

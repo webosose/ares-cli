@@ -1,3 +1,31 @@
+## 2.3.0 (February 7, 2022)
+### ares-log
+* Supports to show logs of pmlogd and added options to support related features.
+* Added option to check(`--current-daemon`) and select(`--select-daemon`) log daemon.
+* Supports to print the help message by selected log daemon.
+
+### ares-device
+* Supports to monitor resource usage using `--resouce-monitor` option and provides related features through the options of `--time-interval`, `--list`, `--id`  and `--save`.
+* Fixed a bug related to the directory permission when using `capture-screen` option.
+
+### ares-pacakge
+* Supports to analyze the pacakge file(.ipk) using `--info` and `--info-detail` options.
+* Fixed a bug related to the callback function error.
+
+### ares-inspect
+* Fixed a bug that prevented opening the browser specified in the environment variables when using `--open` option.
+
+### Common
+* Updated the minimum supported node version from v8.12.0 to v10.24.1.
+* Added a feature to print information of the connected target device.
+* Added a feature to print the progress when the command takes a long time to execute.
+* Cleaned up all log levels of all source code and supports to show level-applied logs  using `--level` option of each command.
+* Added a feature to manually set time interval when running unit tests.
+
+### Meta files
+* Updated the README file.
+
+
 ## 2.2.0 (June 21, 2021)
 ### ares-log
 * Added as a new command for showing or saving logs of webOS apps and services.

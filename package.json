@@ -1,6 +1,6 @@
 {
   "name": "@webosose/ares-cli",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Command Line Interface for development webOS application and service",
   "main": "./bin/ares.js",
   "author": "ye.kim",
@@ -26,7 +26,7 @@
     "ares-shell": "bin/ares-shell.js"
   },
   "engines": {
-    "node": ">=8.12.0"
+    "node": ">=10.24.1"
   },
   "engineStrict": true,
   "os": [
