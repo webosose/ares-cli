@@ -12,6 +12,8 @@
     "description" : [
         "This command installs or removes packages on the DEVICE.",
         "",
+        "PACKAGE_FILE is a webOS package with .ipk extension.",
+        "",
         "LEVEL is priority of logs. (e.g., silly, verbose, info, warn, error)"
     ],
     "examples" : [

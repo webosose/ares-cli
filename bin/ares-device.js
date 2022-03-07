@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- * Copyright (c) 2020 LG Electronics Inc.
+ * Copyright (c) 2020-2022 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -39,7 +39,7 @@ const knownOpts = {
     // resource-monitor parameter
     "list" : Boolean,
     "id-filter" : [String, null],
-    "time-interval" : Number,
+    "time-interval" : [Number, null],
     "save" : Boolean,
     "capture-screen" : Boolean,
     "display" : Number,
@@ -153,15 +153,16 @@ function getResourceMonitor() {
     options.outputPath = argv.argv.remain[0] || null;
 
     if (argv.argv.cooked.indexOf("--time-interval") !== -1 ) {
+        if (options.interval <= 0) {
+            return finish(errHndl.getErrMsg("INVALID_INTERVAL"));
+        }
+
         if (!argv["time-interval"]) {
             // when user does not give the time-interval
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
         } else if (argv.argv.original.indexOf(options.interval.toString()) === -1) {
             // nopt set default value "1" when user puts only "-t" option without value
             return finish(errHndl.getErrMsg("EMPTY_VALUE", "time-interval"));
-        }
-        if (options.interval <= 0) {
-            return finish(errHndl.getErrMsg("INVALID_INTERVAL"));
         }
     }
     log.info("getResourceMonitor()", "interval:", options.interval);

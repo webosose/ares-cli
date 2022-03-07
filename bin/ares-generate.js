@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- * Copyright (c) 2020 LG Electronics Inc.
+ * Copyright (c) 2020-2022 LG Electronics Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -112,7 +112,7 @@ if (argv.help) {
 } else if (argv.list) {
     op = list;
 } else {
-        op = generate;
+    op = generate;
 }
 
 if (op) {
