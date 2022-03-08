@@ -48,6 +48,12 @@
             "method" : "query",
             "returnValue" : "return.returnValue"
         },
+        "softwareInfo" : {
+            "service" : "com.webos.service.systemservice",
+            "folder" : "softwareInfo",
+            "method" : "query",
+            "returnValue" : "return.returnValue"
+        },
         "getSessionList" : {
             "service" : "com.webos.service.sessionmanager",
             "method" : "getSessionList",
