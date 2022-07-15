@@ -2,7 +2,7 @@
   "name": "@webosose/ares-cli",
   "version": "2.3.1",
   "description": "Command Line Interface for development webOS application and service",
-  "main": "./bin/ares.js",
+  "main": "APIs.js",
   "author": "ye.kim",
   "repository": {
     "type": "git",
