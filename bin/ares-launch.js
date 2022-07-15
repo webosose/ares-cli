@@ -43,7 +43,6 @@ const knownOpts = {
     "running":  Boolean,
     "display" : [String, null],
     "params":   [String, Array],
-    "host-port": [String, null],
     "version":  Boolean,
     "help":     Boolean,
     "hidden-help":      Boolean,
@@ -59,7 +58,6 @@ const shortHands = {
     "r": ["--running"],
     "dp": ["--display"],
     "p": ["--params"],
-    "P": ["--host-port"],
     "V": ["--version"],
     "h": ["--help"],
     "hh": ["--hidden-help"],
@@ -96,7 +94,6 @@ const options = {
         inspect: argv.open || argv.inspect,
         open: argv.open,
         installMode: "Installed",
-        hostPort: argv["host-port"],
         display: argv.display
     },
     appId = argv.argv.remain[0];
