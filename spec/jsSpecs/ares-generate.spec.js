@@ -244,7 +244,7 @@ describe(aresCmd + ' --template', function() {
         });
     });
 
-    it('hosted_webapp : generate qml template app', function(done) {
+    it('hosted_webapp : generate hosted template app', function(done) {
         const url = "http://www.google.com";
         exec(cmd + ` -t hosted_webapp -p "url=${url}" ${sampleAppPath}`, function (error, stdout, stderr) {
             if (stderr && stderr.length > 0) {
@@ -259,7 +259,7 @@ describe(aresCmd + ' --template', function() {
                 console.error(err);
             }
 
-            expect(text).toContain(url);
+            expect(text.toString()).toContain(url);
             expect(error).toBeNull();
             done();
         });

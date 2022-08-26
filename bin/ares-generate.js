@@ -133,41 +133,15 @@ function showUsage(hiddenFlag) {
 
 function getGenerator() {
     if (!generator) {
-        generator = new GeneratorLib(options.tmplFile);
+        generator = new GeneratorLib();
     }
     return generator;
 }
 
-function list(next) {
+function list() {
     const gen = getGenerator();
-    gen.showTemplates(options.listType);
-    next();
-}
-
-function parsePropArgs(targetInfo) {
-    const props = options.props;
-    const info = targetInfo;
-    if (props.length === 1 && props[0].indexOf('{') !== -1 && props[0].indexOf('}') !== -1 &&
-        ( (props[0].split("'").length - 1) % 2) === 0)
-    {
-        // eslint-disable-next-line no-useless-escape
-        props[0] = props[0].replace(/\'/g,'"');
-    }
-    props.forEach(function(prop) {
-        try {
-            const data = JSON.parse(prop);
-            for (const k in data) {
-                info[k] = data[k];
-            }
-        } catch (err) {
-            const tokens = prop.split('=');
-            if (tokens.length === 2) {
-                info[tokens[0]] = tokens[1];
-            } else {
-                log.warn('Ignoring invalid arguments:', prop);
-            }
-        }
-    });
+    gen.showTemplates(options.listType, finish);
+    cliControl.end();
 }
 
 function getQueryFile(profile, type) {
@@ -192,23 +166,17 @@ function queryInfo(queryFile) {
     });
 }
 
-function generate(next) {
+function generate() {
     const gen = getGenerator();
-    const templates = gen.getTemplates();
-    if (!options.tmplName) {
-        for (const name in templates) {
-            if (templates[name].default) {
-                options.tmplName = name;
-                break;
-            }
-        }
-    }
-    if (!options.tmplName) {
-        return next(errHndl.getErrMsg("EMPTY_VALUE", "TEMPLATE"));
+    const templates = gen.getTmpl();
+
+    if (options.tmplName === "true") {
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "TEMPLATE"));
     }
     if (!options.out) {
-        return next(errHndl.getErrMsg("EMPTY_VALUE", "APP_DIR"));
+        return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_DIR"));
     }
+
     Promise.resolve()
         .then(function() {
             const overwrite = !!options.overwrite,
@@ -238,7 +206,8 @@ function generate(next) {
             if (!template.type) {
                 return;
             }
-            if(!options.props.length) { // query mode
+            // query mode, only CLI can approach. API only use props
+            if(!options.props.length) {
                 if (options.query && options.tmplName.match(/(^hosted)/)) {
                     const queryConfigFile = getQueryFile(config.profile, 'hosted');
                     return queryInfo(queryConfigFile).then(function(info) {
@@ -268,21 +237,9 @@ function generate(next) {
                         }
                     });
                 }
-            } else if (template.type.match(/(app$|appinfo$)/)) {
-                parsePropArgs(options.appinfo);
-            } else if (template.type.match(/(service$|serviceinfo$)/)) {
-                parsePropArgs(options.svcinfo);
-            } else if (template.type.match(/(package$|packageinfo$)/)) {
-                parsePropArgs(options.pkginfo);
-            }
-        })
+            }})
         .then(function() {
-            return gen.generate(options)
-                .then(function() {
-                    finish(null, {
-                        "msg": "Success"
-                    });
-                });
+            gen.generate(options, finish);
         })
         .catch(function(err) {
             finish(err);
@@ -309,6 +266,5 @@ function finish(err, value) {
         if (value && value.msg) {
             console.log(value.msg);
         }
-        cliControl.end();
     }
 }
