@@ -2,6 +2,7 @@ const {promisify} = require('util'),
     aresInspecter = require('./lib/inspect'),
     aresInstaller = require('./lib/install'),
     aresLauncher = require('./lib/launch'),
+    aresPackager = require('./lib/package'),
     aresPuller = require('./lib/pull'),
     aresPusher = require('./lib/pusher'),
     aresShell = require('./lib/shell'),
@@ -24,6 +25,8 @@ const Launcher = {
     launch: promisify(aresLauncher.launch),
     listRunningApp: promisify(aresLauncher.listRunningApp)
 };
+
+const Packager = new aresPackager.Packager();
 
 const Puller = {
     pull: promisify(aresPuller.pull)
@@ -55,6 +58,7 @@ module.exports = {
     Inspecter,
     Installer,
     Launcher,
+    Packager,
     Puller,
     Pusher,
     Server,
