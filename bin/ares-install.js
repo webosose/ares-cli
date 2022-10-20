@@ -147,15 +147,15 @@ function install() {
         if (!fs.existsSync(path.normalize(pkgPath))) {
             return finish(errHndl.getErrMsg("NOT_EXIST_PATH", pkgPath));
         }
-        installLib.install(options, pkgPath, finish);
+        installLib.install(options, pkgPath, finish, outputTxt);
     }
 }
 
-function list(){
+function list() {
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
         if (Array.isArray(pkgs)) {
-            pkgs.forEach(function (pkg) {
+            pkgs.forEach(function(pkg) {
                 if (argv.type) {
                     if (argv.type !== pkg.type) {
                         return;
@@ -165,21 +165,21 @@ function list(){
             });
         }
         finish(err, {msg : strPkgs.trim()});
-    });
+    }, outputTxt);
 }
 
 function listFull() {
     installLib.list(options, function(err, pkgs) {
         let strPkgs = "";
         if (Array.isArray(pkgs)) {
-            pkgs.forEach(function (pkg) {
+            pkgs.forEach(function(pkg) {
                 strPkgs += "id : "+ pkg.id + '\n';
                 delete pkg.id;
                 strPkgs += convertJsonToList(pkg, 0) + '\n';
             });
         }
         finish(err, {msg : strPkgs.trim()});
-    });
+    }, outputTxt);
 }
 
 function remove() {
@@ -188,7 +188,12 @@ function remove() {
     if (!pkgId) {
         return finish(errHndl.getErrMsg("EMPTY_VALUE", "APP_ID"));
     }
-    installLib.remove(options, pkgId, finish);
+    installLib.remove(options, pkgId, finish, outputTxt);
+}
+
+function outputTxt(value) {
+    log.info("outputTxt()", "value:", value);
+    console.log(value);
 }
 
 function finish(err, value) {
