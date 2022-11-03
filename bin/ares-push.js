@@ -114,7 +114,13 @@ function push() {
         showUsage();
         cliControl.end(-1);
     }
-    pusher.push(srcPaths, dstPath, options, finish);
+
+    pusher.push(srcPaths, dstPath, options, finish, outputTxt);
+}
+
+function outputTxt(value) {
+    log.info("outputTxt()", "value:", value);
+    console.log(value);
 }
 
 function finish(err, value) {
