@@ -1,6 +1,7 @@
 const {promisify} = require('util'),
     aresInspecter = require('./lib/inspect'),
     aresLauncher = require('./lib/launch'),
+    aresPuller = require('./lib/pull'),
     aresPusher = require('./lib/pusher'),
     aresShell = require('./lib/shell'),
     aresServer = require('./lib/base/server'),
@@ -15,6 +16,10 @@ const Launcher = {
     close: promisify(aresLauncher.close),
     launch: promisify(aresLauncher.launch),
     listRunningApp: promisify(aresLauncher.listRunningApp)
+};
+
+const Puller = {
+    pull: promisify(aresPuller.pull)
 };
 
 const Pusher = new aresPusher();
@@ -42,6 +47,7 @@ const SetupDevice = {
 module.exports = {
     Inspecter,
     Launcher,
+    Puller,
     Pusher,
     Server,
     Shell,

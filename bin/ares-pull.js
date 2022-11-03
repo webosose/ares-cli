@@ -116,7 +116,12 @@ function pull() {
         showUsage();
         cliControl.end(-1);
     }
-    pullLib.pull(options, finish);
+    pullLib.pull(options.sourcePath, options.destinationPath, options, finish, outputTxt);
+}
+
+function outputTxt(value) {
+    log.info("outputTxt()", "value:", value);
+    console.log(value);
 }
 
 function finish(err, value) {
