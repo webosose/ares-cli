@@ -1,6 +1,7 @@
 const {promisify} = require('util'),
     aresInspecter = require('./lib/inspect'),
     aresLauncher = require('./lib/launch'),
+    aresShell = require('./lib/shell'),
     aresServer = require('./lib/base/server'),
     aresSetupDevice = require('./lib/base/setup-device');
 
@@ -21,6 +22,11 @@ const Server = {
     stop: promisify(aresServer.stop)
 };
 
+const Shell = {
+    remoteRun: promisify(aresShell.remoteRun),
+    shell: promisify(aresShell.shell)
+};
+
 const SetupDevice = {
     modifyDevice: promisify(aresSetupDevice.modifyDeviceInfo),
     removeDevice: promisify(aresSetupDevice.removeDeviceInfo),
@@ -34,5 +40,6 @@ module.exports = {
     Inspecter,
     Launcher,
     Server,
+    Shell,
     SetupDevice
 };
