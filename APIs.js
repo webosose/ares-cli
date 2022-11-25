@@ -1,11 +1,18 @@
 const {promisify} = require('util'),
-    aresLauncher = require('./lib/launch'),
+aresLauncher = require('./lib/launch'),
+aresServer = require('./lib/base/server'),
     aresSetupDevice = require('./lib/base/setup-device');
 
 const Launcher = {
     close: promisify(aresLauncher.close),
     launch: promisify(aresLauncher.launch),
     listRunningApp: promisify(aresLauncher.listRunningApp)
+};
+
+const Server = {
+    openBrowser: promisify(aresServer.openBrowser),
+    runServer: promisify(aresServer.runServer),
+    stop: promisify(aresServer.stop)
 };
 
 const SetupDevice = {
@@ -19,5 +26,6 @@ const SetupDevice = {
 
 module.exports = {
     Launcher,
+    Server,
     SetupDevice
 };

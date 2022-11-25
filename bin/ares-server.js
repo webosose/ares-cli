@@ -114,11 +114,9 @@ function runServer() {
     async.waterfall([
         serverLib.runServer.bind(serverLib, appPath, port, _reqHandler),
         function(serverInfo, next) {
-            let openUrl;
             if (serverInfo && serverInfo.port) {
-                serverUrl = 'http://localhost:' + serverInfo.port;
-                openUrl = serverUrl + '/ares_cli/ares.html';
-                console.log("Local server running on " + serverUrl);
+                serverUrl = serverInfo.url;
+                console.log(serverInfo.msg);
             }
             if (argv.open && serverInfo.port) {
                 async.series([
@@ -127,8 +125,8 @@ function runServer() {
                     if (err) {
                         return next(err);
                     }
-                    log.info("runServer()", "openUrl:", openUrl, ", browserPath :", browserPath[0]);
-                    serverLib.openBrowser(openUrl, browserPath[0]);
+                    log.info("runServer()", "serverInfo.openBrowserUrl:", serverInfo.openBrowserUrl, ", browserPath :", browserPath[0]);
+                    serverLib.openBrowser(serverInfo.openBrowserUrl, browserPath[0]);
                 });
             }
             next();
