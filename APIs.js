@@ -1,7 +1,13 @@
 const {promisify} = require('util'),
-aresLauncher = require('./lib/launch'),
-aresServer = require('./lib/base/server'),
+    aresInspecter = require('./lib/inspect'),
+    aresLauncher = require('./lib/launch'),
+    aresServer = require('./lib/base/server'),
     aresSetupDevice = require('./lib/base/setup-device');
+
+const Inspecter = {
+    inspect: promisify(aresInspecter.inspect),
+    stop: promisify(aresInspecter.stop)
+};
 
 const Launcher = {
     close: promisify(aresLauncher.close),
@@ -25,6 +31,7 @@ const SetupDevice = {
 };
 
 module.exports = {
+    Inspecter,
     Launcher,
     Server,
     SetupDevice
