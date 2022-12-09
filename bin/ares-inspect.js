@@ -138,13 +138,13 @@ function inspect(){
         return finish(errHndl.getErrMsg("INVALID_DISPLAY"));
     }
 
-    async.series([
-            inspectLib.inspect.bind(inspectLib, options, null),
-            function() {
-                // TODO: hold process to keep alive
-            }
-    ], function(err) {
-        finish(err);
+    async.waterfall([
+        inspectLib.inspect.bind(inspectLib, options),
+        function(inspectInfo) {
+            console.log(inspectInfo.msg);
+        }
+    ], function(err, results) {
+        finish(err, results);
     });
 }
 
