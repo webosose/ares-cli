@@ -20,10 +20,7 @@ const version = commonTools.version,
     help = commonTools.help,
     appdata = commonTools.appdata,
     errHndl = commonTools.errMsg,
-    setupDevice = commonTools.setupDevice,
-    isValidDeviceName = setupDevice.isValidDeviceName,
-    isValidIpv4 = setupDevice.isValidIpv4,
-    isValidPort = setupDevice.isValidPort;
+    setupDevice = commonTools.setupDevice;
 
 const processName = path.basename(process.argv[1]).replace(/.js/, '');
 
@@ -75,23 +72,14 @@ log.heading = processName;
 log.level = argv.level || 'warn';
 log.verbose("argv", argv);
 
-const defaultDeviceInfo = {
-        profile: appdata.getConfig(true).profile,
-        host: "127.0.0.1",
-        port: 22,
-        username: "root",
-        description: "new device description",
-        files: "stream",
-        default: false
-    };
+const inqChoices = ["add", "modify"],
+    dfChoices = ["set default"],
+    rmChoices = ["remove"],
+    totChoices = inqChoices.concat(rmChoices, dfChoices);
 
-const inqChoices = ["add", "modify"];
-const dfChoices = ["set default"];
-const rmChoices = ["remove"];
-const totChoices = inqChoices.concat(rmChoices, dfChoices);
+let questions = [],
+    op;
 
-let questions = [];
-let op;
 if (argv.list) {
     op = deviceList;
 } else if (argv.listfull) {
@@ -102,10 +90,10 @@ if (argv.list) {
     op = search;
 } else if (argv.add || argv.modify || argv.info) {
     op = modifyDeviceInfo;
-} else if (argv.default) {
-    op = setDefaultDeviceInfo;
 } else if (argv.remove) {
     op = removeDeviceInfo;
+} else if (argv.default) {
+    op = setDefaultDeviceInfo;
 } else if (argv.version) {
     version.showVersionAndExit();
 } else if (argv.help) {
@@ -137,28 +125,8 @@ function deviceListFull() {
     setupDevice.showDeviceListFull(finish);
 }
 
-function reset(next) {
-    async.series([
-        function(next) {
-            appdata.resetDeviceList(next);
-        },
-        setupDevice.showDeviceList.bind(this)
-    ], function(err) {
-        next(err);
-    });
-}
-
-function replaceDefaultDeviceInfo(inDevice) {
-    if (inDevice) {
-        inDevice.profile = inDevice.profile || defaultDeviceInfo.profile;
-        inDevice.type = inDevice.type || defaultDeviceInfo.type;
-        inDevice.host = inDevice.host || defaultDeviceInfo.host;
-        inDevice.port = inDevice.port || defaultDeviceInfo.port;
-        inDevice.username = inDevice.username || defaultDeviceInfo.username;
-        inDevice.files = inDevice.files || defaultDeviceInfo.files;
-        inDevice.description = inDevice.description || defaultDeviceInfo.description;
-        inDevice.default = inDevice.default || defaultDeviceInfo.default;
-    }
+function reset() {
+    setupDevice.resetDeviceList(finish);
 }
 
 function _queryAddRemove(ssdpDevices, next) {
@@ -247,7 +215,7 @@ function _queryAddRemove(ssdpDevices, next) {
                     if (deviceNames.indexOf(input) !== -1) {
                         return errHndl.getErrStr("EXISTING_VALUE");
                     }
-                    if (!isValidDeviceName(input)) {
+                    if (!setupDevice.isValidDeviceName(input)) {
                         return errHndl.getErrStr("INVALID_DEVICENAME");
                     }
                     return true;
@@ -271,11 +239,11 @@ function _queryAddRemove(ssdpDevices, next) {
                 selDevice.name = answers.device_name || ((ssdpDevice)? ssdpDevice.name : null);
                 selDevice.mode = answers.op || ((ssdpDevice)? ssdpDevice.op : null);
                 selDevice.host = (ssdpDevice)? ssdpDevice.host : (selDevice.host || null);
-                next();
+                next(null, selDevice, null);
             });
         }
-    ], function(err) {
-        next(err, selDevice);
+    ], function(err, result) {
+        next(err, result);
     });
 }
 
@@ -292,7 +260,7 @@ function _queryDeviceInfo(selDevice, next) {
             return selDevice.host || "127.0.0.1";
         },
         validate: function(answers) {
-            if (!isValidIpv4(answers)) {
+            if (!setupDevice.isValidIpv4(answers)) {
                 return errHndl.getErrStr("INVALID_VALUE");
             }
             return true;
@@ -308,7 +276,7 @@ function _queryDeviceInfo(selDevice, next) {
             return selDevice.port || "22";
         },
         validate: function(answers) {
-            if (!isValidPort(answers)) {
+            if (!setupDevice.isValidPort(answers)) {
                 return errHndl.getErrStr("INVALID_VALUE");
             }
             return true;
@@ -436,34 +404,35 @@ function _queryDeviceInfo(selDevice, next) {
             mode = 'default';
         }
 
-        replaceDefaultDeviceInfo(inDevice);
+        setupDevice.replaceDefaultDeviceInfo(inDevice);
         if (inDevice.port) {
             inDevice.port = Number(inDevice.port);
         }
         async.series([
             resolver.load.bind(resolver),
             resolver.modifyDeviceFile.bind(resolver, mode, inDevice),
-            setupDevice.showDeviceList.bind(this)
-        ], function(err) {
+            setupDevice.showDeviceList.bind(this, finish)
+        ], function(err, results) {
             if (err) {
                 return next(err);
             }
-            next();
+            next(null, results[1]);
         });
     });
 }
 
-function interactiveInput(next) {
+function interactiveInput() {
     async.waterfall([
         setupDevice.showDeviceList.bind(this),
-        function(next) {
+        function(data, next) {
+            console.log(data.msg);
             console.log("** You can modify the device info in the above list, or add new device.");
             next();
         },
         _queryAddRemove,
         _queryDeviceInfo
     ], function(err, result) {
-        next(err, result);
+        finish(err, result);
     });
 }
 
@@ -482,7 +451,7 @@ function search(next) {
     ssdp.onDevice(function(device) {
         if (!device.headers || !device.headers.SERVER ||
             device.headers.SERVER.indexOf('WebOS') < 0 || end) {
-            return;
+            return finish(null, {msg: "No devices is discovered."});
         }
         log.verbose("search()# %s:%s (%s)", '[Discovered]', device.name, device.address);
     });
@@ -514,161 +483,16 @@ function search(next) {
     });
 }
 
-function _getParams(option) {
-    let inputParams = [];
-    const params = {};
-    if (argv[option]) {
-        inputParams = [].concat(argv[option]);
-    }
-
-    if (inputParams.length === 1 && inputParams[0].indexOf('{') !== -1 && inputParams[0].indexOf('}') !== -1 &&
-        ( (inputParams[0].split("'").length - 1) % 2) === 0) {
-        // eslint-disable-next-line no-useless-escape
-        inputParams[0] = inputParams[0].replace(/\'/g,'"');
-    }
-    inputParams.forEach(function(strParam) {
-        try {
-            const data = JSON.parse(strParam);
-            for (const k in data) {
-                params[k] = data[k];
-            }
-        } catch (err) {
-            const tokens = strParam.split('=');
-            if (tokens.length === 2) {
-                params[tokens[0]] = tokens[1];
-                log.verbose("_getParams()", "Inserting params ", tokens[0] + " = " + tokens[1]);
-            } else {
-                log.verbose("_getParams()", "Ignoring invalid arguments:", strParam);
-            }
-        }
-    });
-
-    // FIXME : -i default=true is set as "true" string
-    if (params.default !== undefined && typeof params.default == "string") {
-        params.default = (params.default === "true");
-    }
-
-    log.silly("_getParams()", "params:", JSON.stringify(params));
-    return params;
+function modifyDeviceInfo() {
+    setupDevice.modifyDeviceInfo(argv, finish);
 }
 
-function modifyDeviceInfo(next) {
-    try {
-        const mode = (argv.add)? "add" : (argv.modify)? "modify" : null;
-        if (!mode) {
-            return next(errHndl.getErrMsg("INVALID_MODE"));
-        }
-        if (argv[mode].match(/^-/)) {
-            return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
-        }
-        const argName = (argv.info)? "info" : mode;
-        const inDevice = _getParams(argName);
-        if (!inDevice.name) {
-            if (argv[mode] === "true") {
-                return next(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
-            }
-            inDevice.name = argv[mode];
-        }
-
-        log.info("modifyDeviceInfo()", "devicename:", inDevice.name, ", mode:", mode);
-
-        if (inDevice.default !== undefined && mode === "modify") {
-            log.verbose("modifyDeviceInfo()", "Ignoring invalid arguments:default");
-            inDevice.default = undefined;
-        }
-
-        if (inDevice.privateKey) {
-            inDevice.privatekey = inDevice.privateKey;
-        }
-        if (typeof inDevice.privatekey === "string") {
-            inDevice.privateKey = inDevice.privatekey;
-            inDevice.privateKey = { "openSsh": inDevice.privateKey };
-            delete inDevice.privatekey;
-            inDevice.password = "@DELETE@";
-        }
-        if (typeof inDevice.password !== "undefined" && inDevice.password !== "@DELETE@") {
-            inDevice.privateKey = "@DELETE@";
-            inDevice.passphrase = "@DELETE@";
-        }
-
-        if (mode === "add") {
-            replaceDefaultDeviceInfo(inDevice);
-            if (!inDevice.privateKey && !inDevice.password) {
-                inDevice.password = "";
-            }
-        }
-        // check validation
-        if (!isValidDeviceName(inDevice.name)) {
-            return next(errHndl.getErrMsg("INVALID_DEVICENAME"));
-        }
-        if (inDevice.host && !isValidIpv4(inDevice.host)) {
-            return next(errHndl.getErrMsg("INVALID_VALUE", "host", inDevice.host));
-        }
-        if (inDevice.port && !isValidPort(inDevice.port)) {
-            return next(errHndl.getErrMsg("INVALID_VALUE", "port", inDevice.port));
-        }
-        if (inDevice.port) {
-            inDevice.port = Number(inDevice.port);
-        }
-        if (!inDevice.profile) {
-            inDevice.profile = defaultDeviceInfo.profile;
-        }
-        const resolver = this.resolver || (this.resolver = new novacom.Resolver());
-        async.series([
-            resolver.load.bind(resolver),
-            resolver.modifyDeviceFile.bind(resolver, mode, inDevice),
-            setupDevice.showDeviceList.bind(this)
-        ], function(err) {
-            if (err) {
-                return next(err);
-            }
-            next();
-        });
-    } catch (err) {
-        next(err);
-    }
+function setDefaultDeviceInfo() {
+    setupDevice.setDefaultDevice(argv.default, finish);
 }
 
-function setDefaultDeviceInfo(next) {
-    try {
-        const resolver = this.resolver || (this.resolver = new novacom.Resolver()),
-            inDevice = {name: argv.default, default: true};
-        async.series([
-            resolver.load.bind(resolver),
-            resolver.modifyDeviceFile.bind(resolver, 'default', inDevice),
-            setupDevice.showDeviceList.bind(this)
-        ], function(err) {
-            if (err) {
-                return next(err);
-            }
-            next();
-        });
-    } catch (err) {
-        next(err);
-    }
-}
-
-function removeDeviceInfo(next) {
-    try {
-        if (argv.remove === 'true') {
-            return finish(errHndl.getErrMsg("EMPTY_VALUE", "DEVICE_NAME"));
-        }
-
-        const resolver = this.resolver || (this.resolver = new novacom.Resolver()),
-            inDevice = {name: argv.remove, profile: defaultDeviceInfo.profile};
-        async.series([
-            resolver.load.bind(resolver),
-            resolver.modifyDeviceFile.bind(resolver, 'remove', inDevice),
-            setupDevice.showDeviceList.bind(this)
-        ], function(err) {
-            if (err) {
-                return next(err);
-            }
-            next();
-        });
-    } catch (err) {
-        next(err);
-    }
+function removeDeviceInfo() {
+    setupDevice.removeDeviceInfo(argv, finish);
 }
 
 function finish(err, value) {
