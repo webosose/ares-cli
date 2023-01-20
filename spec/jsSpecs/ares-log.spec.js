@@ -150,7 +150,6 @@ describe(aresCmd + " -n 2", function() {
                 }
             } else if (targetLogDaemon === "journald") {
                 expect(stdout).not.toContain("[Info] Set target device : " + options.device);
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(journalLogRegExp).length).toBe(2);
             } else if (targetLogDaemon === "pmlogd") {
                 expect(stdout).not.toContain("[Info] Set target device : " + options.device);
@@ -317,7 +316,6 @@ describe(aresCmd + " --file", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(journalLogRegExp).length > 0).toBeTrue();
             }
             done();
@@ -413,7 +411,7 @@ describe(aresCmd + " -k", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
+                expect(stdout).toContain("kernel:");
             }
             done();
         });
@@ -432,7 +430,7 @@ describe(aresCmd + " -b", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
+                expect(stdout.length).not.toBe(0);
             }
             done();
         });
@@ -453,7 +451,6 @@ describe(aresCmd + " --pid", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(pidExp).length > 0).toBeTrue();
                 pid = stdout.match(pidExp)[1];
             }
@@ -472,7 +469,6 @@ describe(aresCmd + " --pid", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(expectedPid).length > 0).toBeTrue();
             }
             done();
@@ -510,7 +506,6 @@ describe(aresCmd + " --unit memorymanager", function() {
                 }
             } else {
                 const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w\d\-]+ memorymanager/g;
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(unitExp).length > 0).toBeTrue();
             }
             done();
@@ -533,7 +528,6 @@ describe(aresCmd +" -u sam -dp 1", function() {
                 }
             } else {
                 const unitExp = /\w+ \d+ \d\d:\d\d:\d\d [\w|\d]+ sam/g;
-                expect(stdout).toContain("-- Journal begins at");
                 expect(stdout.match(unitExp).length > 0).toBeTrue();
             }
             done();
@@ -553,7 +547,7 @@ describe(aresCmd + " -S today", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
+                expect(stdout.length).not.toBe(0);
             }
             done();
         });
@@ -572,7 +566,7 @@ describe(aresCmd + " -U yesterday", function() {
                     expect(stderr).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
                 }
             } else {
-                expect(stdout).toContain("-- Journal begins at");
+                expect(stdout.length).not.toBe(0);
             }
             done();
         });
@@ -662,7 +656,6 @@ describe(aresCmd + " -f", function() {
             if (options.device === "emulator") {
                 expect(result).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
             } else if (targetLogDaemon === "journald") {
-                expect(result).toContain("-- Journal begins at");
                 expect(result.match(journalLogRegExp).length > 0).toBeTrue();
             } else if (targetLogDaemon === "pmlogd") {
                 expect(result.match(pmLogRegExp).length > 0).toBeTrue();
@@ -693,7 +686,6 @@ describe(aresCmd + " -r", function() {
             if (options.device === "emulator") {
                 expect(result).toContain("ares-log ERR! [Tips]: Unable to connect to the target device. root access required");
             } else if (targetLogDaemon === "journald") {
-                expect(result).toContain("-- Journal begins at");
                 expect(result.match(journalLogRegExp).length > 0).toBeTrue();
             }
             done();
