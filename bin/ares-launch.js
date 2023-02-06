@@ -159,7 +159,7 @@ function launchHostedApp() {
     options.hostedurl = hostedurl;
     params = getParams();
     log.info("launch()", "pkgId:", pkgId);
-    launchLib.launch(options, pkgId, params, finish);
+    launchLib.launch(options, pkgId, params, finish, outputTxt);
 }
 
 function getParams() {
@@ -224,6 +224,11 @@ function running() {
         });
         finish(null, {msg : strRunApps});
     });
+}
+
+function outputTxt(value) {
+    log.info("outputTxt()", "value:", value);
+    console.log(value);
 }
 
 function finish(err, value) {
