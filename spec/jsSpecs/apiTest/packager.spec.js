@@ -22,8 +22,7 @@ const aresCmd = 'Packager',
     sampleServicePaths = [],
     packageOptions = {};
 
-let options,
-    expectedTemplate;
+let expectedTemplate;
 
 beforeAll(function (done) {
     common.getExpectedResult("ares-generate")
@@ -40,19 +39,6 @@ afterAll(function (done) {
 });
 
 describe("Test setting", function() {
-    // it("Add device with ares-setup-device", function(done) {
-    //     common.resetDeviceList()
-    //     .then(function(){
-    //         return common.addDeviceInfo();
-    //     }).then(function(result) {
-    //         expect(result).toContain(options.device);
-    //         done();
-    //     }).catch(function(err) {
-    //         expect(err).toContain("The specified value already exist");
-    //         done();
-    //     });
-    // });
-
     it('Generate a sample app for packaging', function(done) {
         common.removeOutDir(sampleAppPath);
         const generateCmd = common.makeCmd('ares-generate');

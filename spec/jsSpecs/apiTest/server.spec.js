@@ -81,7 +81,8 @@ describe(aresCmd + ".runServer() and " + aresCmd + ".stop()", function() {
                 serverUrl = serverInfo.url;
                 server.openBrowser(serverInfo.openBrowserUrl, serverOption.path, next);
             },
-            function(next) {
+            function(returnObj, next) {
+                expect(returnObj.msg).toContain('Browser opened');
                 setTimeout(() => {
                     server.stop(next);
                 }, 3000);
@@ -100,7 +101,8 @@ describe(aresCmd + ".runServer() and " + aresCmd + ".stop()", function() {
                 serverUrl = serverInfo.url;
                 server.openBrowser(serverInfo.openBrowserUrl, serverOption.path, next);
             },
-            function(next) {
+            function(returnObj, next) {
+                expect(returnObj.msg).toContain('Browser opened');
                 setTimeout(() => {
                     server.stop(next);
                 }, 3000);
