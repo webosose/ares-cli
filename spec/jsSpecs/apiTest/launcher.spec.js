@@ -12,7 +12,6 @@ const path = require('path'),
 const aresCmd = 'Launcher',
     sampleAppPath = path.join(__dirname, "../..", "tempFiles/sampleApp"),
     launchOptions = {
-        // device: 'mm',
         display: 0
     };
 
@@ -53,7 +52,7 @@ describe("Test setting", function() {
             expect(stdout).toContain("Success");
             setTimeout(function(){
                 done();
-            },1000);
+            },3000);
         });
     });
 });
