@@ -1,6 +1,6 @@
 const {promisify} = require('util'),
     aresGenerator = require('./lib/generator'),
-    aresInspecter = require('./lib/inspect'),
+    aresInspector = require('./lib/inspect'),
     aresInstaller = require('./lib/install'),
     aresLauncher = require('./lib/launch'),
     aresPackager = require('./lib/package'),
@@ -12,9 +12,9 @@ const {promisify} = require('util'),
 
 const Generator = new aresGenerator();
 
-const Inspecter = {
-    inspect: promisify(aresInspecter.inspect),
-    stop: promisify(aresInspecter.stop)
+const Inspector = {
+    inspect: promisify(aresInspector.inspect),
+    stop: promisify(aresInspector.stop)
 };
 
 const Installer = {
@@ -59,7 +59,7 @@ const SetupDevice = {
 
 module.exports = {
     Generator,
-    Inspecter,
+    Inspector,
     Installer,
     Launcher,
     Packager,
