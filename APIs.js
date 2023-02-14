@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023 LG Electronics Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* eslint new-cap: ["error", { "newIsCap": false }] */
+
 const {promisify} = require('util'),
     aresGenerator = require('./lib/generator'),
     aresInspector = require('./lib/inspect'),
