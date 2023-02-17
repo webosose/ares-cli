@@ -6,10 +6,10 @@
 
 const exec = require('child_process').exec,
     common = require('../common-spec'),
-    inspecter = require('../../../lib/inspect'),
+    inspector = require('../../../lib/inspect'),
     async = require('async');
 
-const aresCmd = 'Inspecter',
+const aresCmd = 'Inspector',
     inspectOptions = {
         open: true,
     };
@@ -54,11 +54,11 @@ describe(aresCmd + '.inspect()', function() {
     it('Run web inspector for sample app', function(done) {
         inspectOptions.appId = options.pkgId;
         async.waterfall([
-            inspecter.inspect.bind(inspecter, inspectOptions),
+            inspector.inspect.bind(inspector, inspectOptions),
             function(inspectInfo, next) {
                 expect(inspectInfo.msg).toContain('Application Debugging - http://localhost');
                 setTimeout(() => {
-                    inspecter.stop(inspectInfo.session, next);
+                    inspector.stop(inspectInfo.session, next);
                 }, 5000);
             }
         ], function(err, results) {
@@ -73,12 +73,12 @@ describe(aresCmd + '.inspect()', function() {
     it('Run service inspector for sample service', function(done) {
         inspectOptions.serviceId = options.pkgService;
         async.waterfall([
-            inspecter.inspect.bind(inspecter, inspectOptions),
+            inspector.inspect.bind(inspector, inspectOptions),
             function(inspectInfo, next) {
                 expect(inspectInfo.msg).toContain('To debug your service, set');
                 expect(inspectInfo.msg).toContain("Cannot support \"--open option\" on platform node version 8 and later");
                 setTimeout(() => {
-                    inspecter.stop(inspectInfo.session, next);
+                    inspector.stop(inspectInfo.session, next);
                 }, 7000);
             }
         ], function(err, results) {

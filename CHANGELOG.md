@@ -1,3 +1,17 @@
+## 2.4.0 (February 16, 2023)
+### ares-device
+* Supports to show node version usage using `--system-info` option.
+* Fixed a bug that js service is not listed-up when ares-device `--resource-monitor --list` option.
+
+### ares-inspect
+* Updated displayed guide text during js service inspection using `--service` option.
+
+### Common
+* Supports features of below commands as APIs(total 10s)
+: ares-generate, ares-inspect, ares-install, ares-launch, ares-package, ares-pull, ares-push, ares-server, ares-setup-device, ares-shell
+* Added unit test to verify APIs
+
+
 ## 2.3.0 (February 7, 2022)
 ### ares-log
 * Supports to show logs of pmlogd and added options to support related features.

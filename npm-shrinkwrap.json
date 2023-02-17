@@ -1,6 +1,6 @@
 {
   "name": "@webosose/ares-cli",
-  "version": "2.3.1-T.4",
+  "version": "2.4.0-T.1",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
