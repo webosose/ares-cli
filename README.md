@@ -1,8 +1,11 @@
 # ares-cli
 
-## Summary
-
 **ares-cli** is a command-line interface (CLI) for webOS. It provides a collection of commands used for creating, packaging, installing, and launching apps or services in the command line environment. ares-cli lets you develop and test apps or services without using any IDE.
+
+## Announcement
+
+**We moved to [@webos-sdk/cli](https://github.com/webos-sdk/cli).** In the future, we plan to develop and maintain a single webOS CLI to support webOS in @webos-sdk/cli.
+There is no further maintenance here.
 
 ## Installation
 
