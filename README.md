@@ -1,7 +1,7 @@
 # ares-cli
 
 > [!WARNING]
-> **We moved to [@webos-sdk/cli](https://github.com/webos-sdk/cli).** In the future, we plan to develop and maintain a single webOS CLI to support multi webOS in @webos-sdk/cli. This repository has been deprecated since March 4, 2024.
+> **We moved to [@webos-tools/cli](https://github.com/webos-tools/cli).** In the future, we plan to develop and maintain a single webOS CLI to support multi webOS in @webos-tools/cli. This repository has been deprecated since March 4, 2024.
 
 **ares-cli** is a command-line interface (CLI) for webOS. It provides a collection of commands used for creating, packaging, installing, and launching apps or services in the command line environment. ares-cli lets you develop and test apps or services without using any IDE.
 
