@@ -171,7 +171,7 @@
         },
         "requiredMemory": {
             "type": "number",
-            "description": "Memory consumption is increasing quickly while launching. OOM can be occured before system(Memory Manager) try to acquire adequate memory for the application. requiredMemory is describe the maximum usage of memory while app is publishing. It is not about maximum usage of memory while app is running."
+            "description": "Memory consumption is increasing quickly while launching. OOM can occur before system(Memory Manager) try to acquire adequate memory for the application. requiredMemory is describe the maximum usage of memory while app is publishing. It is not about maximum usage of memory while app is running."
         },
         "iconColor": {
             "type": "string",
